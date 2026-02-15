@@ -1,7 +1,7 @@
 {
   "name": "Red Gold",
   "short_name": "RedGold",
-  "start_url": "/splash.html",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#7B2D26",
   "theme_color": "#7B2D26",
