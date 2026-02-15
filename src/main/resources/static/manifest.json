@@ -1,10 +1,9 @@
 {
   "name": "Red Gold",
   "short_name": "RedGold",
-  "start_url": "/index.html",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#7B2D26",
   "theme_color": "#7B2D26",
   "icons": [
