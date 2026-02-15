@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#7B2D26">
+    <link rel="icon" href="/logo.png" type="image/png">
+    <title>Reports - RED GOLD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #F4EFEA;
+            color: #3E2C23;
+            -webkit-tap-highlight-color: transparent;
+            padding-bottom: 20px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background-color: #7B2D26;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-icon {
+            width: 24px;
+            height: 24px;
+            fill: #FFFFFF;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            right: 0;
+            background-color: #FFFFFF;
+            border-bottom: 2px solid #E0E0E0;
+            z-index: 90;
+        }
+
+        .tabs {
+            display: flex;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 16px 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6B5D4F;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            color: #7B2D26;
+            border-bottom-color: #7B2D26;
+        }
+
+        .tab:hover {
+            background-color: #F9F5F0;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 112px;
+            padding: 16px;
+            max-width: 100%;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3E2C23;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: #6B5D4F;
+        }
+
+        /* Booking Cards */
+        .booking-card {
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: box-shadow 0.2s;
+        }
+
+        .booking-card.active {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            padding: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .card-main-info {
+            flex: 1;
+        }
+
+        .customer-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #3E2C23;
+            margin-bottom: 6px;
+        }
+
+        .booking-summary {
+            font-size: 13px;
+            color: #6B5D4F;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        .booking-summary svg {
+            width: 14px;
+            height: 14px;
+            margin-right: 6px;
+            fill: #6B5D4F;
+        }
+
+        .booking-date {
+            font-size: 12px;
+            color: #9B8B7E;
+            margin-top: 6px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background-color: #FFF3E0;
+            color: #E65100;
+        }
+
+        .status-draft {
+            background-color: #E3F2FD;
+            color: #1565C0;
+        }
+
+        .status-completed {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        /* Expanded Details */
+        .card-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .card-details.expanded {
+            max-height: 800px;
+        }
+
+        .details-content {
+            padding: 0 16px 16px 16px;
+            border-top: 1px solid #E8E3DC;
+        }
+
+        .detail-row {
+            padding: 12px 0;
+            border-bottom: 1px solid #F4EFEA;
+        }
+
+        .detail-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #6B5D4F;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: #3E2C23;
+        }
+
+        /* Action Button */
+        .action-button {
+            width: 100%;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            margin-top: 16px;
+            transition: all 0.2s;
+        }
+
+        .btn-create {
+            background-color: #7B2D26;
+            color: #FFFFFF;
+        }
+
+        .btn-create:active {
+            background-color: #632419;
+        }
+
+        .btn-edit {
+            background-color: #1565C0;
+            color: #FFFFFF;
+        }
+
+        .btn-edit:active {
+            background-color: #0D47A1;
+        }
+
+        .btn-view {
+            background-color: #2E7D32;
+            color: #FFFFFF;
+        }
+
+        .btn-view:active {
+            background-color: #1B5E20;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6B5D4F;
+        }
+
+        /* Tab Content Sections */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tablet and Desktop */
+        @media (min-width: 600px) {
+            .header {
+                height: 64px;
+            }
+
+            .header-title {
+                font-size: 22px;
+            }
+
+            .back-icon {
+                width: 28px;
+                height: 28px;
+            }
+
+            .tabs-container {
+                top: 64px;
+            }
+
+            .tabs {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            .tab {
+                font-size: 16px;
+                padding: 18px 24px;
+            }
+
+            .main-content {
+                max-width: 800px;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 24px;
+                margin-top: 128px;
+            }
+
+            .booking-card {
+                margin-bottom: 16px;
+                border-radius: 12px;
+            }
+
+            .card-header {
+                padding: 20px;
+            }
+
+            .customer-name {
+                font-size: 18px;
+            }
+
+            .booking-summary {
+                font-size: 14px;
+            }
+
+            .booking-date {
+                font-size: 13px;
+            }
+
+            .status-badge {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .details-content {
+                padding: 0 20px 20px 20px;
+            }
+
+            .detail-row {
+                padding: 14px 0;
+            }
+
+            .detail-label {
+                font-size: 13px;
+            }
+
+            .detail-value {
+                font-size: 15px;
+            }
+
+            .action-button {
+                padding: 16px;
+                font-size: 15px;
+            }
+
+            .empty-state {
+                padding: 120px 20px;
+            }
+
+            .empty-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+            .empty-title {
+                font-size: 22px;
+            }
+
+            .empty-text {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 900px) {
+            .main-content {
+                max-width: 1000px;
+            }
+
+            .tabs {
+                max-width: 1000px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-button" onclick="goBack()">
+            <svg class="back-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+            </svg>
+        </button>
+        <div class="header-title">Reports</div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('pending')">Pending</button>
+            <button class="tab" onclick="switchTab('drafted')">Drafted</button>
+            <button class="tab" onclick="switchTab('completed')">Completed</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Pending Tab Content -->
+        <div id="pendingContent" class="tab-content active">
+            <div class="loading">Loading pending bookings...</div>
+        </div>
+
+        <!-- Drafted Tab Content -->
+        <div id="draftedContent" class="tab-content">
+            <div class="loading">Loading drafted reports...</div>
+        </div>
+
+        <!-- Completed Tab Content -->
+        <div id="completedContent" class="tab-content">
+            <div class="loading">Loading completed reports...</div>
+        </div>
+    </div>
+
+    <script>
+        let allBookings = [];
+        let currentExpandedCard = null;
+        let currentTab = 'pending';
+
+        // Initialize page
+        async function init() {
+            await loadAllBookings();
+            renderTabs();
+        }
+
+        // Load all bookings from API
+        async function loadAllBookings() {
+            try {
+                const response = await fetch('/api/bookings');
+                allBookings = await response.json();
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+                allBookings = [];
+            }
+        }
+
+        // Switch tabs
+        function switchTab(tabName) {
+            currentTab = tabName;
+            
+            // Update tab buttons
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update tab content
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            if (tabName === 'pending') {
+                document.getElementById('pendingContent').classList.add('active');
+            } else if (tabName === 'drafted') {
+                document.getElementById('draftedContent').classList.add('active');
+            } else if (tabName === 'completed') {
+                document.getElementById('completedContent').classList.add('active');
+            }
+
+            // Reset expanded card
+            currentExpandedCard = null;
+        }
+
+        // Render all tabs
+        function renderTabs() {
+            renderPendingTab();
+            renderDraftedTab();
+            renderCompletedTab();
+        }
+
+        // Render Pending tab
+        function renderPendingTab() {
+            const container = document.getElementById('pendingContent');
+            const pendingBookings = allBookings.filter(b => b.status === 'PENDING');
+
+            if (pendingBookings.length === 0) {
+                container.innerHTML = renderEmptyState('No Pending Bookings', 'All bookings have been processed.');
+            } else {
+                container.innerHTML = pendingBookings.map(booking => renderBookingCard(booking, 'pending')).join('');
+            }
+        }
+
+        // Render Drafted tab
+        function renderDraftedTab() {
+            const container = document.getElementById('draftedContent');
+            const draftedBookings = allBookings.filter(b => b.status === 'DRAFT');
+
+            if (draftedBookings.length === 0) {
+                container.innerHTML = renderEmptyState('No Draft Reports', 'Create reports to see them here.');
+            } else {
+                container.innerHTML = draftedBookings.map(booking => renderBookingCard(booking, 'draft')).join('');
+            }
+        }
+
+        // Render Completed tab
+        function renderCompletedTab() {
+            const container = document.getElementById('completedContent');
+            const completedBookings = allBookings.filter(b => b.status === 'COMPLETED');
+
+            if (completedBookings.length === 0) {
+                container.innerHTML = renderEmptyState('No Completed Reports', 'Finalized reports will appear here.');
+            } else {
+                container.innerHTML = completedBookings.map(booking => renderBookingCard(booking, 'completed')).join('');
+            }
+        }
+
+        // Render empty state
+        function renderEmptyState(title, text) {
+            return `
+                <div class="empty-state">
+                    <svg class="empty-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#3E2C23" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                        <path fill="#3E2C23" d="M7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/>
+                    </svg>
+                    <div class="empty-title">${title}</div>
+                    <div class="empty-text">${text}</div>
+                </div>
+            `;
+        }
+
+        // Render booking card
+        function renderBookingCard(booking, type) {
+            const statusClass = type === 'pending' ? 'status-pending' : type === 'draft' ? 'status-draft' : 'status-completed';
+            const statusText = type === 'pending' ? 'PENDING' : type === 'draft' ? 'DRAFT' : 'COMPLETED';
+            
+            const customer = booking.customer;
+            const bookingDate = new Date(booking.createdAt).toLocaleDateString();
+
+            return `
+                <div class="booking-card" id="card-${booking.id}">
+                    <div class="card-header" onclick="toggleCard(${booking.id}, '${type}')">
+                        <div class="card-main-info">
+                            <div class="customer-name">${customer.name}</div>
+                            <div class="booking-summary">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                                </svg>
+                                ${formatNumber(booking.quantity)} Bricks
+                            </div>
+                            <div class="booking-summary">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg>
+                                ${customer.location}
+                            </div>
+                            <div class="booking-date">${bookingDate}</div>
+                        </div>
+                        <div>
+                            <div class="status-badge ${statusClass}">${statusText}</div>
+                        </div>
+                    </div>
+                    <div class="card-details" id="details-${booking.id}">
+                        <div class="details-content">
+                            <div class="detail-row">
+                                <div class="detail-label">Mobile Number</div>
+                                <div class="detail-value">${customer.mobile}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">WhatsApp Number</div>
+                                <div class="detail-value">${customer.whatsapp}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Address</div>
+                                <div class="detail-value">${customer.address}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Quantity</div>
+                                <div class="detail-value">${formatNumber(booking.quantity)} Bricks</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Destination</div>
+                                <div class="detail-value">${customer.location}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Booking ID</div>
+                                <div class="detail-value">#BK${booking.id.toString().padStart(4, '0')}</div>
+                            </div>
+                            ${renderActionButton(booking.id, type)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render action button based on status
+        function renderActionButton(bookingId, type) {
+            if (type === 'pending') {
+                return `<button class="action-button btn-create" onclick="createReport(${bookingId})">CREATE REPORT</button>`;
+            } else if (type === 'draft') {
+                return `<button class="action-button btn-edit" onclick="editReport(${bookingId})">EDIT REPORT</button>`;
+            } else {
+                return `<button class="action-button btn-view" onclick="viewReport(${bookingId})">VIEW REPORT</button>`;
+            }
+        }
+
+        // Toggle card expansion
+        function toggleCard(bookingId, type) {
+            const card = document.getElementById('card-' + bookingId);
+            const details = document.getElementById('details-' + bookingId);
+
+            // If this card is already expanded, collapse it
+            if (currentExpandedCard === bookingId) {
+                details.classList.remove('expanded');
+                card.classList.remove('active');
+                currentExpandedCard = null;
+                return;
+            }
+
+            // Collapse previously expanded card
+            if (currentExpandedCard !== null) {
+                const prevDetails = document.getElementById('details-' + currentExpandedCard);
+                const prevCard = document.getElementById('card-' + currentExpandedCard);
+                if (prevDetails) prevDetails.classList.remove('expanded');
+                if (prevCard) prevCard.classList.remove('active');
+            }
+
+            // Expand this card
+            details.classList.add('expanded');
+            card.classList.add('active');
+            currentExpandedCard = bookingId;
+        }
+
+        // Format number with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Navigation functions
+        function goBack() {
+            window.location.href = '/home.html';
+        }
+
+        function createReport(bookingId) {
+            window.location.href = `/report.html?mode=create&bookingId=${bookingId}`;
+        }
+
+        function editReport(bookingId) {
+            window.location.href = `/report.html?mode=edit&bookingId=${bookingId}`;
+        }
+
+        function viewReport(bookingId) {
+            window.location.href = `/report.html?mode=view&bookingId=${bookingId}`;
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#7B2D26">
+    <link rel="icon" href="/logo.png" type="image/png">
+    <title>All Bookings - RED GOLD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #FAFAFA;
+            color: #3E2C23;
+            -webkit-tap-highlight-color: transparent;
+            padding-bottom: 20px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background-color: #7B2D26;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-icon {
+            width: 24px;
+            height: 24px;
+            fill: #FFFFFF;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* Summary Section */
+        .summary-section {
+            margin-top: 56px;
+            background-color: #FFFFFF;
+            border-bottom: 2px solid #E0E0E0;
+            padding: 24px 16px;
+        }
+
+        .summary-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .summary-count {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #6B5D4F;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .summary-number {
+            font-size: 42px;
+            font-weight: 700;
+            color: #7B2D26;
+            line-height: 1;
+        }
+
+        .filter-wrapper {
+            position: relative;
+        }
+
+        .filter-label {
+            font-size: 11px;
+            color: #6B5D4F;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .filter-select {
+            padding: 10px 36px 10px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 2px solid #D0D0D0;
+            border-radius: 8px;
+            background-color: #FFFFFF;
+            color: #3E2C23;
+            cursor: pointer;
+            appearance: none;
+            min-width: 160px;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #7B2D26;
+        }
+
+        .filter-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            pointer-events: none;
+            color: #666;
+            font-size: 10px;
+        }
+
+        /* Storage Widget */
+        .storage-widget {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .storage-ring-container {
+            position: relative;
+            width: 70px;
+            height: 70px;
+        }
+
+        .storage-ring {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#7B2D26 0% var(--percent), #E0E0E0 var(--percent) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+
+        .storage-ring::before {
+            content: '';
+            position: absolute;
+            width: 52px;
+            height: 52px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+        }
+
+        .storage-percent {
+            position: relative;
+            z-index: 1;
+            font-size: 16px;
+            font-weight: 700;
+            color: #7B2D26;
+        }
+
+        .storage-label {
+            font-size: 11px;
+            color: #6B5D4F;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        .storage-button {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .btn-export {
+            background-color: #7B2D26;
+            color: #FFFFFF;
+        }
+
+        .btn-export:hover {
+            background-color: #632419;
+        }
+
+        .btn-truncate {
+            background-color: #D32F2F;
+            color: #FFFFFF;
+        }
+
+        .btn-truncate:hover {
+            background-color: #B71C1C;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3E2C23;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: #6B5D4F;
+        }
+
+        /* Booking Cards */
+        .booking-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E0E0E0;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: box-shadow 0.2s;
+        }
+
+        .booking-card:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-main-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .customer-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #3E2C23;
+            margin-bottom: 8px;
+        }
+
+        .booking-detail {
+            font-size: 14px;
+            color: #6B5D4F;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .booking-detail svg {
+            width: 14px;
+            height: 14px;
+            fill: #9B8B7E;
+            flex-shrink: 0;
+        }
+
+        .detail-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .address-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            margin-left: 12px;
+            flex-shrink: 0;
+        }
+
+        .status-pending {
+            background-color: #F5F5F5;
+            color: #666;
+        }
+
+        .status-draft {
+            background-color: #FFF3E0;
+            color: #E65100;
+        }
+
+        .status-completed {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6B5D4F;
+            font-size: 15px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 16px;
+            border: 4px solid #E0E0E0;
+            border-top-color: #7B2D26;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Tablet and Desktop */
+        @media (min-width: 600px) {
+            .header {
+                height: 64px;
+            }
+
+            .header-title {
+                font-size: 22px;
+            }
+
+            .back-icon {
+                width: 28px;
+                height: 28px;
+            }
+
+            .summary-section {
+                margin-top: 64px;
+                padding: 32px 24px;
+            }
+
+            .summary-number {
+                font-size: 56px;
+            }
+
+            .summary-label {
+                font-size: 14px;
+            }
+
+            .filter-label {
+                font-size: 12px;
+            }
+
+            .filter-select {
+                padding: 12px 40px 12px 16px;
+                font-size: 15px;
+            }
+
+            .storage-ring-container {
+                width: 80px;
+                height: 80px;
+            }
+
+            .storage-ring::before {
+                width: 60px;
+                height: 60px;
+            }
+
+            .storage-percent {
+                font-size: 18px;
+            }
+
+            .storage-label {
+                font-size: 12px;
+            }
+
+            .storage-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .main-content {
+                padding: 32px 24px;
+            }
+
+            .booking-card {
+                padding: 22px 24px;
+                margin-bottom: 14px;
+                border-radius: 12px;
+            }
+
+            .customer-name {
+                font-size: 18px;
+            }
+
+            .booking-detail {
+                font-size: 15px;
+            }
+
+            .status-badge {
+                padding: 8px 18px;
+                font-size: 12px;
+            }
+
+            .empty-state {
+                padding: 120px 20px;
+            }
+
+            .empty-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+            .empty-title {
+                font-size: 22px;
+            }
+
+            .empty-text {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 900px) {
+            .main-content {
+                max-width: 1000px;
+            }
+
+            .summary-container {
+                max-width: 1000px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-button" onclick="goBack()">
+            <svg class="back-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+            </svg>
+        </button>
+        <div class="header-title">All Bookings</div>
+    </div>
+
+    <!-- Summary Section -->
+    <div class="summary-section">
+        <div class="summary-container">
+            <div class="summary-count">
+                <div class="summary-label">Total Bookings</div>
+                <div class="summary-number" id="bookingCount">0</div>
+            </div>
+            <div class="filter-wrapper">
+                <div class="filter-label">Filter Period</div>
+                <select class="filter-select" id="filterSelect" onchange="applyFilter()">
+                    <option value="lifetime">Lifetime</option>
+                    <option value="today">Today</option>
+                    <option value="7days">Last 7 Days</option>
+                    <option value="30days">Last 30 Days</option>
+                    <option value="3months">Last 3 Months</option>
+                    <option value="6months">Last 6 Months</option>
+                    <option value="1year">Last 1 Year</option>
+                </select>
+            </div>
+            <div class="storage-widget" id="storageWidget">
+                <div class="storage-ring-container">
+                    <div class="storage-ring" id="storageRing" style="--percent: 0%">
+                        <span class="storage-percent" id="storagePercent">0%</span>
+                    </div>
+                </div>
+                <div class="storage-label">Database Used</div>
+                <button class="storage-button btn-export" id="storageButton" onclick="handleStorageAction()">
+                    Export as Excel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            Loading bookings...
+        </div>
+    </div>
+
+    <script>
+        let allBookings = [];
+        let filteredBookings = [];
+        let exportClicked = false;
+
+        // Initialize page
+        async function init() {
+            await loadAllBookings();
+            await loadStorageUsage();
+            applyFilter();
+        }
+
+        // Load storage usage from API
+        async function loadStorageUsage() {
+            try {
+                const res = await fetch('/api/db-stats');
+                const stats = await res.json();
+
+                const percent = Math.round(stats.percent);
+
+                // update text
+                document.getElementById('storagePercent').textContent = percent + '%';
+
+                // update ring fill (CSS variable)
+                const ring = document.getElementById('storageRing');
+                ring.style.setProperty('--percent', percent + '%');
+
+            } catch (e) {
+                console.error('Failed to load DB stats', e);
+            }
+        }
+
+
+        // Handle storage action (Export or Truncate)
+        function handleStorageAction() {
+            const button = document.getElementById('storageButton');
+            
+            if (!exportClicked) {
+                // First click - Export
+                exportData();
+                
+                // Change button to Truncate
+                exportClicked = true;
+                button.textContent = 'TRUNCATE DATA';
+                button.classList.remove('btn-export');
+                button.classList.add('btn-truncate');
+            } else {
+                // Second click - Truncate
+                truncateData();
+            }
+        }
+
+        // Export data to Excel
+        function exportData() {
+            window.location.href = '/api/admin/export';
+        }
+
+        // Truncate database with confirmation
+        async function truncateData() {
+            const userInput = prompt('This will permanently delete ALL data.\nType DELETE to continue:');
+            
+            if (userInput === 'DELETE') {
+                try {
+                    const response = await fetch('/api/admin/truncate', {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        alert('Database cleared');
+                        location.reload();
+                    } else {
+                        alert('Failed to clear database');
+                    }
+                } catch (error) {
+                    console.error('Error truncating database:', error);
+                    alert('Error clearing database');
+                }
+            }
+        }
+
+
+        // Load all bookings from API
+        async function loadAllBookings() {
+            try {
+                const response = await fetch('/api/bookings');
+                allBookings = await response.json();
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+                allBookings = [];
+                showError();
+            }
+        }
+
+        // Apply filter based on selected period
+        function applyFilter() {
+            const filterValue = document.getElementById('filterSelect').value;
+            const now = new Date();
+            
+            // Reset time to start of day for accurate comparison
+            now.setHours(0, 0, 0, 0);
+
+            filteredBookings = allBookings.filter(booking => {
+                const bookingDate = new Date(booking.createdAt);
+                bookingDate.setHours(0, 0, 0, 0);
+
+                switch(filterValue) {
+                    case 'today':
+                        return bookingDate.getTime() === now.getTime();
+                    
+                    case '7days':
+                        const sevenDaysAgo = new Date(now);
+                        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                        return bookingDate >= sevenDaysAgo;
+                    
+                    case '30days':
+                        const thirtyDaysAgo = new Date(now);
+                        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                        return bookingDate >= thirtyDaysAgo;
+                    
+                    case '3months':
+                        const threeMonthsAgo = new Date(now);
+                        threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+                        return bookingDate >= threeMonthsAgo;
+                    
+                    case '6months':
+                        const sixMonthsAgo = new Date(now);
+                        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+                        return bookingDate >= sixMonthsAgo;
+                    
+                    case '1year':
+                        const oneYearAgo = new Date(now);
+                        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+                        return bookingDate >= oneYearAgo;
+                    
+                    case 'lifetime':
+                    default:
+                        return true;
+                }
+            });
+
+            updateCountDisplay();
+            renderBookings();
+        }
+
+        // Update count display
+        function updateCountDisplay() {
+            document.getElementById('bookingCount').textContent = filteredBookings.length;
+        }
+
+        // Render bookings
+        function renderBookings() {
+            const container = document.getElementById('mainContent');
+
+            if (filteredBookings.length === 0) {
+                container.innerHTML = renderEmptyState();
+            } else {
+                container.innerHTML = filteredBookings.map(booking => renderBookingCard(booking)).join('');
+            }
+        }
+
+        // Render empty state
+        function renderEmptyState() {
+            return `
+                <div class="empty-state">
+                    <svg class="empty-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#3E2C23" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                        <path fill="#3E2C23" d="M7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/>
+                    </svg>
+                    <div class="empty-title">No Bookings Found</div>
+                    <div class="empty-text">No bookings match the selected filter</div>
+                </div>
+            `;
+        }
+
+        // Render booking card
+        function renderBookingCard(booking) {
+            const statusClass = getStatusClass(booking.status);
+            const statusText = booking.status;
+            const customer = booking.customer;
+
+            return `
+                <div class="booking-card">
+                    <div class="card-main-info">
+                        <div class="customer-name">${escapeHtml(customer.name)}</div>
+                        <div class="booking-detail">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                            </svg>
+                            <span class="detail-text">${formatNumber(booking.quantity)} Bricks</span>
+                        </div>
+                        <div class="booking-detail">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                            </svg>
+                            <span class="detail-text">${escapeHtml(customer.mobile)}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            <span class="address-text">${escapeHtml(customer.address)}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="status-badge ${statusClass}">${statusText}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Get status CSS class
+        function getStatusClass(status) {
+            if (status === 'PENDING') return 'status-pending';
+            if (status === 'DRAFT') return 'status-draft';
+            if (status === 'COMPLETED') return 'status-completed';
+            return 'status-pending';
+        }
+
+        // Show error state
+        function showError() {
+            const container = document.getElementById('mainContent');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <svg class="empty-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#3E2C23" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                    <div class="empty-title">Error Loading Data</div>
+                    <div class="empty-text">Please refresh the page to try again</div>
+                </div>
+            `;
+        }
+
+        // Format number with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Go back to home
+        function goBack() {
+            window.location.href = '/home.html';
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

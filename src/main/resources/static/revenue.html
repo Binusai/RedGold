@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#7B2D26">
+    <link rel="icon" href="/logo.png" type="image/png">
+    <title>Revenue - RED GOLD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #FAFAFA;
+            color: #3E2C23;
+            -webkit-tap-highlight-color: transparent;
+            padding-bottom: 20px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background-color: #7B2D26;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-icon {
+            width: 24px;
+            height: 24px;
+            fill: #FFFFFF;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* Summary Section */
+        .summary-section {
+            margin-top: 56px;
+            background-color: #FFFFFF;
+            border-bottom: 2px solid #E0E0E0;
+            padding: 24px 16px;
+        }
+
+        .summary-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .summary-count {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #6B5D4F;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .summary-number {
+            font-size: 38px;
+            font-weight: 700;
+            color: #7B2D26;
+            line-height: 1;
+        }
+
+        .filter-wrapper {
+            position: relative;
+        }
+
+        .filter-label {
+            font-size: 11px;
+            color: #6B5D4F;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .filter-select {
+            padding: 10px 36px 10px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 2px solid #D0D0D0;
+            border-radius: 8px;
+            background-color: #FFFFFF;
+            color: #3E2C23;
+            cursor: pointer;
+            appearance: none;
+            min-width: 160px;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #7B2D26;
+        }
+
+        .filter-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            pointer-events: none;
+            color: #666;
+            font-size: 10px;
+        }
+
+        /* Revenue Rings Widget */
+        .revenue-rings {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .ring-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ring-container {
+            position: relative;
+            width: 70px;
+            height: 70px;
+        }
+
+        .progress-ring {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#2E7D32 0% var(--percent), #E0E0E0 var(--percent) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .progress-ring.amount-ring {
+            background: conic-gradient(#7B2D26 0% var(--percent), #E0E0E0 var(--percent) 100%);
+        }
+
+        .progress-ring::before {
+            content: '';
+            position: absolute;
+            width: 52px;
+            height: 52px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+        }
+
+        .ring-text {
+            position: relative;
+            z-index: 1;
+            font-size: 13px;
+            font-weight: 700;
+            color: #2E7D32;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .progress-ring.amount-ring .ring-text {
+            color: #7B2D26;
+            font-size: 9px;
+        }
+
+        .ring-label {
+            font-size: 10px;
+            color: #6B5D4F;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            max-width: 90px;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3E2C23;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: #6B5D4F;
+        }
+
+        /* Revenue Cards */
+        .revenue-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E0E0E0;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: box-shadow 0.2s;
+        }
+
+        .revenue-card:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-main-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .customer-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #3E2C23;
+            margin-bottom: 8px;
+        }
+
+        .revenue-detail {
+            font-size: 14px;
+            color: #6B5D4F;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .revenue-detail svg {
+            width: 14px;
+            height: 14px;
+            fill: #9B8B7E;
+            flex-shrink: 0;
+        }
+
+        .detail-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .address-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .final-total {
+            font-size: 18px;
+            font-weight: 700;
+            color: #7B2D26;
+            margin-top: 6px;
+        }
+
+        .card-action {
+            margin-left: 12px;
+            flex-shrink: 0;
+        }
+
+        .pay-button {
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            background-color: #7B2D26;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .pay-button:hover {
+            background-color: #632419;
+        }
+
+        .pay-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .paid-badge {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            background-color: #E8F5E9;
+            color: #2E7D32;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6B5D4F;
+            font-size: 15px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 16px;
+            border: 4px solid #E0E0E0;
+            border-top-color: #7B2D26;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Tablet and Desktop */
+        @media (min-width: 600px) {
+            .header {
+                height: 64px;
+            }
+
+            .header-title {
+                font-size: 22px;
+            }
+
+            .back-icon {
+                width: 28px;
+                height: 28px;
+            }
+
+            .summary-section {
+                margin-top: 64px;
+                padding: 32px 24px;
+            }
+
+            .summary-number {
+                font-size: 48px;
+            }
+
+            .summary-label {
+                font-size: 14px;
+            }
+
+            .filter-label {
+                font-size: 12px;
+            }
+
+            .filter-select {
+                padding: 12px 40px 12px 16px;
+                font-size: 15px;
+            }
+
+            .ring-container {
+                width: 85px;
+                height: 85px;
+            }
+
+            .progress-ring::before {
+                width: 65px;
+                height: 65px;
+            }
+
+            .ring-text {
+                font-size: 15px;
+            }
+
+            .progress-ring.amount-ring .ring-text {
+                font-size: 10px;
+            }
+
+            .ring-label {
+                font-size: 11px;
+            }
+
+            .main-content {
+                padding: 32px 24px;
+            }
+
+            .revenue-card {
+                padding: 22px 24px;
+                margin-bottom: 14px;
+                border-radius: 12px;
+            }
+
+            .customer-name {
+                font-size: 18px;
+            }
+
+            .revenue-detail {
+                font-size: 15px;
+            }
+
+            .final-total {
+                font-size: 20px;
+            }
+
+            .pay-button {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+
+            .paid-badge {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+
+            .empty-state {
+                padding: 120px 20px;
+            }
+
+            .empty-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+            .empty-title {
+                font-size: 22px;
+            }
+
+            .empty-text {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 900px) {
+            .main-content {
+                max-width: 1000px;
+            }
+
+            .summary-container {
+                max-width: 1000px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-button" onclick="goBack()">
+            <svg class="back-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+            </svg>
+        </button>
+        <div class="header-title">Revenue</div>
+    </div>
+
+    <!-- Summary Section -->
+    <div class="summary-section">
+        <div class="summary-container">
+            <div class="summary-count">
+                <div class="summary-label">Total Revenue</div>
+                <div class="summary-number" id="totalRevenue">₹ 0</div>
+            </div>
+            <div class="filter-wrapper">
+                <div class="filter-label">Filter Period</div>
+                <select class="filter-select" id="filterSelect" onchange="applyFilter()">
+                    <option value="lifetime">Lifetime</option>
+                    <option value="today">Today</option>
+                    <option value="7days">Last 7 Days</option>
+                    <option value="30days">Last 30 Days</option>
+                    <option value="3months">Last 3 Months</option>
+                    <option value="6months">Last 6 Months</option>
+                    <option value="1year">Last 1 Year</option>
+                </select>
+            </div>
+            <div class="revenue-rings">
+                <div class="ring-item">
+                    <div class="ring-container">
+                        <div class="progress-ring" id="paymentRing" style="--percent: 0%">
+                            <span class="ring-text" id="paymentPercent">0%</span>
+                        </div>
+                    </div>
+                    <div class="ring-label">Payment Collected</div>
+                </div>
+                <div class="ring-item">
+                    <div class="ring-container">
+                        <div class="progress-ring amount-ring" id="amountRing" style="--percent: 0%">
+                            <span class="ring-text" id="amountText">₹0/₹0</span>
+                        </div>
+                    </div>
+                    <div class="ring-label">Amount Collected</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            Loading revenue data...
+        </div>
+    </div>
+
+    <script>
+        let allReports = [];
+        let currentFilter = 'lifetime';
+        let currentSummary = null;
+
+        // Initialize page
+        async function init() {
+            await loadRevenueData();
+        }
+
+        // Load revenue data and summary
+        async function loadRevenueData() {
+            try {
+                // Load both reports and summary in parallel
+                const [reportsResponse, summaryResponse] = await Promise.all([
+                    fetch(`/api/revenue?filter=${currentFilter}`),
+                    fetch(`/api/revenue/summary?filter=${currentFilter}`)
+                ]);
+
+                allReports = await reportsResponse.json();
+                currentSummary = await summaryResponse.json();
+
+                updateSummaryDisplay();
+                renderRevenueCards();
+
+            } catch (error) {
+                console.error('Error loading revenue data:', error);
+                showError();
+            }
+        }
+
+        // Apply filter
+        async function applyFilter() {
+            currentFilter = document.getElementById('filterSelect').value;
+            
+            // Show loading state
+            document.getElementById('mainContent').innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    Loading revenue data...
+                </div>
+            `;
+
+            await loadRevenueData();
+        }
+
+        // Update summary display
+        function updateSummaryDisplay() {
+            if (!currentSummary) return;
+
+            // Update total revenue
+            document.getElementById('totalRevenue').textContent = 
+                '₹ ' + formatMoney(currentSummary.totalCompletedAmount);
+
+            // Update payment collected ring (percentage of reports paid)
+            const paymentPercent = currentSummary.paidPercentage || 0;
+            document.getElementById('paymentRing').style.setProperty('--percent', paymentPercent + '%');
+            document.getElementById('paymentPercent').textContent = Math.round(paymentPercent) + '%';
+
+            // Update amount collected ring (amount paid vs total)
+            const amountPercent = currentSummary.paidPercentage || 0;
+            document.getElementById('amountRing').style.setProperty('--percent', amountPercent + '%');
+            
+            const paidAmount = formatMoneyShort(currentSummary.totalPaidAmount);
+            const totalAmount = formatMoneyShort(currentSummary.totalCompletedAmount);
+            document.getElementById('amountText').textContent = `₹${paidAmount}/₹${totalAmount}`;
+        }
+
+        // Render revenue cards
+        function renderRevenueCards() {
+            const container = document.getElementById('mainContent');
+
+            if (allReports.length === 0) {
+                container.innerHTML = renderEmptyState();
+            } else {
+                container.innerHTML = allReports.map(report => renderRevenueCard(report)).join('');
+            }
+        }
+
+        // Render empty state
+        function renderEmptyState() {
+            return `
+                <div class="empty-state">
+                    <svg class="empty-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#3E2C23" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/>
+                    </svg>
+                    <div class="empty-title">No Completed Reports</div>
+                    <div class="empty-text">Complete and finalize reports to see revenue data</div>
+                </div>
+            `;
+        }
+
+        // Render revenue card
+        function renderRevenueCard(report) {
+            const actionButton = report.paymentDone 
+                ? `<div class="paid-badge">PAID ✓</div>`
+                : `<button class="pay-button" onclick="markAsPaid(${report.reportId})">Mark as Paid</button>`;
+
+            return `
+                <div class="revenue-card" id="card-${report.reportId}">
+                    <div class="card-main-info">
+                        <div class="customer-name">${escapeHtml(report.customerName)}</div>
+                        <div class="revenue-detail">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                            </svg>
+                            <span class="detail-text">${formatNumber(report.quantity)} Bricks</span>
+                        </div>
+                        <div class="revenue-detail">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                            </svg>
+                            <span class="detail-text">${escapeHtml(report.mobile)}</span>
+                        </div>
+                        <div class="revenue-detail">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            <span class="address-text">${escapeHtml(report.address)}</span>
+                        </div>
+                        <div class="final-total">₹ ${formatMoney(report.finalTotal)}</div>
+                    </div>
+                    <div class="card-action" id="action-${report.reportId}">
+                        ${actionButton}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Mark report as paid
+        async function markAsPaid(reportId) {
+            try {
+                const response = await fetch(`/api/revenue/${reportId}/pay`, {
+                    method: 'PUT'
+                });
+
+                if (response.ok) {
+                    // Update local data
+                    const report = allReports.find(r => r.reportId === reportId);
+                    if (report) {
+                        report.paymentDone = true;
+                    }
+
+                    // Update UI instantly - replace button with badge
+                    const actionDiv = document.getElementById(`action-${reportId}`);
+                    if (actionDiv) {
+                        actionDiv.innerHTML = '<div class="paid-badge">PAID ✓</div>';
+                    }
+
+                    // Reload summary to update totals
+                    const summaryResponse = await fetch(`/api/revenue/summary?filter=${currentFilter}`);
+                    currentSummary = await summaryResponse.json();
+                    updateSummaryDisplay();
+
+                } else {
+                    alert('Failed to mark as paid');
+                }
+            } catch (error) {
+                console.error('Error marking as paid:', error);
+                alert('Error marking as paid');
+            }
+        }
+
+        // Show error state
+        function showError() {
+            const container = document.getElementById('mainContent');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <svg class="empty-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#3E2C23" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                    <div class="empty-title">Error Loading Data</div>
+                    <div class="empty-text">Please refresh the page to try again</div>
+                </div>
+            `;
+        }
+
+        // Format number with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Format money with 2 decimals
+        function formatMoney(amount) {
+            return parseFloat(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Format money for short display (K, L notation)
+        function formatMoneyShort(amount) {
+            const num = parseFloat(amount);
+            if (num >= 10000000) { // 1 Crore
+                return (num / 10000000).toFixed(1) + 'Cr';
+            } else if (num >= 100000) { // 1 Lakh
+                return (num / 100000).toFixed(1) + 'L';
+            } else if (num >= 1000) { // 1 Thousand
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toFixed(0);
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Go back to home
+        function goBack() {
+            window.location.href = '/home.html';
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

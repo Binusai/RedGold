@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#7B2D26">
+    <link rel="icon" href="/logo.png" type="image/png">
+
+    <title>RED GOLD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #F4EFEA;
+            color: #3E2C23;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            padding-bottom: 20px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background-color: #7B2D26;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .hamburger {
+            position: absolute;
+            left: 12px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            width: 22px;
+            height: 2.5px;
+            background-color: #FFFFFF;
+            display: block;
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .app-name {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        /* Side Menu */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .menu-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background-color: #FFFFFF;
+            z-index: 300;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .side-menu.active {
+            left: 0;
+        }
+
+        .menu-header {
+            background-color: #7B2D26;
+            color: #FFFFFF;
+            padding: 18px 16px;
+            font-size: 17px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .menu-close {
+            width: 32px;
+            height: 32px;
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            font-size: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .menu-items {
+            overflow-y: auto;
+            height: calc(100% - 54px);
+        }
+
+        .menu-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid #E8E3DC;
+            color: #3E2C23;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .menu-item:active {
+            background-color: #F4EFEA;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 56px;
+            padding: 16px;
+            max-width: 100%;
+        }
+
+        .greeting-section {
+            margin-bottom: 16px;
+        }
+
+        .greeting {
+            font-size: 16px;
+            color: #C0582B;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .user-name {
+            font-size: 22px;
+            color: #3E2C23;
+            font-weight: 700;
+        }
+
+        /* Animation Card */
+        .animation-card {
+            background: linear-gradient(135deg, #7B2D26 0%, #A03A2F 100%);
+            border-radius: 20px;
+            padding: 30px 20px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brick-wall {
+            position: relative;
+            width: 180px;
+            height: 120px;
+            margin-bottom: 16px;
+        }
+
+        .brick {
+            position: absolute;
+            background: linear-gradient(135deg, #C0582B 0%, #A04525 100%);
+            border: 1.5px solid #8B2E1E;
+            border-radius: 2px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Row 1 - Bottom */
+        .brick-1-1 {
+            width: 58px;
+            height: 22px;
+            bottom: 0;
+            left: 0;
+            animation: brickWave 3s ease-in-out infinite;
+        }
+
+        .brick-1-2 {
+            width: 58px;
+            height: 22px;
+            bottom: 0;
+            left: 61px;
+            animation: brickWave 3s ease-in-out infinite 0.1s;
+        }
+
+        .brick-1-3 {
+            width: 58px;
+            height: 22px;
+            bottom: 0;
+            right: 0;
+            animation: brickWave 3s ease-in-out infinite 0.2s;
+        }
+
+        /* Row 2 */
+        .brick-2-1 {
+            width: 58px;
+            height: 22px;
+            bottom: 24px;
+            left: 30px;
+            animation: brickWave 3s ease-in-out infinite 0.15s;
+        }
+
+        .brick-2-2 {
+            width: 58px;
+            height: 22px;
+            bottom: 24px;
+            left: 91px;
+            animation: brickWave 3s ease-in-out infinite 0.25s;
+        }
+
+        /* Row 3 */
+        .brick-3-1 {
+            width: 58px;
+            height: 22px;
+            bottom: 48px;
+            left: 0;
+            animation: brickWave 3s ease-in-out infinite 0.3s;
+        }
+
+        .brick-3-2 {
+            width: 58px;
+            height: 22px;
+            bottom: 48px;
+            left: 61px;
+            animation: brickWave 3s ease-in-out infinite 0.4s;
+        }
+
+        .brick-3-3 {
+            width: 58px;
+            height: 22px;
+            bottom: 48px;
+            right: 0;
+            animation: brickWave 3s ease-in-out infinite 0.5s;
+        }
+
+        /* Row 4 */
+        .brick-4-1 {
+            width: 58px;
+            height: 22px;
+            bottom: 72px;
+            left: 30px;
+            animation: brickWave 3s ease-in-out infinite 0.45s;
+        }
+
+        .brick-4-2 {
+            width: 58px;
+            height: 22px;
+            bottom: 72px;
+            left: 91px;
+            animation: brickWave 3s ease-in-out infinite 0.55s;
+        }
+
+        /* Row 5 - Top */
+        .brick-5-1 {
+            width: 58px;
+            height: 22px;
+            bottom: 96px;
+            left: 0;
+            animation: brickWave 3s ease-in-out infinite 0.6s;
+        }
+
+        .brick-5-2 {
+            width: 58px;
+            height: 22px;
+            bottom: 96px;
+            left: 61px;
+            animation: brickWave 3s ease-in-out infinite 0.7s;
+        }
+
+        .brick-5-3 {
+            width: 58px;
+            height: 22px;
+            bottom: 96px;
+            right: 0;
+            animation: brickWave 3s ease-in-out infinite 0.8s;
+        }
+
+        @keyframes brickWave {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-3px) scale(1.02);
+            }
+        }
+
+        .animation-text {
+            color: #FFFFFF;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Action Grid */
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #3E2C23;
+            margin-bottom: 16px;
+        }
+
+        .action-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+            justify-content: space-between;
+        }
+
+        .grid-item {
+            flex: 1 1 calc(50% - 8px);
+            min-width: calc(50% - 8px);
+            max-width: calc(50% - 8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .icon-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background-color: #FFFFFF;
+            border: 3px solid #7B2D26;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .grid-item:active .icon-circle {
+            background-color: #F9F5F0;
+            transform: scale(0.95);
+        }
+
+        .icon-svg {
+            width: 45px;
+            height: 45px;
+        }
+
+        .icon-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3E2C23;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* Primary Action Button */
+        .add-booking-btn {
+            width: 100%;
+            background-color: #7B2D26;
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #FFFFFF;
+            text-align: center;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .add-booking-btn:active {
+            background-color: #632419;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background-color: #7B2D26;
+            border: none;
+            border-radius: 50%;
+            color: #FFFFFF;
+            font-size: 28px;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 50;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s;
+        }
+
+        .fab:active {
+            background-color: #632419;
+            transform: scale(0.9);
+        }
+
+        /* Tablet and Desktop Styles */
+        @media (min-width: 600px) {
+            .header {
+                height: 64px;
+            }
+
+            .app-name {
+                font-size: 24px;
+            }
+
+            .main-content {
+                max-width: 1200px;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 32px;
+            }
+
+            .greeting {
+                font-size: 20px;
+            }
+
+            .user-name {
+                font-size: 32px;
+            }
+
+            .animation-card {
+                padding: 60px 40px;
+                min-height: 320px;
+            }
+
+            .brick-wall {
+                width: 450px;
+                height: 200px;
+                margin-bottom: 24px;
+            }
+
+            .brick {
+                border: 2px solid #8B2E1E;
+            }
+
+            /* Row 1 - Bottom */
+            .brick-1-1 {
+                width: 88px;
+                height: 35px;
+                bottom: 0;
+                left: 0;
+            }
+
+            .brick-1-2 {
+                width: 88px;
+                height: 35px;
+                bottom: 0;
+                left: 92px;
+            }
+
+            .brick-1-3 {
+                width: 88px;
+                height: 35px;
+                bottom: 0;
+                left: 184px;
+            }
+
+            .brick-1-4 {
+                width: 88px;
+                height: 35px;
+                bottom: 0;
+                left: 276px;
+            }
+
+            .brick-1-5 {
+                width: 88px;
+                height: 35px;
+                bottom: 0;
+                right: 0;
+            }
+
+            /* Row 2 */
+            .brick-2-1 {
+                width: 88px;
+                height: 35px;
+                bottom: 39px;
+                left: 45px;
+            }
+
+            .brick-2-2 {
+                width: 88px;
+                height: 35px;
+                bottom: 39px;
+                left: 137px;
+            }
+
+            .brick-2-3 {
+                width: 88px;
+                height: 35px;
+                bottom: 39px;
+                left: 229px;
+            }
+
+            .brick-2-4 {
+                width: 88px;
+                height: 35px;
+                bottom: 39px;
+                left: 321px;
+            }
+
+            /* Row 3 */
+            .brick-3-1 {
+                width: 88px;
+                height: 35px;
+                bottom: 78px;
+                left: 0;
+            }
+
+            .brick-3-2 {
+                width: 88px;
+                height: 35px;
+                bottom: 78px;
+                left: 92px;
+            }
+
+            .brick-3-3 {
+                width: 88px;
+                height: 35px;
+                bottom: 78px;
+                left: 184px;
+            }
+
+            .brick-3-4 {
+                width: 88px;
+                height: 35px;
+                bottom: 78px;
+                left: 276px;
+            }
+
+            .brick-3-5 {
+                width: 88px;
+                height: 35px;
+                bottom: 78px;
+                right: 0;
+            }
+
+            /* Row 4 */
+            .brick-4-1 {
+                width: 88px;
+                height: 35px;
+                bottom: 117px;
+                left: 45px;
+            }
+
+            .brick-4-2 {
+                width: 88px;
+                height: 35px;
+                bottom: 117px;
+                left: 137px;
+            }
+
+            .brick-4-3 {
+                width: 88px;
+                height: 35px;
+                bottom: 117px;
+                left: 229px;
+            }
+
+            .brick-4-4 {
+                width: 88px;
+                height: 35px;
+                bottom: 117px;
+                left: 321px;
+            }
+
+            /* Row 5 - Top */
+            .brick-5-1 {
+                width: 88px;
+                height: 35px;
+                bottom: 156px;
+                left: 0;
+            }
+
+            .brick-5-2 {
+                width: 88px;
+                height: 35px;
+                bottom: 156px;
+                left: 92px;
+            }
+
+            .brick-5-3 {
+                width: 88px;
+                height: 35px;
+                bottom: 156px;
+                left: 184px;
+            }
+
+            .brick-5-4 {
+                width: 88px;
+                height: 35px;
+                bottom: 156px;
+                left: 276px;
+            }
+
+            .brick-5-5 {
+                width: 88px;
+                height: 35px;
+                bottom: 156px;
+                right: 0;
+            }
+
+            .animation-text {
+                font-size: 22px;
+            }
+
+            .section-title {
+                font-size: 22px;
+                margin-bottom: 24px;
+            }
+
+            .action-grid {
+                gap: 32px;
+            }
+
+            .grid-item {
+                flex: 1 1 calc(25% - 24px);
+                min-width: calc(25% - 24px);
+                max-width: calc(25% - 24px);
+            }
+
+            .icon-circle {
+                width: 140px;
+                height: 140px;
+                border: 4px solid #7B2D26;
+                margin-bottom: 16px;
+            }
+
+            .icon-svg {
+                width: 70px;
+                height: 70px;
+            }
+
+            .icon-label {
+                font-size: 17px;
+                font-weight: 600;
+            }
+
+            .add-booking-btn {
+                padding: 24px;
+                font-size: 20px;
+                border-radius: 16px;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .fab {
+                width: 64px;
+                height: 64px;
+                font-size: 32px;
+                bottom: 32px;
+                right: 32px;
+            }
+        }
+
+        /* Extra bricks for desktop - hidden on mobile */
+        .brick-1-4, .brick-1-5,
+        .brick-2-3, .brick-2-4,
+        .brick-3-4, .brick-3-5,
+        .brick-4-3, .brick-4-4,
+        .brick-5-4, .brick-5-5 {
+            display: none;
+        }
+
+        @media (min-width: 600px) {
+            .brick-1-4, .brick-1-5,
+            .brick-2-3, .brick-2-4,
+            .brick-3-4, .brick-3-5,
+            .brick-4-3, .brick-4-4,
+            .brick-5-4, .brick-5-5 {
+                display: block;
+            }
+        }
+        @media (min-width: 600px) {
+            .add-booking-btn {
+                padding: 24px;
+                font-size: 20px;
+                border-radius: 16px;
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="hamburger" id="hamburgerBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="app-name">HOME</div>
+    </div>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Side Menu -->
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-header">
+            <span>Menu</span>
+            <button class="menu-close" id="menuCloseBtn">×</button>
+        </div>
+        <div class="menu-items">
+            <div class="menu-item" data-action="add-booking">Add Booking</div>
+            <div class="menu-item" data-action="bookings">List of Bookings</div>
+            <div class="menu-item" data-action="history">History</div>
+            <div class="menu-item" data-action="reports">Reports</div>
+            <div class="menu-item" data-action="revenue">Revenue Generated</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Greeting Section -->
+        <div class="greeting-section">
+            <div class="greeting">Hello there !!</div>
+        </div>
+
+        <!-- Animation Card -->
+        <div class="animation-card">
+            <div class="brick-wall">
+                <!-- Row 1 (Bottom) -->
+                <div class="brick brick-1-1"></div>
+                <div class="brick brick-1-2"></div>
+                <div class="brick brick-1-3"></div>
+                <div class="brick brick-1-4"></div>
+                <div class="brick brick-1-5"></div>
+                
+                <!-- Row 2 -->
+                <div class="brick brick-2-1"></div>
+                <div class="brick brick-2-2"></div>
+                <div class="brick brick-2-3"></div>
+                <div class="brick brick-2-4"></div>
+                
+                <!-- Row 3 -->
+                <div class="brick brick-3-1"></div>
+                <div class="brick brick-3-2"></div>
+                <div class="brick brick-3-3"></div>
+                <div class="brick brick-3-4"></div>
+                <div class="brick brick-3-5"></div>
+                
+                <!-- Row 4 -->
+                <div class="brick brick-4-1"></div>
+                <div class="brick brick-4-2"></div>
+                <div class="brick brick-4-3"></div>
+                <div class="brick brick-4-4"></div>
+                
+                <!-- Row 5 (Top) -->
+                <div class="brick brick-5-1"></div>
+                <div class="brick brick-5-2"></div>
+                <div class="brick brick-5-3"></div>
+                <div class="brick brick-5-4"></div>
+                <div class="brick brick-5-5"></div>
+            </div>
+            <div class="animation-text">Production & Delivery System</div>
+        </div>
+
+        <!-- Section Title -->
+        <div class="section-title">Quick Actions</div>
+
+        <!-- Action Grid -->
+        <div class="action-grid">
+            <!-- Bookings -->
+            <div class="grid-item" onclick="handleAction('bookings')">
+                <div class="icon-circle">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="#7B2D26" stroke-width="2"/>
+                        <path d="M3 8H21M8 3V8M16 3V8" stroke="#7B2D26" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="8" cy="13" r="1" fill="#7B2D26"/>
+                        <circle cx="12" cy="13" r="1" fill="#7B2D26"/>
+                        <circle cx="16" cy="13" r="1" fill="#7B2D26"/>
+                        <circle cx="8" cy="17" r="1" fill="#7B2D26"/>
+                        <circle cx="12" cy="17" r="1" fill="#7B2D26"/>
+                    </svg>
+                </div>
+                <div class="icon-label">List of Bookings</div>
+            </div>
+            <!-- Pending -->
+            <div class="grid-item" onclick="handleAction('history')">
+                <div class="icon-circle">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="9" stroke="#7B2D26" stroke-width="2"/>
+                        <path d="M12 7V12L15 15" stroke="#7B2D26" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="icon-label">History</div>
+            </div>
+
+            <!-- History -->
+            <div class="grid-item" onclick="handleAction('reports')">
+                <div class="icon-circle">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 7H21M3 12H21M3 17H21" stroke="#7B2D26" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="7" cy="7" r="1.5" fill="#7B2D26"/>
+                        <circle cx="7" cy="12" r="1.5" fill="#7B2D26"/>
+                        <circle cx="7" cy="17" r="1.5" fill="#7B2D26"/>
+                    </svg>
+                </div>
+                <div class="icon-label">View Reports</div>
+            </div>
+
+            <!-- Revenue -->
+            <div class="grid-item" onclick="handleAction('revenue')">
+                <div class="icon-circle">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#7B2D26" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M2 17L12 22L22 17" stroke="#7B2D26" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="#7B2D26" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="icon-label">Revenue Generated</div>
+            </div>
+
+        </div>
+
+        <!-- Primary Action Button -->
+        <button class="add-booking-btn" onclick="handleAction('add-booking')">ADD BOOKING</button>
+    </div>
+
+
+    <script>
+        // Menu elements
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const menuCloseBtn = document.getElementById('menuCloseBtn');
+        const sideMenu = document.getElementById('sideMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        // Open menu
+        function openMenu() {
+            sideMenu.classList.add('active');
+            menuOverlay.classList.add('active');
+            hamburgerBtn.classList.add('active');
+        }
+
+        // Close menu
+        function closeMenu() {
+            sideMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            hamburgerBtn.classList.remove('active');
+        }
+
+        // Toggle menu with hamburger
+        hamburgerBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (sideMenu.classList.contains('active')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+
+        // Close menu with X button
+        menuCloseBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            closeMenu();
+        });
+
+        // Close menu when clicking overlay
+        menuOverlay.addEventListener('click', closeMenu);
+
+        // Handle menu item clicks
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(function(item) {
+            item.addEventListener('click', function() {
+                const action = this.getAttribute('data-action');
+
+                if (action === 'add-booking') {
+                    window.location.href = '/add-booking.html';
+                    return;
+                }
+
+                if (action === 'history') {
+                    window.location.href = '/history.html';
+                    return;
+                }
+
+                if (action === 'reports') {
+                    window.location.href = '/reports.html';
+                    return;
+                }
+                if (action === 'bookings') {
+                    window.location.href = '/bookings.html';
+                    return;
+                }
+                if (action === 'revenue') {
+                    window.location.href = '/revenue.html';
+                    return;
+                }
+
+                closeMenu();
+            });
+        });
+
+
+
+        // Handle action buttons
+        function handleAction(action) {
+
+            if (action === 'add-booking') {
+                window.location.href = '/add-booking.html';
+                return;
+            }
+
+            if (action === 'history') {
+                window.location.href = '/history.html';
+                return;
+            }
+
+            if (action === 'reports') {
+                window.location.href = '/reports.html';
+                return;
+            }
+            if (action === 'bookings') {
+                window.location.href = '/bookings.html';
+                return;
+            }
+            if (action === 'revenue') {
+                window.location.href = '/revenue.html';
+                return;
+            }
+
+            console.log('Action triggered:', action);
+        }
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#7B2D26">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#FFFFFF">
+    <link rel="icon" href="/logo.png" type="image/png">
+    <title>RED GOLD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #FFFFFF;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .splash-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+.logo-image {
+            width: 130px;
+            max-width: 140px;
+            height: auto;
+            opacity: 0;
+            animation: fadeInLogo 2.2s ease-out forwards;
+        }
+
+        .brand-text {
+            margin-top: 24px;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            opacity: 0;
+            animation: fadeInText 0.6s ease-out forwards;
+            animation-delay: 1.2s;
+        }
+
+        /* Tablet and Desktop Styles */
+        @media (min-width: 600px) {
+            .logo-image {
+                width: 250px;
+                max-width: 280px;
+            }
+
+            .brand-text {
+                margin-top: 48px;
+                font-size: 64px;
+                letter-spacing: 6px;
+            }
+        }
+
+        @media (min-width: 900px) {
+            .logo-image {
+                width: 320px;
+                max-width: 350px;
+            }
+
+            .brand-text {
+                margin-top: 64px;
+                font-size: 80px;
+                letter-spacing: 8px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .logo-image {
+                width: 350px;
+                max-width: 350px;
+            }
+
+            .brand-text {
+                margin-top: 80px;
+                font-size: 100px;
+            }
+        }
+
+        .text-red {
+            color: #7B2D26;
+        }
+
+        .text-gold {
+            color: #7B2D26;
+            animation: colorToGold 1s ease-out forwards;
+            animation-delay: 1.9s;
+        }
+
+        @keyframes fadeInLogo {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInText {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes colorToGold {
+            from {
+                color: #7B2D26;
+            }
+            to {
+                color: #ffc82f;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .logo-image,
+            .brand-text,
+            .text-gold {
+                animation: none;
+                opacity: 1;
+            }
+
+            .text-gold {
+                color: #ffc82f;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-container">
+        <img src="/logo.png" alt="Logo" class="logo-image">
+        <div class="brand-text">
+            <span class="text-red">RED</span> <span class="text-gold">GOLD</span>
+        </div>
+    </div>
+
+    <script>
+        // Check if user prefers reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (prefersReducedMotion) {
+            // Redirect immediately if reduced motion is preferred
+            setTimeout(function() {
+                window.location.href = '/login.html';
+            }, 1000);
+        } else {
+            // Normal animation timing: 1.2s logo + 0.4s text + 0.6s color + 1s pause = 3.2s
+            setTimeout(function() {
+                window.location.href = '/login.html';
+            }, 4600);
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js');
+        }
+    </script>
+</body>
+</html>
