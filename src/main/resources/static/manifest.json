@@ -2,13 +2,20 @@
   "name": "Red Gold",
   "short_name": "RedGold",
   "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#7B2D26",
   "theme_color": "#7B2D26",
   "icons": [
     {
       "src": "/logo.png",
       "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
