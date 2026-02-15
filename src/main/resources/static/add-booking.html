@@ -437,12 +437,14 @@
                     <span class="toggle-label">Same as Mobile</span>
                 </div>
                 <input 
-                    type="number" 
-                    id="whatsapp" 
-                    class="form-input" 
+                    type="tel"
+                    id="whatsapp"
+                    class="form-input"
                     placeholder="Enter WhatsApp number"
                     maxlength="10"
-                >
+                    pattern="[0-9]{10}"
+                    inputmode="numeric"
+                />
             </div>
 
             <!-- Address -->
@@ -512,9 +514,9 @@
             const toggle = document.getElementById('whatsappToggle');
             const whatsappInput = document.getElementById('whatsapp');
             const mobileInput = document.getElementById('mobile');
-
+        
             isWhatsAppSameAsMobile = !isWhatsAppSameAsMobile;
-
+        
             if (isWhatsAppSameAsMobile) {
                 toggle.classList.add('active');
                 whatsappInput.value = mobileInput.value;
@@ -522,15 +524,30 @@
             } else {
                 toggle.classList.remove('active');
                 whatsappInput.disabled = false;
+                whatsappInput.value = '';
             }
         }
 
-        // Update WhatsApp when mobile changes (if toggle is on)
-        document.getElementById('mobile').addEventListener('input', function() {
+
+        function restrictToTenDigits(el) {
+            el.value = el.value.replace(/\D/g, '');
+            if (el.value.length > 10) {
+                el.value = el.value.slice(0, 10);
+            }
+        }
+        
+        document.getElementById('mobile').addEventListener('input', function () {
+            restrictToTenDigits(this);
+        
             if (isWhatsAppSameAsMobile) {
                 document.getElementById('whatsapp').value = this.value;
             }
         });
+        
+        document.getElementById('whatsapp').addEventListener('input', function () {
+            restrictToTenDigits(this);
+        });
+
 
         // Handle form submission
         document.getElementById('bookingForm').addEventListener('submit', async function(e) {
@@ -551,11 +568,14 @@
 
             customerName = name;
 
+            const formattedMobile = "91" + mobile;
+            const formattedWhatsapp = whatsapp ? "91" + whatsapp : formattedMobile;
+            
             const bookingData = {
                 name: name,
                 email: email || null,
-                mobile: mobile,
-                whatsapp: whatsapp || mobile,
+                mobile: formattedMobile,
+                whatsapp: formattedWhatsapp,
                 address: address || null,
                 location: location || null,
                 quantity: parseInt(quantity)
