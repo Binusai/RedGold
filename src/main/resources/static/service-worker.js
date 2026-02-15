@@ -1,6 +1,6 @@
-const CACHE_NAME = "redgold-v2";
+const CACHE = "redgold-cache-v2";
 
-const urlsToCache = [
+const ASSETS = [
   "/",
   "/index.html",
   "/login.html",
@@ -10,27 +10,33 @@ const urlsToCache = [
   "/reports.html",
   "/history.html",
   "/revenue.html",
-  "/manifest.json",
-  "/logo.png"
+  "/logo.png",
+  "/manifest.json"
 ];
 
-// Install
+// Install → cache app shell
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
   );
   self.skipWaiting();
 });
 
-// Activate
+// Activate → take control immediately
 self.addEventListener("activate", event => {
   event.waitUntil(self.clients.claim());
 });
 
-// Fetch (network first, fallback cache)
+// THIS PART IS WHAT MAKES IT INSTALLABLE
 self.addEventListener("fetch", event => {
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      caches.match("/index.html")
+    );
+    return;
+  }
+
   event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
+    caches.match(event.request).then(res => res || fetch(event.request))
   );
 });
