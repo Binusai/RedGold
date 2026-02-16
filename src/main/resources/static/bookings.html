@@ -765,6 +765,8 @@
 
         // Escape HTML to prevent XSS
         function escapeHtml(text) {
+            if (!text) return '-';   // prevents null/undefined crash
+        
             const map = {
                 '&': '&amp;',
                 '<': '&lt;',
@@ -772,8 +774,10 @@
                 '"': '&quot;',
                 "'": '&#039;'
             };
-            return text.replace(/[&<>"']/g, m => map[m]);
+        
+            return text.toString().replace(/[&<>"']/g, m => map[m]);
         }
+
 
         // Go back to home
         function goBack() {
