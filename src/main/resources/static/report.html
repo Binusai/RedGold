@@ -891,8 +891,9 @@
                     body: JSON.stringify(reportData)
                 });
 
-                const result = await response.json();
-                savedReportId = result.reportId || result;
+                const savedId = await response.json();
+                savedReportId = savedId;
+
 
                 showSuccess('Draft saved successfully!');
 
@@ -915,8 +916,9 @@
                     body: JSON.stringify(reportData)
                 });
 
-                const result = await response.json();
-                savedReportId = result.reportId || result;
+                const savedId = await response.json();
+                savedReportId = savedId;
+
 
                 showSuccess('Draft updated successfully!');
 
@@ -941,8 +943,8 @@
                     body: JSON.stringify(reportData)
                 });
 
-                const result = await response.json();
-                savedReportId = result.reportId || result;
+                const savedId = await response.json();
+                savedReportId = savedId;
 
                 showSuccess('Report finalized successfully!');
                 
@@ -1248,16 +1250,39 @@
 
         // Build report data object
         function buildReportData(status) {
+        
             return {
                 bookingId: selectedBooking.id,
                 status: status,
-                items: reportItems.filter(item => item.description && item.description.trim() !== ''),
+        
+                // IMPORTANT → send edited booking/customer values
+                customerName: document.getElementById('customerName').value.trim(),
+                mobile: document.getElementById('customerMobile').value.trim(),
+                email: selectedBooking.customer.email || "",
+                address: document.getElementById('customerAddress').value.trim(),
+                quantity: parseInt(document.getElementById('bookingQuantity').value || 0),
+                location: document.getElementById('bookingDestination').value.trim(),
+        
+                // report items
+                items: reportItems
+                    .filter(item => item.description && item.description.trim() !== '')
+                    .map(item => ({
+                        description: item.description,
+                        rate: item.rate,
+                        qty: item.qty,
+                        total: item.total
+                    })),
+        
                 discount: parseFloat(document.getElementById('discountInput').value) || 0,
                 netTotal: reportItems.reduce((sum, item) => sum + item.total, 0),
-                finalTotal: reportItems.reduce((sum, item) => sum + item.total, 0) - (parseFloat(document.getElementById('discountInput').value) || 0),
+                finalTotal:
+                    reportItems.reduce((sum, item) => sum + item.total, 0)
+                    - (parseFloat(document.getElementById('discountInput').value) || 0),
+        
                 remarks: document.getElementById('remarksBox').value.trim()
             };
         }
+
 
         // Validate report
         function validateReport() {
