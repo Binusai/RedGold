@@ -702,6 +702,10 @@
             }
         }
 
+        .admin-only {
+            display: none;
+        }
+
         /* Extra bricks for desktop - hidden on mobile */
         .brick-1-4, .brick-1-5,
         .brick-2-3, .brick-2-4,
@@ -749,15 +753,18 @@
     <!-- Side Menu -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
-            <span>Menu</span>
+            <span id="menuTrigger">Menu</span>
             <button class="menu-close" id="menuCloseBtn">×</button>
         </div>
         <div class="menu-items">
             <div class="menu-item" data-action="add-booking">Add Booking</div>
-            <div class="menu-item" data-action="bookings">List of Bookings</div>
+            <div class="menu-item admin-only" data-action="bookings">List of Bookings</div>
             <div class="menu-item" data-action="history">History</div>
             <div class="menu-item" data-action="reports">Reports</div>
             <div class="menu-item" data-action="revenue">Revenue Generated</div>
+            <div class="menu-item admin-only" data-action="create-investment">Create Investment</div>
+            <div class="menu-item admin-only" data-action="view-investment">View Investments</div>
+
         </div>
     </div>
 
@@ -813,7 +820,8 @@
         <!-- Action Grid -->
         <div class="action-grid">
             <!-- Bookings -->
-            <div class="grid-item" onclick="handleAction('bookings')">
+            
+            <div class="grid-item" id="bookingsQuickAction" onclick="handleAction('bookings')">
                 <div class="icon-circle">
                     <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="3" y="3" width="18" height="18" rx="2" stroke="#7B2D26" stroke-width="2"/>
@@ -862,6 +870,27 @@
                 </div>
                 <div class="icon-label">Revenue Generated</div>
             </div>
+
+            <!-- Create Investment (Hidden by default) -->
+            <div class="grid-item admin-only"  onclick="handleAction('create-investment')">
+                <div class="icon-circle">
+                    <svg class="icon-svg" viewBox="0 0 24 24">
+                        <path d="M12 5V19M5 12H19" stroke="#7B2D26" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="icon-label">Create Investment</div>
+            </div>
+            
+            <!-- View Investments (Hidden by default) -->
+            <div class="grid-item admin-only" onclick="handleAction('view-investment')">
+                <div class="icon-circle">
+                    <svg class="icon-svg" viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="16" stroke="#7B2D26" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="icon-label">View Investments</div>
+            </div>
+
 
         </div>
 
@@ -938,6 +967,16 @@
                     window.location.href = '/revenue.html';
                     return;
                 }
+                if (action === 'create-investment') {
+                    window.location.href = '/create-investment.html';
+                    return;
+                }
+                
+                if (action === 'view-investment') {
+                    window.location.href = '/view-investment.html';
+                    return;
+                }
+
 
                 closeMenu();
             });
@@ -970,9 +1009,39 @@
                 window.location.href = '/revenue.html';
                 return;
             }
+            if (action === 'create-investment') {
+                window.location.href = '/create-investment.html';
+                return;
+            }
+            
+            if (action === 'view-investment') {
+                window.location.href = '/view-investment.html';
+                return;
+            }
+
 
             console.log('Action triggered:', action);
         }
+
+        const menuTrigger = document.getElementById("menuTrigger");
+        let adminMenuUnlocked = false;
+        
+        menuTrigger.addEventListener("click", function () {
+        
+            adminMenuUnlocked = !adminMenuUnlocked;
+        
+            document.querySelectorAll('.admin-only').forEach(el => {
+                el.style.display = adminMenuUnlocked ? '' : 'none';
+            });
+            
+                    
+            const bookingsQuick = document.getElementById('bookingsQuickAction');
+            if (bookingsQuick) {
+                bookingsQuick.style.display = adminMenuUnlocked ? 'block' : 'none';
+            }
+        });
+
+
 
 
     </script>
