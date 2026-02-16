@@ -122,7 +122,8 @@ public class ReportController {
         booking.setQuantity(req.quantity());
     
         // ---------------- FIND OR CREATE REPORT ----------------
-        Report report = reportRepo.findByBookingId(booking.getId()).orElse(null);
+        Report report = reportRepo.findByBookingIdWithItems(booking.getId()).orElse(null);
+
     
         if (report == null) {
             report = new Report();
