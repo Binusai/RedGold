@@ -777,7 +777,8 @@
 
         // Create new investment
         function createNewInvestment() {
-            window.location.href = '/create-investment.html';
+            // force new record instead of reopening last edited one
+            window.location.href = '/create-investment.html?new=' + Date.now();
         }
 
         // Go back to home
