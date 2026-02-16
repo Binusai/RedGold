@@ -435,52 +435,46 @@
 
         // Initialize page
         async function init() {
-            // Reset state
-            investmentItems = [];
-            rowCounter = 0;
-            investmentId = null;
-            investmentDate = null;
-            document.getElementById('investmentTableBody').innerHTML = '';
-
-            // Try to load existing investment
-            await loadExistingInvestment();
-
-            // If no existing investment, set today's date
-            if (!investmentDate) {
+        
+            const urlParams = new URLSearchParams(window.location.search);
+            const idFromUrl = urlParams.get("id");
+        
+            if (idFromUrl) {
+                // EDIT MODE
+                investmentId = idFromUrl;
+                await loadInvestmentById(investmentId);
+            } else {
+                // CREATE MODE
                 investmentDate = new Date().toISOString().split('T')[0];
-                document.getElementById('investmentDate').textContent = new Date().toLocaleDateString();
-            }
-
-            // Initialize with one empty row if no items exist
-            if (investmentItems.length === 0) {
+                document.getElementById('investmentDate').textContent =
+                    new Date().toLocaleDateString();
+        
                 addInvestmentRow();
             }
         }
 
-        // Load existing investment if it exists
-        async function loadExistingInvestment() {
-            try {
-                const response = await fetch('/api/investments/all');
-                
-                if (response.ok) {
-                    const list = await response.json();
-                    if (list.length > 0) {
-                        const data = list[0];   // latest
-                        investmentId = data.id;
-                        investmentDate = data.createdDate;
-                
-                        document.getElementById('investmentDate').textContent =
-                            new Date(data.createdDate).toLocaleDateString();
-                
-                        data.items.forEach(item => addInvestmentRowWithData(item));
-                    }
-                }
 
-            } catch (error) {
-                console.error('Error loading investment:', error);
-                // Continue with empty form
+        // Load existing investment if it exists
+        async function loadInvestmentById(id) {
+            try {
+                const response = await fetch(`/api/investments/${id}`);
+                const data = await response.json();
+        
+                investmentDate = data.createdDate;
+        
+                document.getElementById('investmentDate').textContent =
+                    new Date(data.createdDate).toLocaleDateString();
+        
+                data.items.forEach(item => addInvestmentRowWithData(item));
+        
+                calculateTotal();
+        
+            } catch (e) {
+                console.error(e);
+                alert("Failed to load investment");
             }
         }
+
 
         // Add new investment row
         function addInvestmentRow() {
