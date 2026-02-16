@@ -872,7 +872,7 @@
             </div>
 
             <!-- Create Investment (Hidden by default) -->
-            <div class="grid-item admin-only"  onclick="handleAction('create-investment')">
+            <div class="grid-item admin-only" onclick="handleAction('create-investment')">
                 <div class="icon-circle">
                     <svg class="icon-svg" viewBox="0 0 24 24">
                         <path d="M12 5V19M5 12H19" stroke="#7B2D26" stroke-width="2"/>
@@ -1026,18 +1026,18 @@
         const menuTrigger = document.getElementById("menuTrigger");
         let adminMenuUnlocked = false;
         
-        menuTrigger.addEventListener("click", function () {
+        menuTrigger.addEventListener("click", function (e) {
+            e.stopPropagation();
         
             adminMenuUnlocked = !adminMenuUnlocked;
         
             document.querySelectorAll('.admin-only').forEach(el => {
-                el.style.display = adminMenuUnlocked ? '' : 'none';
+                el.style.display = adminMenuUnlocked ? 'flex' : 'none';
             });
-            
-                    
+
             const bookingsQuick = document.getElementById('bookingsQuickAction');
             if (bookingsQuick) {
-                bookingsQuick.style.display = adminMenuUnlocked ? 'block' : 'none';
+                bookingsQuick.style.display = adminMenuUnlocked ? 'flex' : 'none';
             }
         });
 
