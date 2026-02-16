@@ -1,15 +1,34 @@
+package com.brick.billing.controller;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+import com.brick.billing.model.Investment;
+import com.brick.billing.model.InvestmentItem;
+import com.brick.billing.repository.InvestmentRepository;
+import com.brick.billing.repository.ReportRepository;
+import com.brick.billing.controller.dto.*;
+
 @RestController
 @RequestMapping("/api/investments")
 @Transactional
 public class InvestmentController {
 
     private final InvestmentRepository repo;
+    private final ReportRepository reportRepository;
 
-    public InvestmentController(InvestmentRepository repo) {
+    public InvestmentController(InvestmentRepository repo,
+                                ReportRepository reportRepository) {
         this.repo = repo;
+        this.reportRepository = reportRepository;
     }
 
-    // SAVE OR UPDATE (same API)
+    // ---------------- SAVE OR UPDATE ----------------
     @PostMapping("/save")
     public Long save(@RequestBody InvestmentRequest req) {
 
@@ -23,7 +42,8 @@ public class InvestmentController {
 
         inv.setRemarks(req.remarks());
 
-        inv.getItems().clear();
+        // IMPORTANT: replace collection (do NOT clear managed one)
+        List<InvestmentItem> newItems = new ArrayList<>();
 
         double grandTotal = 0;
 
@@ -42,18 +62,21 @@ public class InvestmentController {
             item.setRemarks(dto.remarks());
 
             grandTotal += dto.total();
-            inv.getItems().add(item);
+            newItems.add(item);
         }
 
+        inv.setItems(newItems);
         inv.setGrandTotal(grandTotal);
 
-        repo.save(inv);
+        repo.saveAndFlush(inv);
         return inv.getId();
     }
 
-    // LIST PAGE
+    // ---------------- LIST PAGE ----------------
     @GetMapping("/all")
+    @Transactional(readOnly = true)
     public List<InvestmentViewDto> list() {
+
         return repo.findAllWithItems().stream().map(i ->
             new InvestmentViewDto(
                 i.getId(),
@@ -75,8 +98,9 @@ public class InvestmentController {
         ).toList();
     }
 
-    // LOAD FOR EDIT
+    // ---------------- LOAD FOR EDIT ----------------
     @GetMapping("/{id}")
+    @Transactional(readOnly = true)
     public InvestmentViewDto get(@PathVariable Long id) {
 
         Investment i = repo.findByIdWithItems(id).orElseThrow();
@@ -97,6 +121,27 @@ public class InvestmentController {
                     it.getRemarks()
                 )
             ).toList()
+        );
+    }
+
+    // ---------------- SUMMARY (FOR PROFIT RINGS) ----------------
+    @GetMapping("/summary")
+    @Transactional(readOnly = true)
+    public Map<String, Double> summary() {
+
+        Double invested = repo.findAll().stream()
+                .mapToDouble(Investment::getGrandTotal)
+                .sum();
+
+        Double revenue = reportRepository.sumAllFinalTotals();
+        if (revenue == null) revenue = 0.0;
+
+        Double profit = revenue - invested;
+
+        return Map.of(
+            "invested", invested,
+            "revenue", revenue,
+            "profit", profit
         );
     }
 }
