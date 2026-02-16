@@ -2,21 +2,18 @@ package com.brick.billing.controller;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.brick.billing.controller.dto.ReportItemDto;
 import com.brick.billing.controller.dto.ReportRequest;
 import com.brick.billing.controller.dto.ReportViewDto;
 import com.brick.billing.model.Booking;
+import com.brick.billing.model.Customer;   // ✅ IMPORTANT (was missing)
 import com.brick.billing.model.Report;
 import com.brick.billing.model.ReportItem;
 import com.brick.billing.repository.BookingRepository;
@@ -25,7 +22,6 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
-
 
 @RestController
 @RequestMapping("/api/report")
@@ -39,18 +35,19 @@ public class ReportController {
         this.reportRepo = reportRepo;
     }
 
-    // SAVE DRAFT
+    // ---------------- SAVE DRAFT ----------------
     @PostMapping("/save-draft")
     public Long saveDraft(@RequestBody ReportRequest req) {
         return save(req);
     }
 
-    // FINALIZE REPORT
+    // ---------------- FINALIZE REPORT ----------------
     @PostMapping("/finalize")
     public Long finalizeReport(@RequestBody ReportRequest req) {
         return save(req);
     }
 
+    // ---------------- LOAD REPORT FOR EDIT/VIEW ----------------
     @GetMapping("/by-booking/{bookingId}")
     @Transactional(readOnly = true)
     public ReportViewDto getReportByBooking(@PathVariable Long bookingId) {
@@ -58,9 +55,9 @@ public class ReportController {
         Report report = reportRepo.findByBookingId(bookingId)
                 .orElseThrow(() -> new RuntimeException("Report not found"));
 
-        var items = report.getItems().stream()
+        // ✅ Explicit type (fix Docker compile issue)
+        List<ReportItemDto> items = report.getItems().stream()
                 .map(i -> new ReportItemDto(
-                        i.getItem(),
                         i.getDescription(),
                         i.getRate(),
                         i.getQty(),
@@ -79,9 +76,7 @@ public class ReportController {
         );
     }
 
-
-
-    // DOWNLOAD PDF
+    // ---------------- DOWNLOAD PDF ----------------
     @GetMapping("/{id}/pdf")
     public ResponseEntity<byte[]> downloadPdf(@PathVariable Long id) throws Exception {
 
@@ -107,26 +102,24 @@ public class ReportController {
                 .body(out.toByteArray());
     }
 
-    // COMMON SAVE METHOD
+    // ---------------- COMMON SAVE METHOD ----------------
     @Transactional
     private Long save(ReportRequest req) {
 
         Booking booking = bookingRepo.findById(req.bookingId()).orElseThrow();
 
-        // -------- UPDATE CUSTOMER DETAILS (EDIT MODE SUPPORT) --------
+        // ✅ UPDATE CUSTOMER (Editable now)
         Customer customer = booking.getCustomer();
-        
         customer.setName(req.customerName());
         customer.setMobile(req.mobile());
         customer.setEmail(req.email());
         customer.setAddress(req.address());
         customer.setLocation(req.location());
-        
-        // -------- UPDATE BOOKING DETAILS --------
+
+        // ✅ UPDATE BOOKING (Editable quantity)
         booking.setQuantity(req.quantity());
 
-
-        // Check if report already exists for this booking
+        // Check if report exists already
         Report report = reportRepo.findByBookingId(booking.getId()).orElse(new Report());
 
         report.setBooking(booking);
@@ -136,7 +129,8 @@ public class ReportController {
         report.setFinalTotal(req.finalTotal());
         report.setRemarks(req.remarks());
 
-        var items = new ArrayList<ReportItem>();
+        // Recreate items
+        List<ReportItem> items = new ArrayList<>();
 
         for (ReportItemDto dto : req.items()) {
             ReportItem item = new ReportItem();
@@ -152,17 +146,12 @@ public class ReportController {
 
         reportRepo.save(report);
 
-        // ---- Update booking workflow status ----
+        // Update workflow status
         String newStatus = "COMPLETED".equals(req.status()) ? "COMPLETED" : "DRAFT";
-
         booking.setStatus(newStatus);
 
-        // force update immediately (avoid Hibernate cache issue)
         bookingRepo.saveAndFlush(booking);
 
         return report.getId();
-
     }
-
-
 }
