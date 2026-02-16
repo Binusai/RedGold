@@ -31,6 +31,16 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     """)
     List<Object[]> getRevenueSummary();
 
+    @Query("""
+    SELECT r FROM Report r
+    JOIN FETCH r.booking b
+    JOIN FETCH b.customer
+    LEFT JOIN FETCH r.items
+    WHERE b.id = :bookingId
+    """)
+    Optional<Report> findByBookingIdWithItems(Long bookingId);
+
+
 
 
 }
