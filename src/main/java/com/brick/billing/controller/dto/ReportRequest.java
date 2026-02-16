@@ -10,4 +10,12 @@ public record ReportRequest(
         Double finalTotal,
         String remarks,
         List<ReportItemDto> items
+        
+        String customerName,
+        String mobile,
+        String email,
+        String address,
+        Integer quantity,
+        String location,
+
 ) {}
