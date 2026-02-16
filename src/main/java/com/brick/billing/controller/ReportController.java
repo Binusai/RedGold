@@ -108,9 +108,8 @@ public class ReportController {
     
         Booking booking = bookingRepo.findByIdWithCustomer(req.bookingId())
             .orElseThrow(() -> new RuntimeException("Booking not found"));
-
     
-        // ---------------- UPDATE CUSTOMER ----------------
+        // ---- update customer ----
         Customer customer = booking.getCustomer();
         customer.setName(req.customerName());
         customer.setMobile(req.mobile());
@@ -118,12 +117,11 @@ public class ReportController {
         customer.setAddress(req.address());
         customer.setLocation(req.location());
     
-        // ---------------- UPDATE BOOKING ----------------
+        // ---- update booking ----
         booking.setQuantity(req.quantity());
     
-        // ---------------- FIND OR CREATE REPORT ----------------
+        // ---- find or create report (WITH items fetched) ----
         Report report = reportRepo.findByBookingIdWithItems(booking.getId()).orElse(null);
-
     
         if (report == null) {
             report = new Report();
@@ -136,16 +134,11 @@ public class ReportController {
         report.setFinalTotal(req.finalTotal());
         report.setRemarks(req.remarks());
     
-        // ---------------- HANDLE ITEMS CORRECTLY ----------------
-        if (report.getItems() == null) {
-            report.setItems(new ArrayList<>());
-        } else {
-            report.getItems().clear();   // VERY IMPORTANT (keeps entity managed)
-        }
+        // ---- replace items safely (NO clear(), NO add()) ----
+        List<ReportItem> newItems = new ArrayList<>();
     
         for (ReportItemDto dto : req.items()) {
     
-            // Skip empty rows (frontend may send blank rows)
             if (dto.description() == null || dto.description().isBlank()) continue;
     
             ReportItem item = new ReportItem();
@@ -155,18 +148,19 @@ public class ReportController {
             item.setQty(dto.qty());
             item.setTotal(dto.total());
     
-            report.getItems().add(item);
+            newItems.add(item);
         }
     
-        // ---------------- SAVE ----------------
-        reportRepo.saveAndFlush(report);   // force DB sync
+        report.setItems(newItems);
     
-        // ---------------- UPDATE WORKFLOW STATUS ----------------
-        String newStatus = "COMPLETED".equals(req.status()) ? "COMPLETED" : "DRAFT";
-        booking.setStatus(newStatus);
+        // ---- save ----
+        reportRepo.saveAndFlush(report);
     
+        // ---- workflow ----
+        booking.setStatus("COMPLETED".equals(req.status()) ? "COMPLETED" : "DRAFT");
         bookingRepo.saveAndFlush(booking);
     
         return report.getId();
     }
+
 }
