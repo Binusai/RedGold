@@ -781,7 +781,13 @@
 
             row.innerHTML = `
                 <td class="sno">${rowCounter}</td>
-                <td><textarea rows="2" class="desc-input" placeholder="Description" oninput="updateRow(${rowCounter})" ${isViewMode ? 'disabled' : ''}></textarea></td>
+                <td>
+                    <textarea rows="2"
+                        class="desc-input uppercase-input"
+                        placeholder="Description"
+                        oninput="updateRow(${rowCounter})"
+                        ${isViewMode ? 'disabled' : ''}>${item.description || ''}</textarea>
+                </td>
                 <td><input type="number" class="qty-input" placeholder="0" min="0" oninput="updateRow(${rowCounter})" ${isViewMode ? 'disabled' : ''}></td>
                 <td><input type="number" class="rate-input" placeholder="0.00" min="0" step="0.01" oninput="updateRow(${rowCounter})" ${isViewMode ? 'disabled' : ''}></td>
                 <td><input type="number" class="total-input" placeholder="0.00" readonly></td>
@@ -809,14 +815,14 @@
             const isViewMode = currentMode === 'view';
 
             row.innerHTML = `
-                <td class="sno">${rowCounter}</td>
-                <td>
-    <textarea rows="2"
-        class="desc-input uppercase-input"
-        placeholder="Description"
-        oninput="updateRow(${rowCounter})"
-        ${isViewMode ? 'disabled' : ''}>${item.description || ''}</textarea>
-</td>
+                <td class="sno">${rowCounter}</td><td>
+                <textarea rows="2"
+                    class="desc-input uppercase-input"
+                    placeholder="Description"
+                    oninput="updateRow(${rowCounter})"
+                    ${isViewMode ? 'disabled' : ''}>${item.description || ''}</textarea>
+                 </td>
+
                 <td><input type="number" class="qty-input" value="${item.qty || 0}" placeholder="0" min="0" oninput="updateRow(${rowCounter})" ${isViewMode ? 'disabled' : ''}></td>
                 <td><input type="number" class="rate-input" value="${item.rate || 0}" placeholder="0.00" min="0" step="0.01" oninput="updateRow(${rowCounter})" ${isViewMode ? 'disabled' : ''}></td>
                 <td><input type="number" class="total-input" value="${(item.rate * item.qty).toFixed(2)}" placeholder="0.00" readonly></td>
