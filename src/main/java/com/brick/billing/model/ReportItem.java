@@ -21,7 +21,6 @@ public class ReportItem {
     private Report report;
 
 
-    private String item;
     private String description;
     private Double rate;
     private Double qty;
@@ -30,8 +29,6 @@ public class ReportItem {
     // getters & setters
     public void setReport(Report report) { this.report = report; }
 
-    public String getItem() { return item; }
-    public void setItem(String item) { this.item = item; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
