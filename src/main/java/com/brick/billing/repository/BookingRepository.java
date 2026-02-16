@@ -1,7 +1,7 @@
 package com.brick.billing.repository;
 
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -9,6 +9,14 @@ import com.brick.billing.controller.dto.BookingExportRow;
 import com.brick.billing.model.Booking;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
+
+    @Query("""
+    SELECT b FROM Booking b
+    JOIN FETCH b.customer
+    WHERE b.id = :id
+    """)
+    Optional<Booking> findByIdWithCustomer(Long id);
+
 
     @Query("""
     SELECT b FROM Booking b
