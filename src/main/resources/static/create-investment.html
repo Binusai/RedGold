@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#7B2D26">
+    <link rel="icon" href="/logo.png" type="image/png">
+    <title>Investment - YSG Bricks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #FFFFFF;
+            color: #2C2416;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .page-header {
+            background-color: #7B2D26;
+            color: #FFFFFF;
+            padding: 24px 0;
+            margin: -20px -20px 30px -20px;
+        }
+
+        .page-header .container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-icon {
+            width: 24px;
+            height: 24px;
+            fill: #FFFFFF;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Styles */
+        .section {
+            background: #FAFAFA;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #7B2D26;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Investment Info */
+        .investment-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .info-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: #7B2D26;
+            font-weight: 700;
+        }
+
+        /* Investment Items Table */
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
+
+        .investment-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #FFFFFF;
+        }
+
+        .investment-table th {
+            background-color: #7B2D26;
+            color: #FFFFFF;
+            padding: 12px 8px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #6A251F;
+        }
+
+        .investment-table td {
+            padding: 10px 8px;
+            border: 1px solid #E0E0E0;
+        }
+
+        .investment-table input,
+        .investment-table textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #D0D0D0;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .investment-table input:focus,
+        .investment-table textarea:focus {
+            outline: none;
+            border-color: #7B2D26;
+        }
+
+        .investment-table input[type="number"] {
+            text-align: right;
+        }
+
+        .investment-table .sno {
+            width: 50px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .investment-table .desc-col {
+            min-width: 180px;
+        }
+
+        .investment-table .package-col {
+            min-width: 120px;
+        }
+
+        .investment-table .qty-col,
+        .investment-table .rate-col,
+        .investment-table .discount-col,
+        .investment-table .total-col {
+            min-width: 100px;
+        }
+
+        .investment-table .remarks-col {
+            min-width: 150px;
+        }
+
+        .investment-table .action-col {
+            width: 80px;
+            text-align: center;
+        }
+
+        .delete-btn {
+            background-color: #D32F2F;
+            color: #FFFFFF;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .delete-btn:hover {
+            background-color: #B71C1C;
+        }
+
+        .add-row-btn {
+            background-color: #2E7D32;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .add-row-btn:hover {
+            background-color: #1B5E20;
+        }
+
+        /* Summary */
+        .summary-box {
+            max-width: 400px;
+            margin-left: auto;
+            background: #FFFFFF;
+            border: 2px solid #7B2D26;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            padding-top: 16px;
+            margin-top: 8px;
+            border-top: 2px solid #7B2D26;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .summary-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #7B2D26;
+        }
+
+        .summary-row:last-child .summary-label,
+        .summary-row:last-child .summary-value {
+            font-size: 18px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px solid #E0E0E0;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-back {
+            background-color: #E0E0E0;
+            color: #2C2416;
+        }
+
+        .btn-back:hover {
+            background-color: #BDBDBD;
+        }
+
+        .btn-save {
+            background-color: #7B2D26;
+            color: #FFFFFF;
+        }
+
+        .btn-save:hover {
+            background-color: #5A2118;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px;
+            }
+
+            .page-header {
+                margin: -12px -12px 20px -12px;
+                padding: 16px 0;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .section {
+                padding: 16px;
+            }
+
+            .summary-box {
+                max-width: 100%;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .investment-table {
+                font-size: 12px;
+            }
+
+            .investment-table th,
+            .investment-table td {
+                padding: 8px 4px;
+            }
+        }
+
+        /* Success Message */
+        .success-message {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2E7D32;
+            display: none;
+        }
+
+        .success-message.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <button class="back-btn" onclick="goBack()">
+                <svg class="back-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+            </button>
+            <h1 class="page-title">Business Investment</h1>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage"></div>
+
+        <!-- Investment Info Section -->
+        <div class="section">
+            <div class="investment-info">
+                <span class="info-label">Investment Date:</span>
+                <span class="info-value" id="investmentDate">-</span>
+            </div>
+        </div>
+
+        <!-- Investment Items Section -->
+        <div class="section">
+            <h2 class="section-title">Investment Items</h2>
+            <div class="table-container">
+                <table class="investment-table">
+                    <thead>
+                        <tr>
+                            <th class="sno">S.No</th>
+                            <th class="desc-col">Description</th>
+                            <th class="package-col">Package Size</th>
+                            <th class="qty-col">Quantity</th>
+                            <th class="rate-col">Rate (₹)</th>
+                            <th class="discount-col">Discount (₹)</th>
+                            <th class="total-col">Total (₹)</th>
+                            <th class="remarks-col">Remarks</th>
+                            <th class="action-col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="investmentTableBody">
+                        <!-- Rows will be added dynamically -->
+                    </tbody>
+                </table>
+            </div>
+            <button class="add-row-btn" onclick="addInvestmentRow()">
+                <span>+</span> Add Row
+            </button>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="section">
+            <h2 class="section-title">Summary</h2>
+            <div class="summary-box">
+                <div class="summary-row">
+                    <span class="summary-label">Net Total:</span>
+                    <span class="summary-value" id="netTotal">₹ 0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-back" onclick="goBack()">← Back</button>
+            <button class="btn btn-save" onclick="saveInvestment()">Save Investment</button>
+        </div>
+    </div>
+
+    <script>
+        let investmentItems = [];
+        let rowCounter = 0;
+        let investmentId = null;
+        let investmentDate = null;
+
+        // Initialize page
+        async function init() {
+            // Reset state
+            investmentItems = [];
+            rowCounter = 0;
+            investmentId = null;
+            investmentDate = null;
+            document.getElementById('investmentTableBody').innerHTML = '';
+
+            // Try to load existing investment
+            await loadExistingInvestment();
+
+            // If no existing investment, set today's date
+            if (!investmentDate) {
+                investmentDate = new Date().toISOString().split('T')[0];
+                document.getElementById('investmentDate').textContent = new Date().toLocaleDateString();
+            }
+
+            // Initialize with one empty row if no items exist
+            if (investmentItems.length === 0) {
+                addInvestmentRow();
+            }
+        }
+
+        // Load existing investment if it exists
+        async function loadExistingInvestment() {
+            try {
+                const response = await fetch('/api/investment');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data) {
+                        investmentId = data.id;
+                        investmentDate = data.date;
+                        document.getElementById('investmentDate').textContent = 
+                            new Date(data.date).toLocaleDateString();
+
+                        // Load items
+                        if (data.items && data.items.length > 0) {
+                            data.items.forEach(item => {
+                                addInvestmentRowWithData(item);
+                            });
+                        }
+
+                        calculateTotal();
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading investment:', error);
+                // Continue with empty form
+            }
+        }
+
+        // Add new investment row
+        function addInvestmentRow() {
+            rowCounter++;
+            const tbody = document.getElementById('investmentTableBody');
+            const row = tbody.insertRow();
+            row.id = `row-${rowCounter}`;
+
+            row.innerHTML = `
+                <td class="sno">${rowCounter}</td>
+                <td><textarea rows="2" class="desc-input" placeholder="Description" oninput="updateRow(${rowCounter})"></textarea></td>
+                <td><input type="text" class="package-input" placeholder="Package size" oninput="updateRow(${rowCounter})"></td>
+                <td><input type="number" class="qty-input" placeholder="0" min="0" value="0" oninput="updateRow(${rowCounter})"></td>
+                <td><input type="number" class="rate-input" placeholder="0.00" min="0" step="0.01" value="0" oninput="updateRow(${rowCounter})"></td>
+                <td><input type="number" class="discount-input" placeholder="0.00" min="0" step="0.01" value="0" oninput="updateRow(${rowCounter})"></td>
+                <td><input type="number" class="total-input" placeholder="0.00" readonly></td>
+                <td><input type="text" class="remarks-input" placeholder="Remarks" oninput="updateRow(${rowCounter})"></td>
+                <td class="action-col">
+                    <button class="delete-btn" onclick="deleteRow(${rowCounter})">Delete</button>
+                </td>
+            `;
+
+            investmentItems.push({
+                id: rowCounter,
+                description: '',
+                packageSize: '',
+                qty: 0,
+                rate: 0,
+                discount: 0,
+                total: 0,
+                remarks: ''
+            });
+        }
+
+        // Add row with existing data
+        function addInvestmentRowWithData(item) {
+            rowCounter++;
+            const tbody = document.getElementById('investmentTableBody');
+            const row = tbody.insertRow();
+            row.id = `row-${rowCounter}`;
+
+            const total = (item.qty * item.rate) - item.discount;
+
+            row.innerHTML = `
+                <td class="sno">${rowCounter}</td>
+                <td><textarea rows="2" class="desc-input" oninput="updateRow(${rowCounter})">${item.description || ''}</textarea></td>
+                <td><input type="text" class="package-input" value="${item.packageSize || ''}" oninput="updateRow(${rowCounter})"></td>
+                <td><input type="number" class="qty-input" value="${item.qty || 0}" min="0" oninput="updateRow(${rowCounter})"></td>
+                <td><input type="number" class="rate-input" value="${item.rate || 0}" min="0" step="0.01" oninput="updateRow(${rowCounter})"></td>
+                <td><input type="number" class="discount-input" value="${item.discount || 0}" min="0" step="0.01" oninput="updateRow(${rowCounter})"></td>
+                <td><input type="number" class="total-input" value="${total.toFixed(2)}" readonly></td>
+                <td><input type="text" class="remarks-input" value="${item.remarks || ''}" oninput="updateRow(${rowCounter})"></td>
+                <td class="action-col">
+                    <button class="delete-btn" onclick="deleteRow(${rowCounter})">Delete</button>
+                </td>
+            `;
+
+            investmentItems.push({
+                id: rowCounter,
+                description: item.description || '',
+                packageSize: item.packageSize || '',
+                qty: item.qty || 0,
+                rate: item.rate || 0,
+                discount: item.discount || 0,
+                total: total,
+                remarks: item.remarks || ''
+            });
+        }
+
+        // Update row data
+        function updateRow(rowId) {
+            const row = document.getElementById(`row-${rowId}`);
+            const description = row.querySelector('.desc-input').value;
+            const packageSize = row.querySelector('.package-input').value;
+            const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
+            const rate = parseFloat(row.querySelector('.rate-input').value) || 0;
+            const discount = parseFloat(row.querySelector('.discount-input').value) || 0;
+            const remarks = row.querySelector('.remarks-input').value;
+            const total = (qty * rate) - discount;
+
+            // Update total in the row
+            row.querySelector('.total-input').value = total.toFixed(2);
+
+            // Update investmentItems array
+            const itemIndex = investmentItems.findIndex(i => i.id === rowId);
+            if (itemIndex !== -1) {
+                investmentItems[itemIndex] = {
+                    id: rowId,
+                    description: description,
+                    packageSize: packageSize,
+                    qty: qty,
+                    rate: rate,
+                    discount: discount,
+                    total: total,
+                    remarks: remarks
+                };
+            }
+
+            calculateTotal();
+        }
+
+        // Delete row
+        function deleteRow(rowId) {
+            if (investmentItems.length <= 1) {
+                alert('At least one item is required.');
+                return;
+            }
+
+            const row = document.getElementById(`row-${rowId}`);
+            row.remove();
+
+            investmentItems = investmentItems.filter(i => i.id !== rowId);
+
+            // Renumber rows
+            renumberRows();
+            calculateTotal();
+        }
+
+        // Renumber rows after deletion
+        function renumberRows() {
+            const tbody = document.getElementById('investmentTableBody');
+            const rows = tbody.querySelectorAll('tr');
+            rows.forEach((row, index) => {
+                row.querySelector('.sno').textContent = index + 1;
+            });
+        }
+
+        // Calculate total
+        function calculateTotal() {
+            const netTotal = investmentItems.reduce((sum, item) => sum + item.total, 0);
+            document.getElementById('netTotal').textContent = '₹ ' + formatMoney(netTotal);
+        }
+
+        // Save investment
+        async function saveInvestment() {
+            if (!validateInvestment()) return;
+
+            const investmentData = {
+                id: investmentId,
+                date: investmentDate,
+                items: investmentItems.map(item => ({
+                    description: item.description,
+                    packageSize: item.packageSize,
+                    qty: item.qty,
+                    rate: item.rate,
+                    discount: item.discount,
+                    total: item.total,
+                    remarks: item.remarks
+                })),
+                netTotal: investmentItems.reduce((sum, item) => sum + item.total, 0)
+            };
+
+            try {
+                const response = await fetch('/api/investment/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(investmentData)
+                });
+
+                const result = await response.json();
+                
+                if (!investmentId) {
+                    investmentId = result.id || result;
+                }
+
+                showSuccess('Investment saved successfully!');
+
+            } catch (error) {
+                console.error('Error saving investment:', error);
+                alert('Failed to save investment.');
+            }
+        }
+
+        // Validate investment
+        function validateInvestment() {
+            const validItems = investmentItems.filter(item => 
+                item.description.trim() !== '' || 
+                item.qty > 0 || 
+                item.rate > 0
+            );
+
+            if (validItems.length === 0) {
+                alert('Please add at least one item.');
+                return false;
+            }
+
+            // Check for negative values
+            for (let item of investmentItems) {
+                if (item.qty < 0 || item.rate < 0 || item.discount < 0) {
+                    alert('Quantity, Rate, and Discount must be >= 0');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.classList.add('visible');
+
+            setTimeout(() => {
+                successDiv.classList.remove('visible');
+            }, 5000);
+        }
+
+        // Format money
+        function formatMoney(amount) {
+            return amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Go back
+        function goBack() {
+            window.location.href = '/home.html';
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
