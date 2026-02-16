@@ -113,6 +113,19 @@ public class ReportController {
 
         Booking booking = bookingRepo.findById(req.bookingId()).orElseThrow();
 
+        // -------- UPDATE CUSTOMER DETAILS (EDIT MODE SUPPORT) --------
+        Customer customer = booking.getCustomer();
+        
+        customer.setName(req.customerName());
+        customer.setMobile(req.mobile());
+        customer.setEmail(req.email());
+        customer.setAddress(req.address());
+        customer.setLocation(req.location());
+        
+        // -------- UPDATE BOOKING DETAILS --------
+        booking.setQuantity(req.quantity());
+
+
         // Check if report already exists for this booking
         Report report = reportRepo.findByBookingId(booking.getId()).orElse(new Report());
 
