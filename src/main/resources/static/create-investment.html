@@ -428,6 +428,7 @@
     </div>
 
     <script>
+        let investmentId = null;
         let investmentItems = [];
         let rowCounter = 0;
         let investmentId = null;
@@ -436,13 +437,12 @@
         // Initialize page
         async function init() {
         
-            const urlParams = new URLSearchParams(window.location.search);
-            const idFromUrl = urlParams.get("id");
+            const params = new URLSearchParams(window.location.search);
+            investmentId = params.get("id");
         
-            if (idFromUrl) {
+            if (investmentId) {
                 // EDIT MODE
-                investmentId = idFromUrl;
-                await loadInvestmentById(investmentId);
+                await loadInvestment(investmentId);
             } else {
                 // CREATE MODE
                 investmentDate = new Date().toISOString().split('T')[0];
@@ -453,6 +453,25 @@
             }
         }
 
+        async function loadInvestment(id) {
+            try {
+                const res = await fetch(`/api/investments/${id}`);
+                const data = await res.json();
+        
+                investmentDate = data.createdDate;
+        
+                document.getElementById('investmentDate').textContent =
+                    new Date(data.createdDate).toLocaleDateString();
+        
+                data.items.forEach(item => addInvestmentRowWithData(item));
+        
+                calculateTotal();
+        
+            } catch (e) {
+                console.error("Load failed", e);
+                alert("Failed to load investment");
+            }
+        }
 
         // Load existing investment if it exists
         async function loadInvestmentById(id) {
@@ -610,43 +629,51 @@
 
         // Save investment
         async function saveInvestment() {
-            if (!validateInvestment()) return;
-
-            const investmentData = {
-                id: investmentId,
+        
+            const validItems = investmentItems.filter(i =>
+                i.description.trim() !== ''
+            );
+        
+            if (validItems.length === 0) {
+                alert("Add at least one item");
+                return;
+            }
+        
+            const payload = {
+                id: investmentId ? Number(investmentId) : null,
                 createdDate: investmentDate,
                 remarks: "",
-                items: investmentItems.map(item => ({
-                    description: item.description,
-                    packageSize: item.packageSize,
-                    qty: item.qty,
-                    rate: item.rate,
-                    discount: item.discount,
-                    total: item.total,
-                    remarks: item.remarks
+                items: validItems.map(i => ({
+                    description: i.description,
+                    packageSize: i.packageSize,
+                    qty: i.qty,
+                    rate: i.rate,
+                    discount: i.discount,
+                    total: i.total,
+                    remarks: i.remarks
                 }))
             };
-
+        
             try {
-                const response = await fetch('/api/investments/save', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(investmentData)
+                const res = await fetch("/api/investments/save", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
                 });
-
-                const result = await response.json();
-                
-                if (!investmentId) {
-                    investmentId = result.id || result;
-                }
-
-                showSuccess('Investment saved successfully!');
-
-            } catch (error) {
-                console.error('Error saving investment:', error);
-                alert('Failed to save investment.');
+        
+                const savedId = await res.json();
+        
+                // After save → switch to edit mode
+                investmentId = savedId;
+        
+                showSuccess("Saved successfully");
+        
+            } catch (e) {
+                console.error(e);
+                alert("Save failed");
             }
         }
+
 
         // Validate investment
         function validateInvestment() {
