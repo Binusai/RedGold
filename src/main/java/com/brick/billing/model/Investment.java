@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "investments")
 public class Investment {
 
     @Id
@@ -16,10 +17,12 @@ public class Investment {
 
     private String remarks;
 
-    private Double grandTotal;
+    private Double grandTotal = 0.0;
 
     @OneToMany(mappedBy = "investment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InvestmentItem> items = new ArrayList<>();
+
+    // getters & setters
 
     public Long getId() { return id; }
 
@@ -33,4 +36,5 @@ public class Investment {
     public void setGrandTotal(Double grandTotal) { this.grandTotal = grandTotal; }
 
     public List<InvestmentItem> getItems() { return items; }
+    public void setItems(List<InvestmentItem> items) { this.items = items; }
 }
