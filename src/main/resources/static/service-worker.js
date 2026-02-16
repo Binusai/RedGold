@@ -1,8 +1,6 @@
-const CACHE = "redgold-cache-v2";
+const CACHE = "redgold-cache-v3";
 
 const ASSETS = [
-  "/",
-  "/index.html",
   "/login.html",
   "/home.html",
   "/add-booking.html",
@@ -14,27 +12,31 @@ const ASSETS = [
   "/manifest.json"
 ];
 
-// Install → cache app shell
+// Install → cache basic files
 self.addEventListener("install", event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE).then(cache => cache.addAll(ASSETS))
   );
-  self.skipWaiting();
 });
 
-// Activate → take control immediately
+// Activate → delete old caches
 self.addEventListener("activate", event => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.map(key => {
+          if (key !== CACHE) return caches.delete(key);
+        })
+      )
+    )
+  );
+  self.clients.claim();
 });
 
-// THIS PART IS WHAT MAKES IT INSTALLABLE
+// Fetch → cache-first for static files only
 self.addEventListener("fetch", event => {
-  if (event.request.mode === "navigate") {
-    event.respondWith(
-      caches.match("/index.html")
-    );
-    return;
-  }
+  if (event.request.method !== "GET") return;
 
   event.respondWith(
     caches.match(event.request).then(res => res || fetch(event.request))
