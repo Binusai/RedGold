@@ -428,7 +428,6 @@
     </div>
 
     <script>
-        let investmentId = null;
         let investmentItems = [];
         let rowCounter = 0;
         let investmentId = null;
@@ -455,6 +454,11 @@
 
         async function loadInvestment(id) {
             try {
+                // reset state before loading
+                investmentItems = [];
+                rowCounter = 0;
+                document.getElementById('investmentTableBody').innerHTML = '';
+        
                 const res = await fetch(`/api/investments/${id}`);
                 const data = await res.json();
         
@@ -473,26 +477,6 @@
             }
         }
 
-        // Load existing investment if it exists
-        async function loadInvestmentById(id) {
-            try {
-                const response = await fetch(`/api/investments/${id}`);
-                const data = await response.json();
-        
-                investmentDate = data.createdDate;
-        
-                document.getElementById('investmentDate').textContent =
-                    new Date(data.createdDate).toLocaleDateString();
-        
-                data.items.forEach(item => addInvestmentRowWithData(item));
-        
-                calculateTotal();
-        
-            } catch (e) {
-                console.error(e);
-                alert("Failed to load investment");
-            }
-        }
 
 
         // Add new investment row
@@ -665,8 +649,12 @@
         
                 // After save → switch to edit mode
                 investmentId = savedId;
-        
+
+                // switch page into edit mode by updating URL
+                window.history.replaceState({}, "", `/create-investment.html?id=${savedId}`);
+                
                 showSuccess("Saved successfully");
+
         
             } catch (e) {
                 console.error(e);
