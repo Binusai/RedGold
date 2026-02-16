@@ -40,6 +40,14 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     """)
     Optional<Report> findByBookingIdWithItems(Long bookingId);
 
+    @Query("""
+    SELECT COALESCE(SUM(r.finalTotal), 0)
+    FROM Report r
+    WHERE r.status = 'COMPLETED'
+    """)
+    Double sumAllFinalTotals();
+    
+
 
 
 
