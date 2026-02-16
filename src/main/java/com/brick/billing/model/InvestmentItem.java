@@ -3,6 +3,7 @@ package com.brick.billing.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "investment_items")
 public class InvestmentItem {
 
     @Id
@@ -20,6 +21,8 @@ public class InvestmentItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "investment_id")
     private Investment investment;
+
+    // getters & setters
 
     public void setInvestment(Investment investment) { this.investment = investment; }
 
