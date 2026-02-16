@@ -128,7 +128,6 @@ public class ReportController {
         for (ReportItemDto dto : req.items()) {
             ReportItem item = new ReportItem();
             item.setReport(report);
-            item.setItem(dto.item());
             item.setDescription(dto.description());
             item.setRate(dto.rate());
             item.setQty(dto.qty());
