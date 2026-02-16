@@ -780,7 +780,6 @@
 
             reportItems.push({
                 id: rowCounter,
-                item: '',
                 description: '',
                 rate: 0,
                 qty: 0,
@@ -810,7 +809,6 @@
 
             reportItems.push({
                 id: rowCounter,
-                item: item.item || '',
                 description: item.description || '',
                 rate: item.rate || 0,
                 qty: item.qty || 0,
@@ -834,7 +832,6 @@
             if (itemIndex !== -1) {
                 reportItems[itemIndex] = {
                     id: rowId,
-                    item: '',
                     description: description,
                     rate: rate,
                     qty: qty,
@@ -1254,7 +1251,7 @@
             return {
                 bookingId: selectedBooking.id,
                 status: status,
-                items: reportItems.filter(item => item.item.trim() !== ''),
+                items: reportItems.filter(item => item.description && item.description.trim() !== ''),
                 discount: parseFloat(document.getElementById('discountInput').value) || 0,
                 netTotal: reportItems.reduce((sum, item) => sum + item.total, 0),
                 finalTotal: reportItems.reduce((sum, item) => sum + item.total, 0) - (parseFloat(document.getElementById('discountInput').value) || 0),
@@ -1264,10 +1261,10 @@
 
         // Validate report
         function validateReport() {
-            const validItems = reportItems.filter(item => item.item.trim() !== '');
-
+            const validItems = reportItems.filter(item => item.description && item.description.trim() !== '');
+            
             if (validItems.length === 0) {
-                alert('Please add at least one item to the report.');
+                alert('Please add at least one description to the report.');
                 return false;
             }
 
