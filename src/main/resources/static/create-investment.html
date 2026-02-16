@@ -460,27 +460,22 @@
         // Load existing investment if it exists
         async function loadExistingInvestment() {
             try {
-                const response = await fetch('/api/investment');
+                const response = await fetch('/api/investments/all');
                 
                 if (response.ok) {
-                    const data = await response.json();
-                    
-                    if (data) {
+                    const list = await response.json();
+                    if (list.length > 0) {
+                        const data = list[0];   // latest
                         investmentId = data.id;
-                        investmentDate = data.date;
-                        document.getElementById('investmentDate').textContent = 
-                            new Date(data.date).toLocaleDateString();
-
-                        // Load items
-                        if (data.items && data.items.length > 0) {
-                            data.items.forEach(item => {
-                                addInvestmentRowWithData(item);
-                            });
-                        }
-
-                        calculateTotal();
+                        investmentDate = data.createdDate;
+                
+                        document.getElementById('investmentDate').textContent =
+                            new Date(data.createdDate).toLocaleDateString();
+                
+                        data.items.forEach(item => addInvestmentRowWithData(item));
                     }
                 }
+
             } catch (error) {
                 console.error('Error loading investment:', error);
                 // Continue with empty form
@@ -625,7 +620,8 @@
 
             const investmentData = {
                 id: investmentId,
-                date: investmentDate,
+                createdDate: investmentDate,
+                remarks: "",
                 items: investmentItems.map(item => ({
                     description: item.description,
                     packageSize: item.packageSize,
@@ -634,12 +630,11 @@
                     discount: item.discount,
                     total: item.total,
                     remarks: item.remarks
-                })),
-                netTotal: investmentItems.reduce((sum, item) => sum + item.total, 0)
+                }))
             };
 
             try {
-                const response = await fetch('/api/investment/save', {
+                const response = await fetch('/api/investments/save', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(investmentData)
