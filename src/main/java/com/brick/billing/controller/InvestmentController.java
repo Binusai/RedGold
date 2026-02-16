@@ -1,18 +1,14 @@
 package com.brick.billing.controller;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import com.brick.billing.model.Investment;
-import com.brick.billing.model.InvestmentItem;
-import com.brick.billing.repository.InvestmentRepository;
-import com.brick.billing.repository.ReportRepository;
+import com.brick.billing.model.*;
+import com.brick.billing.repository.*;
 import com.brick.billing.controller.dto.*;
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/investments")
@@ -28,7 +24,7 @@ public class InvestmentController {
         this.reportRepository = reportRepository;
     }
 
-    // ---------------- SAVE OR UPDATE ----------------
+    // SAVE OR UPDATE
     @PostMapping("/save")
     public Long save(@RequestBody InvestmentRequest req) {
 
@@ -42,9 +38,7 @@ public class InvestmentController {
 
         inv.setRemarks(req.remarks());
 
-        // IMPORTANT: replace collection (do NOT clear managed one)
         List<InvestmentItem> newItems = new ArrayList<>();
-
         double grandTotal = 0;
 
         for (InvestmentItemDto dto : req.items()) {
@@ -72,7 +66,7 @@ public class InvestmentController {
         return inv.getId();
     }
 
-    // ---------------- LIST PAGE ----------------
+    // LIST
     @GetMapping("/all")
     @Transactional(readOnly = true)
     public List<InvestmentViewDto> list() {
@@ -98,7 +92,7 @@ public class InvestmentController {
         ).toList();
     }
 
-    // ---------------- LOAD FOR EDIT ----------------
+    // LOAD SINGLE
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
     public InvestmentViewDto get(@PathVariable Long id) {
@@ -106,31 +100,31 @@ public class InvestmentController {
         Investment i = repo.findByIdWithItems(id).orElseThrow();
 
         return new InvestmentViewDto(
-            i.getId(),
-            i.getCreatedDate().toString(),
-            i.getGrandTotal(),
-            i.getRemarks(),
-            i.getItems().stream().map(it ->
-                new InvestmentItemDto(
-                    it.getDescription(),
-                    it.getPackageSize(),
-                    it.getQty(),
-                    it.getRate(),
-                    it.getDiscount(),
-                    it.getTotal(),
-                    it.getRemarks()
-                )
-            ).toList()
+                i.getId(),
+                i.getCreatedDate().toString(),
+                i.getGrandTotal(),
+                i.getRemarks(),
+                i.getItems().stream().map(it ->
+                        new InvestmentItemDto(
+                                it.getDescription(),
+                                it.getPackageSize(),
+                                it.getQty(),
+                                it.getRate(),
+                                it.getDiscount(),
+                                it.getTotal(),
+                                it.getRemarks()
+                        )
+                ).toList()
         );
     }
 
-    // ---------------- SUMMARY (FOR PROFIT RINGS) ----------------
+    // PROFIT SUMMARY
     @GetMapping("/summary")
     @Transactional(readOnly = true)
     public Map<String, Double> summary() {
 
         Double invested = repo.findAll().stream()
-                .mapToDouble(Investment::getGrandTotal)
+                .mapToDouble(i -> i.getGrandTotal() == null ? 0 : i.getGrandTotal())
                 .sum();
 
         Double revenue = reportRepository.sumAllFinalTotals();
@@ -139,9 +133,9 @@ public class InvestmentController {
         Double profit = revenue - invested;
 
         return Map.of(
-            "invested", invested,
-            "revenue", revenue,
-            "profit", profit
+                "invested", invested,
+                "revenue", revenue,
+                "profit", profit
         );
     }
 }
