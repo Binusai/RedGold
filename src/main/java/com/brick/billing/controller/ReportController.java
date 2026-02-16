@@ -105,53 +105,64 @@ public class ReportController {
     // ---------------- COMMON SAVE METHOD ----------------
     @Transactional
     private Long save(ReportRequest req) {
-
+    
         Booking booking = bookingRepo.findById(req.bookingId()).orElseThrow();
-
-        // ✅ UPDATE CUSTOMER (Editable now)
+    
+        // ---------------- UPDATE CUSTOMER ----------------
         Customer customer = booking.getCustomer();
         customer.setName(req.customerName());
         customer.setMobile(req.mobile());
         customer.setEmail(req.email());
         customer.setAddress(req.address());
         customer.setLocation(req.location());
-
-        // ✅ UPDATE BOOKING (Editable quantity)
+    
+        // ---------------- UPDATE BOOKING ----------------
         booking.setQuantity(req.quantity());
-
-        // Check if report exists already
-        Report report = reportRepo.findByBookingId(booking.getId()).orElse(new Report());
-
-        report.setBooking(booking);
+    
+        // ---------------- FIND OR CREATE REPORT ----------------
+        Report report = reportRepo.findByBookingId(booking.getId()).orElse(null);
+    
+        if (report == null) {
+            report = new Report();
+            report.setBooking(booking);
+        }
+    
         report.setStatus(req.status());
         report.setNetTotal(req.netTotal());
         report.setDiscount(req.discount());
         report.setFinalTotal(req.finalTotal());
         report.setRemarks(req.remarks());
-
-        // Recreate items
-        List<ReportItem> items = new ArrayList<>();
-
+    
+        // ---------------- HANDLE ITEMS CORRECTLY ----------------
+        if (report.getItems() == null) {
+            report.setItems(new ArrayList<>());
+        } else {
+            report.getItems().clear();   // VERY IMPORTANT (keeps entity managed)
+        }
+    
         for (ReportItemDto dto : req.items()) {
+    
+            // Skip empty rows (frontend may send blank rows)
+            if (dto.description() == null || dto.description().isBlank()) continue;
+    
             ReportItem item = new ReportItem();
             item.setReport(report);
             item.setDescription(dto.description());
             item.setRate(dto.rate());
             item.setQty(dto.qty());
             item.setTotal(dto.total());
-            items.add(item);
+    
+            report.getItems().add(item);
         }
-
-        report.setItems(items);
-
-        reportRepo.save(report);
-
-        // Update workflow status
+    
+        // ---------------- SAVE ----------------
+        reportRepo.saveAndFlush(report);   // force DB sync
+    
+        // ---------------- UPDATE WORKFLOW STATUS ----------------
         String newStatus = "COMPLETED".equals(req.status()) ? "COMPLETED" : "DRAFT";
         booking.setStatus(newStatus);
-
+    
         bookingRepo.saveAndFlush(booking);
-
+    
         return report.getId();
     }
-}
