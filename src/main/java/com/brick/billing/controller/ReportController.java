@@ -106,7 +106,9 @@ public class ReportController {
     @Transactional
     private Long save(ReportRequest req) {
     
-        Booking booking = bookingRepo.findById(req.bookingId()).orElseThrow();
+        Booking booking = bookingRepo.findByIdWithCustomer(req.bookingId())
+            .orElseThrow(() -> new RuntimeException("Booking not found"));
+
     
         // ---------------- UPDATE CUSTOMER ----------------
         Customer customer = booking.getCustomer();
