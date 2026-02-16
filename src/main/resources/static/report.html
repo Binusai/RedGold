@@ -881,80 +881,99 @@
         // Save as draft
         async function saveDraft() {
             if (!validateReport()) return;
-
+        
             const reportData = buildReportData('DRAFT');
-
+        
             try {
                 const response = await fetch('/api/report/save-draft', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(reportData)
                 });
-
+        
+                if (!response.ok) {
+                    const text = await response.text();
+                    console.error(text);
+                    alert("Backend rejected the request.");
+                    return;
+                }
+        
                 const savedId = await response.json();
                 savedReportId = savedId;
-
-
+        
                 showSuccess('Draft saved successfully!');
-
+        
             } catch (error) {
-                console.error('Error saving draft:', error);
+                console.error(error);
                 alert('Failed to save draft.');
             }
         }
 
+
         // Update draft (edit mode)
         async function updateDraft() {
             if (!validateReport()) return;
-
+        
             const reportData = buildReportData('DRAFT');
-
+        
             try {
                 const response = await fetch('/api/report/save-draft', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(reportData)
                 });
-
+        
+                if (!response.ok) {
+                    const text = await response.text();
+                    console.error(text);
+                    alert("Backend rejected the request.");
+                    return;
+                }
+        
                 const savedId = await response.json();
                 savedReportId = savedId;
-
-
+        
                 showSuccess('Draft updated successfully!');
-
+        
             } catch (error) {
-                console.error('Error updating draft:', error);
+                console.error(error);
                 alert('Failed to update draft.');
             }
         }
 
-        // Submit and finalize
+
         async function submitReport() {
             if (!validateReport()) return;
-
+        
             if (!confirm('Finalize this report? It cannot be edited later.')) return;
-
+        
             const reportData = buildReportData('COMPLETED');
-
+        
             try {
                 const response = await fetch('/api/report/finalize', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(reportData)
                 });
-
+        
+                if (!response.ok) {
+                    const text = await response.text();
+                    console.error(text);
+                    alert("Backend rejected the request.");
+                    return;
+                }
+        
                 const savedId = await response.json();
                 savedReportId = savedId;
-
+        
                 showSuccess('Report finalized successfully!');
-                
-                // Redirect to view mode after finalization
+        
                 setTimeout(() => {
                     window.location.href = `/report.html?mode=view&bookingId=${bookingId}`;
                 }, 2000);
-
+        
             } catch (error) {
-                console.error('Error finalizing report:', error);
+                console.error(error);
                 alert('Failed to finalize report.');
             }
         }
@@ -1251,37 +1270,36 @@
         // Build report data object
         function buildReportData(status) {
         
+            const customerName = document.getElementById('customerName').value.trim();
+            const mobile = document.getElementById('customerMobile').value.trim();
+            const address = document.getElementById('customerAddress').value.trim();
+            const quantity = parseInt(document.getElementById('bookingQuantity').value);
+            const location = document.getElementById('bookingDestination').value.trim();
+        
             return {
                 bookingId: selectedBooking.id,
                 status: status,
         
-                // IMPORTANT → send edited booking/customer values
-                customerName: document.getElementById('customerName').value.trim(),
-                mobile: document.getElementById('customerMobile').value.trim(),
-                email: selectedBooking.customer.email || "",
-                address: document.getElementById('customerAddress').value.trim(),
-                quantity: parseInt(document.getElementById('bookingQuantity').value || 0),
-                location: document.getElementById('bookingDestination').value.trim(),
-        
-                // report items
-                items: reportItems
-                    .filter(item => item.description && item.description.trim() !== '')
-                    .map(item => ({
-                        description: item.description,
-                        rate: item.rate,
-                        qty: item.qty,
-                        total: item.total
-                    })),
+                items: reportItems.filter(item => item.description && item.description.trim() !== ''),
         
                 discount: parseFloat(document.getElementById('discountInput').value) || 0,
                 netTotal: reportItems.reduce((sum, item) => sum + item.total, 0),
                 finalTotal:
-                    reportItems.reduce((sum, item) => sum + item.total, 0)
-                    - (parseFloat(document.getElementById('discountInput').value) || 0),
+                    reportItems.reduce((sum, item) => sum + item.total, 0) -
+                    (parseFloat(document.getElementById('discountInput').value) || 0),
         
-                remarks: document.getElementById('remarksBox').value.trim()
+                remarks: document.getElementById('remarksBox').value.trim(),
+        
+                // 🔴 THESE WERE MISSING
+                customerName: customerName,
+                mobile: mobile,
+                email: selectedBooking.customer.email || null, // keep existing
+                address: address,
+                quantity: quantity,
+                location: location
             };
         }
+
 
 
         // Validate report
