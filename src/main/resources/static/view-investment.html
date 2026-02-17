@@ -952,7 +952,7 @@
             doc.setLineWidth(0.3);
             doc.line(15, 78, 195, 78);
             // Batch meta
-
+            let y = 95;
             // Table title + header
             doc.setFontSize(16);
             doc.setFont(undefined, 'bold');
@@ -1074,7 +1074,7 @@
                 doc.text('Generated on ' + new Date().toLocaleDateString('en-IN'), 105, 288, { align: 'center' });
             }
 
-            doc.save(`RedGold_Batch_${batch.id}.pdf`);
+            doc.save(`YSG_Batch_${batch.id}.pdf`);
         }
 
         // ── Helpers ──────────────────────────────────────────────────────────────────
