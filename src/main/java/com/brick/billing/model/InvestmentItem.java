@@ -21,6 +21,8 @@ public class InvestmentItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "investment_id")
     private Investment investment;
+    @Column(name = "entry_date")
+    private LocalDate entryDate;
 
     // getters & setters
 
@@ -46,4 +48,13 @@ public class InvestmentItem {
 
     public String getRemarks() { return remarks; }
     public void setRemarks(String remarks) { this.remarks = remarks; }
+
+    public LocalDate getEntryDate() {
+        return entryDate;
+    }
+    
+    public void setEntryDate(LocalDate entryDate) {
+        this.entryDate = entryDate;
+    }
+
 }
