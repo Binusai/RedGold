@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#7B2D26">
     <link rel="icon" href="/logo.png" type="image/png">
     <title>Investments - YSG Bricks</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -18,15 +19,13 @@
             background-color: #FAFAFA;
             color: #3E2C23;
             -webkit-tap-highlight-color: transparent;
-            padding-bottom: 20px;
+            padding-bottom: 80px;
         }
 
-        /* Header */
+        /* ── Header (unchanged) ── */
         .header {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 56px;
             background-color: #7B2D26;
             color: #FFFFFF;
@@ -34,7 +33,7 @@
             align-items: center;
             padding: 0 16px;
             z-index: 100;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .back-button {
@@ -46,22 +45,13 @@
             margin-right: 12px;
             display: flex;
             align-items: center;
-            justify-content: center;
         }
 
-        .back-icon {
-            width: 24px;
-            height: 24px;
-            fill: #FFFFFF;
-        }
+        .back-icon { width: 24px; height: 24px; fill: #FFFFFF; }
 
-        .header-title {
-            font-size: 18px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
+        .header-title { font-size: 18px; font-weight: 600; letter-spacing: 0.3px; }
 
-        /* Filter Section */
+        /* ── Filter Section (unchanged) ── */
         .filter-section {
             margin-top: 56px;
             background-color: #FFFFFF;
@@ -91,9 +81,7 @@
             transition: all 0.2s;
         }
 
-        .filter-btn:hover {
-            border-color: #7B2D26;
-        }
+        .filter-btn:hover { border-color: #7B2D26; }
 
         .filter-btn.active {
             background-color: #7B2D26;
@@ -101,17 +89,14 @@
             border-color: #7B2D26;
         }
 
-        /* Analytics Section */
+        /* ── Analytics Section (unchanged) ── */
         .analytics-section {
             background-color: #FFFFFF;
             border-bottom: 2px solid #E0E0E0;
             padding: 24px 16px;
         }
 
-        .analytics-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .analytics-container { max-width: 800px; margin: 0 auto; }
 
         .rings-container {
             display: flex;
@@ -128,15 +113,10 @@
             gap: 12px;
         }
 
-        .ring-wrapper {
-            position: relative;
-            width: 120px;
-            height: 120px;
-        }
+        .ring-wrapper { position: relative; width: 120px; height: 120px; }
 
         .progress-ring {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -144,23 +124,14 @@
             position: relative;
         }
 
-        .investment-ring {
-            background: conic-gradient(#1565C0 0% 100%, #E0E0E0 100% 100%);
-        }
-
-        .profit-ring {
-            background: conic-gradient(#2E7D32 0% var(--percent), #E0E0E0 var(--percent) 100%);
-        }
-
-        .loss-ring {
-            background: conic-gradient(#D32F2F 0% var(--percent), #E0E0E0 var(--percent) 100%);
-        }
+        .investment-ring { background: conic-gradient(#1565C0 0% 100%, #E0E0E0 100% 100%); }
+        .profit-ring     { background: conic-gradient(#2E7D32 0% var(--percent), #E0E0E0 var(--percent) 100%); }
+        .loss-ring       { background: conic-gradient(#D32F2F 0% var(--percent), #E0E0E0 var(--percent) 100%); }
 
         .progress-ring::before {
             content: '';
             position: absolute;
-            width: 90px;
-            height: 90px;
+            width: 90px; height: 90px;
             background-color: #FFFFFF;
             border-radius: 50%;
         }
@@ -174,17 +145,9 @@
             line-height: 1.3;
         }
 
-        .investment-ring .ring-text {
-            color: #1565C0;
-        }
-
-        .profit-ring .ring-text {
-            color: #2E7D32;
-        }
-
-        .loss-ring .ring-text {
-            color: #D32F2F;
-        }
+        .investment-ring .ring-text { color: #1565C0; }
+        .profit-ring .ring-text     { color: #2E7D32; }
+        .loss-ring .ring-text       { color: #D32F2F; }
 
         .ring-label {
             font-size: 13px;
@@ -195,7 +158,6 @@
             text-align: center;
         }
 
-        /* Summary Stats */
         .summary-stats {
             display: grid;
             grid-template-columns: 1fr;
@@ -214,27 +176,13 @@
             border-left: 4px solid #7B2D26;
         }
 
-        .stat-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #6B5D4F;
-        }
+        .stat-label { font-size: 14px; font-weight: 600; color: #6B5D4F; }
 
-        .stat-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: #3E2C23;
-        }
+        .stat-value { font-size: 18px; font-weight: 700; color: #3E2C23; }
+        .stat-value.positive { color: #2E7D32; }
+        .stat-value.negative { color: #D32F2F; }
 
-        .stat-value.positive {
-            color: #2E7D32;
-        }
-
-        .stat-value.negative {
-            color: #D32F2F;
-        }
-
-        /* Main Content */
+        /* ── Main Content ── */
         .main-content {
             max-width: 800px;
             margin: 0 auto;
@@ -248,73 +196,58 @@
             margin-bottom: 16px;
         }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-        }
+        /* ── Empty / Error ── */
+        .empty-state { text-align: center; padding: 80px 20px; }
 
-        .empty-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            opacity: 0.3;
-        }
+        .empty-icon { width: 80px; height: 80px; margin: 0 auto 20px; opacity: 0.3; }
 
-        .empty-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #3E2C23;
-            margin-bottom: 8px;
-        }
+        .empty-title { font-size: 18px; font-weight: 600; color: #3E2C23; margin-bottom: 8px; }
 
-        .empty-text {
-            font-size: 14px;
-            color: #6B5D4F;
-        }
+        .empty-text { font-size: 14px; color: #6B5D4F; }
 
-        /* Investment Cards */
+        /* ── Investment Card — extended to batch layout ── */
         .investment-card {
             background-color: #FFFFFF;
             border: 1px solid #E0E0E0;
             border-radius: 10px;
             padding: 18px;
             margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
             transition: box-shadow 0.2s;
         }
 
-        .investment-card:hover {
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
+        .investment-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 
-        .card-main-info {
-            flex: 1;
-            min-width: 0;
-        }
+        /* top info area */
+        .card-main-info { margin-bottom: 14px; }
 
+        /* batch label — "BATCH" uppercase small */
         .investment-date {
-            font-size: 14px;
+            font-size: 11px;
+            font-weight: 700;
             color: #9B8B7E;
-            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 4px;
+        }
+
+        /* created date row with calendar icon */
+        .batch-created-date {
+            font-size: 15px;
+            font-weight: 600;
+            color: #3E2C23;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
-        .investment-date svg {
-            width: 14px;
-            height: 14px;
-            fill: #9B8B7E;
-        }
+        .batch-created-date svg { width: 15px; height: 15px; fill: #9B8B7E; }
 
         .investment-amount {
             font-size: 20px;
             font-weight: 700;
             color: #7B2D26;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .investment-entries {
@@ -325,21 +258,20 @@
             gap: 6px;
         }
 
-        .investment-entries svg {
-            width: 14px;
-            height: 14px;
-            fill: #6B5D4F;
-        }
+        .investment-entries svg { width: 14px; height: 14px; fill: #6B5D4F; }
 
+        /* card-action now holds 3 buttons in a row */
         .card-action {
-            margin-left: 12px;
-            flex-shrink: 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
+        /* ── Button variants ── */
         .view-button {
-            padding: 10px 20px;
+            padding: 10px 18px;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 700;
             border: none;
             border-radius: 6px;
             background-color: #7B2D26;
@@ -349,11 +281,39 @@
             white-space: nowrap;
         }
 
-        .view-button:hover {
-            background-color: #632419;
+        .view-button:hover { background-color: #632419; }
+
+        .add-button {
+            padding: 10px 18px;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            background-color: #1565C0;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
         }
 
-        /* Loading State */
+        .add-button:hover { background-color: #0D47A1; }
+
+        .pdf-button {
+            padding: 10px 18px;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            background-color: #4A4A4A;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .pdf-button:hover { background-color: #2C2C2C; }
+
+        /* ── Loading ── */
         .loading {
             text-align: center;
             padding: 60px 20px;
@@ -362,8 +322,7 @@
         }
 
         .loading-spinner {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             margin: 0 auto 16px;
             border: 4px solid #E0E0E0;
             border-top-color: #7B2D26;
@@ -371,132 +330,174 @@
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── PDF Preview Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.72);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
         }
 
-        /* Tablet and Desktop */
-        @media (min-width: 600px) {
-            .header {
-                height: 64px;
-            }
+        .modal-overlay.visible { display: flex; }
 
-            .header-title {
-                font-size: 22px;
-            }
-
-            .back-icon {
-                width: 28px;
-                height: 28px;
-            }
-
-            .filter-section {
-                margin-top: 64px;
-                padding: 20px 24px;
-            }
-
-            .filter-btn {
-                padding: 12px 24px;
-                font-size: 15px;
-            }
-
-            .analytics-section {
-                padding: 32px 24px;
-            }
-
-            .ring-wrapper {
-                width: 140px;
-                height: 140px;
-            }
-
-            .progress-ring::before {
-                width: 105px;
-                height: 105px;
-            }
-
-            .ring-text {
-                font-size: 18px;
-            }
-
-            .ring-label {
-                font-size: 14px;
-            }
-
-            .summary-stats {
-                grid-template-columns: repeat(3, 1fr);
-                max-width: 100%;
-            }
-
-            .main-content {
-                padding: 32px 24px;
-            }
-
-            .section-header {
-                font-size: 20px;
-            }
-
-            .investment-card {
-                padding: 22px 24px;
-                margin-bottom: 14px;
-                border-radius: 12px;
-            }
-
-            .investment-date {
-                font-size: 15px;
-            }
-
-            .investment-amount {
-                font-size: 22px;
-            }
-
-            .investment-entries {
-                font-size: 14px;
-            }
-
-            .view-button {
-                padding: 12px 24px;
-                font-size: 14px;
-            }
-
-            .empty-state {
-                padding: 120px 20px;
-            }
-
-            .empty-icon {
-                width: 100px;
-                height: 100px;
-            }
-
-            .empty-title {
-                font-size: 22px;
-            }
-
-            .empty-text {
-                font-size: 16px;
-            }
+        .modal-box {
+            background: #FFFFFF;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 740px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        @media (min-width: 900px) {
-            .main-content {
-                max-width: 1000px;
-            }
-
-            .analytics-container {
-                max-width: 1000px;
-            }
-
-            .filter-container {
-                max-width: 1000px;
-            }
+        .modal-header {
+            background-color: #7B2D26;
+            color: #FFFFFF;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
         }
 
-        /* FAB Button */
+        .modal-title { font-size: 16px; font-weight: 700; }
+
+        .modal-close-btn {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            font-size: 22px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 4px;
+        }
+
+        .modal-body { overflow-y: auto; padding: 24px; flex: 1; }
+
+        /* PDF preview layout inside modal */
+        .pdf-co-header {
+            border-bottom: 3px solid #7B2D26;
+            padding-bottom: 14px;
+            margin-bottom: 16px;
+        }
+
+        .pdf-co-name { font-size: 26px; font-weight: 700; line-height: 1; }
+        .pdf-co-name .red { color: #7B2D26; }
+        .pdf-co-sub { font-size: 13px; color: #6B5D4F; margin-top: 4px; font-style: italic; }
+
+        .pdf-doc-title {
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #2C2416;
+            margin: 14px 0;
+        }
+
+        .pdf-meta-row {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        .pdf-meta-row strong { color: #2C2416; }
+        .pdf-meta-row span   { color: #6B5D4F; }
+
+        .pdf-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        .pdf-table th {
+            background-color: #7B2D26;
+            color: #FFFFFF;
+            padding: 9px 8px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .pdf-table td {
+            padding: 9px 8px;
+            border: 1px solid #E0E0E0;
+        }
+
+        .pdf-table tr:nth-child(even) td { background-color: #FAFAFA; }
+
+        /* date group sub-header row */
+        .pdf-date-group th {
+            background-color: #F0E6E4;
+            color: #7B2D26;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            padding: 7px 8px;
+        }
+
+        /* date subtotal row */
+        .pdf-subtotal td {
+            background-color: #F4EFEA !important;
+            border-top: 2px solid #7B2D26;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .pdf-grand-total {
+            max-width: 280px;
+            margin-left: auto;
+            background-color: #7B2D26;
+            color: #FFFFFF;
+            border-radius: 6px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .modal-footer {
+            padding: 14px 20px;
+            border-top: 1px solid #E0E0E0;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-shrink: 0;
+        }
+
+        .modal-btn {
+            padding: 11px 22px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn-cancel { background-color: #E0E0E0; color: #2C2416; }
+        .modal-btn-cancel:hover { background-color: #BDBDBD; }
+
+        .modal-btn-download { background-color: #2E7D32; color: #FFFFFF; }
+        .modal-btn-download:hover { background-color: #1B5E20; }
+
+        /* ── FAB ── */
         .fab {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 56px;
-            height: 56px;
+            bottom: 24px; right: 24px;
+            width: 56px; height: 56px;
             background-color: #7B2D26;
             border: none;
             border-radius: 50%;
@@ -508,38 +509,65 @@
             justify-content: center;
             cursor: pointer;
             z-index: 50;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        .fab:active {
-            background-color: #632419;
+        .fab:active { background-color: #632419; }
+
+        /* ── Responsive ── */
+        @media (min-width: 600px) {
+            .header { height: 64px; }
+            .header-title { font-size: 22px; }
+            .back-icon { width: 28px; height: 28px; }
+            .filter-section { margin-top: 64px; padding: 20px 24px; }
+            .filter-btn { padding: 12px 24px; font-size: 15px; }
+            .analytics-section { padding: 32px 24px; }
+            .ring-wrapper { width: 140px; height: 140px; }
+            .progress-ring::before { width: 105px; height: 105px; }
+            .ring-text { font-size: 18px; }
+            .ring-label { font-size: 14px; }
+            .summary-stats { grid-template-columns: repeat(3, 1fr); max-width: 100%; }
+            .main-content { padding: 32px 24px; }
+            .section-header { font-size: 20px; }
+            .investment-card { padding: 22px 24px; margin-bottom: 14px; border-radius: 12px; }
+            .investment-amount { font-size: 22px; }
+            .view-button, .add-button, .pdf-button { padding: 12px 22px; font-size: 14px; }
+            .empty-state { padding: 120px 20px; }
+            .empty-icon { width: 100px; height: 100px; }
+            .empty-title { font-size: 22px; }
+            .empty-text { font-size: 16px; }
+        }
+
+        @media (min-width: 900px) {
+            .main-content { max-width: 1000px; }
+            .analytics-container { max-width: 1000px; }
+            .filter-container { max-width: 1000px; }
         }
     </style>
 </head>
 <body>
+
     <!-- Header -->
     <div class="header">
         <button class="back-button" onclick="goBack()">
-            <svg class="back-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-            </svg>
+            <svg class="back-icon" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
         </button>
         <div class="header-title">Investments</div>
     </div>
 
-    <!-- Filter Section -->
+    <!-- Filter Section (same as before) -->
     <div class="filter-section">
         <div class="filter-container">
-            <button class="filter-btn" onclick="setFilter('1d')">1 Day</button>
-            <button class="filter-btn" onclick="setFilter('7d')">7 Days</button>
-            <button class="filter-btn active" onclick="setFilter('30d')">30 Days</button>
-            <button class="filter-btn" onclick="setFilter('3m')">3 Months</button>
-            <button class="filter-btn" onclick="setFilter('1y')">1 Year</button>
-            <button class="filter-btn" onclick="setFilter('all')">All</button>
+            <button class="filter-btn" onclick="setFilter('1d', this)">1 Day</button>
+            <button class="filter-btn" onclick="setFilter('7d', this)">7 Days</button>
+            <button class="filter-btn active" onclick="setFilter('30d', this)">30 Days</button>
+            <button class="filter-btn" onclick="setFilter('3m', this)">3 Months</button>
+            <button class="filter-btn" onclick="setFilter('1y', this)">1 Year</button>
+            <button class="filter-btn" onclick="setFilter('all', this)">All</button>
         </div>
     </div>
 
-    <!-- Analytics Section -->
+    <!-- Analytics Section (same as before — untouched) -->
     <div class="analytics-section">
         <div class="analytics-container">
             <div class="rings-container">
@@ -578,9 +606,9 @@
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Batch List -->
     <div class="main-content">
-        <h2 class="section-header">Investment Records</h2>
+        <h2 class="section-header">Investment Batches</h2>
         <div id="investmentList">
             <div class="loading">
                 <div class="loading-spinner"></div>
@@ -589,161 +617,493 @@
         </div>
     </div>
 
-    <!-- FAB Button -->
+    <!-- FAB: Create New Batch -->
     <button class="fab" onclick="createNewInvestment()">+</button>
+
+    <!-- PDF Preview Modal -->
+    <div class="modal-overlay" id="pdfModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span class="modal-title">Batch Report Preview</span>
+                <button class="modal-close-btn" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="pdfPreviewContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal()">Close</button>
+                <button class="modal-btn modal-btn-download" onclick="downloadCurrentPDF()">⬇ Download PDF</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         let currentFilter = '30d';
         let allInvestments = [];
-        let summaryData = null;
+        let summaryData    = null;
+        let activeBatch    = null;
 
-        // Initialize page
+        // ── Init ─────────────────────────────────────────────────────────────────────
         async function init() {
             await loadData();
         }
 
-        // Load all data
+        // ── Load Data ────────────────────────────────────────────────────────────────
         async function loadData() {
             try {
-                // Load summary and investment list in parallel
-                const [summaryResponse, investmentsResponse] = await Promise.all([
-                    fetch(`/api/investments/summary`),
-                    fetch(`/api/investments/all`)
+                const [summaryRes, listRes] = await Promise.all([
+                    fetch('/api/investments/summary'),
+                    fetch('/api/investments/all')
                 ]);
 
-                summaryData = await summaryResponse.json();
-                allInvestments = await investmentsResponse.json();
+                summaryData    = await summaryRes.json();
+                allInvestments = await listRes.json();
 
                 updateAnalytics();
                 renderInvestments();
 
-            } catch (error) {
-                console.error('Error loading data:', error);
+            } catch (err) {
+                console.error('Error loading data:', err);
                 showError();
             }
         }
 
-        // Set filter
-        async function setFilter(range) {
+        // ── Filter ───────────────────────────────────────────────────────────────────
+        async function setFilter(range, btn) {
             currentFilter = range;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
 
-            // Update active button
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-
-            // Show loading
             document.getElementById('investmentList').innerHTML = `
                 <div class="loading">
                     <div class="loading-spinner"></div>
                     Loading investments...
                 </div>
             `;
-
             await loadData();
         }
 
-        // Update analytics rings and stats
+        // ── Analytics (unchanged logic) ──────────────────────────────────────────────
         function updateAnalytics() {
             if (!summaryData) return;
 
-            const totalRevenue = summaryData.revenue || 0;
+            const totalRevenue    = summaryData.revenue  || 0;
             const totalInvestment = summaryData.invested || 0;
-            const profitLoss = totalRevenue - totalInvestment;
+            const profitLoss      = totalRevenue - totalInvestment;
 
-            // Update investment ring
             document.getElementById('investmentRingText').textContent = '₹' + formatMoneyShort(totalInvestment);
 
-            // Update profit/loss ring
-            const profitLossRing = document.getElementById('profitLossRing');
-            const profitLossText = document.getElementById('profitLossRingText');
-            const profitLossLabel = document.getElementById('profitLossLabel');
+            const ring  = document.getElementById('profitLossRing');
+            const rText = document.getElementById('profitLossRingText');
+            const rLabel= document.getElementById('profitLossLabel');
 
             if (profitLoss >= 0) {
-                // Profit - green ring
-                profitLossRing.className = 'progress-ring profit-ring';
-                profitLossLabel.textContent = 'Profit';
-                const percent = totalRevenue > 0 ? (profitLoss / totalRevenue) * 100 : 0;
-                profitLossRing.style.setProperty('--percent', Math.min(percent, 100) + '%');
+                ring.className = 'progress-ring profit-ring';
+                rLabel.textContent = 'Profit';
+                const pct = totalRevenue > 0 ? (profitLoss / totalRevenue) * 100 : 0;
+                ring.style.setProperty('--percent', Math.min(pct, 100) + '%');
             } else {
-                // Loss - red ring
-                profitLossRing.className = 'progress-ring loss-ring';
-                profitLossLabel.textContent = 'Loss';
-                const percent = totalInvestment > 0 ? (Math.abs(profitLoss) / totalInvestment) * 100 : 0;
-                profitLossRing.style.setProperty('--percent', Math.min(percent, 100) + '%');
+                ring.className = 'progress-ring loss-ring';
+                rLabel.textContent = 'Loss';
+                const pct = totalInvestment > 0 ? (Math.abs(profitLoss) / totalInvestment) * 100 : 0;
+                ring.style.setProperty('--percent', Math.min(pct, 100) + '%');
             }
-            profitLossText.textContent = '₹' + formatMoneyShort(Math.abs(profitLoss));
+            rText.textContent = '₹' + formatMoneyShort(Math.abs(profitLoss));
 
-            // Update summary stats
-            document.getElementById('totalRevenue').textContent = '₹ ' + formatMoney(totalRevenue);
+            document.getElementById('totalRevenue').textContent    = '₹ ' + formatMoney(totalRevenue);
             document.getElementById('totalInvestment').textContent = '₹ ' + formatMoney(totalInvestment);
-            
-            const netProfitLossElement = document.getElementById('netProfitLoss');
-            netProfitLossElement.textContent = '₹ ' + formatMoney(Math.abs(profitLoss));
-            
-            if (profitLoss > 0) {
-                netProfitLossElement.className = 'stat-value positive';
-            } else if (profitLoss < 0) {
-                netProfitLossElement.className = 'stat-value negative';
-            } else {
-                netProfitLossElement.className = 'stat-value';
-            }
+
+            const plEl = document.getElementById('netProfitLoss');
+            plEl.textContent = '₹ ' + formatMoney(Math.abs(profitLoss));
+            plEl.className   = 'stat-value' + (profitLoss > 0 ? ' positive' : profitLoss < 0 ? ' negative' : '');
         }
 
-        // Render investments list
+        // ── Render Batch Cards ───────────────────────────────────────────────────────
         function renderInvestments() {
             const container = document.getElementById('investmentList');
 
-            if (allInvestments.length === 0) {
+            if (!allInvestments || allInvestments.length === 0) {
                 container.innerHTML = renderEmptyState();
-            } else {
-                container.innerHTML = allInvestments.map(investment => renderInvestmentCard(investment)).join('');
+                return;
             }
+
+            container.innerHTML = allInvestments.map(inv => renderInvestmentCard(inv)).join('');
         }
 
-        // Render empty state
         function renderEmptyState() {
             return `
                 <div class="empty-state">
-                    <svg class="empty-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="empty-icon" viewBox="0 0 24 24">
                         <path fill="#3E2C23" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/>
                     </svg>
                     <div class="empty-title">No Investments Found</div>
-                    <div class="empty-text">Click the + button to create your first investment</div>
+                    <div class="empty-text">Click the + button to create your first investment batch</div>
                 </div>
             `;
         }
 
-        // Render investment card
         function renderInvestmentCard(investment) {
+            const createdDate = new Date(investment.createdDate).toLocaleDateString('en-IN', {
+                day: '2-digit', month: 'short', year: 'numeric'
+            });
+            const entryCount = investment.items ? investment.items.length : 0;
+
             return `
                 <div class="investment-card">
                     <div class="card-main-info">
-                        <div class="investment-date">
-                            ${new Date(investment.createdDate).toLocaleDateString()}
+                        <div class="investment-date">Batch</div>
+                        <div class="batch-created-date">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                            </svg>
+                            ${createdDate}
                         </div>
                         <div class="investment-amount">₹ ${formatMoney(investment.grandTotal)}</div>
                         <div class="investment-entries">
-                            ${investment.items.length} entries
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+                            </svg>
+                            ${entryCount} ${entryCount === 1 ? 'entry' : 'entries'}
                         </div>
                     </div>
                     <div class="card-action">
-                        <button class="view-button" onclick="viewInvestment(${investment.id})">
-                            View Investment
-                        </button>
+                        <button class="add-button"  onclick="addToBatch(${investment.id})">+ Add Investment</button>
+                        <button class="view-button" onclick="viewInvestment(${investment.id})">View Batch</button>
+                        <button class="pdf-button"  onclick="openPDFPreview(${investment.id})">Preview PDF</button>
                     </div>
                 </div>
             `;
         }
 
+        // ── Navigation ───────────────────────────────────────────────────────────────
 
-        // Show error state
+        // Add rows to existing batch — opens create page with empty rows
+        function addToBatch(id) {
+            window.location.href = `/create-investment.html?id=${id}&mode=add`;
+        }
+
+        // View all rows grouped by date — read-only
+        function viewInvestment(investmentId) {
+            window.location.href = `/create-investment.html?id=${investmentId}&mode=view`;
+        }
+
+        // Fresh batch
+        function createNewInvestment() {
+            window.location.href = '/create-investment.html?new=' + Date.now();
+        }
+
+        function goBack() {
+            window.location.href = '/home.html';
+        }
+
+        // ── PDF Preview ──────────────────────────────────────────────────────────────
+
+        async function openPDFPreview(batchId) {
+            try {
+                const res = await fetch(`/api/investments/${batchId}`);
+                if (!res.ok) throw new Error('fetch failed');
+                activeBatch = await res.json();
+
+                document.getElementById('pdfPreviewContent').innerHTML = buildPreviewHTML(activeBatch);
+                document.getElementById('pdfModal').classList.add('visible');
+            } catch (err) {
+                console.error(err);
+                alert('Could not load batch details.');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('pdfModal').classList.remove('visible');
+            activeBatch = null;
+        }
+
+        document.getElementById('pdfModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ── Build Preview HTML ────────────────────────────────────────────────────────
+
+        function buildPreviewHTML(batch) {
+            const createdDate = new Date(batch.createdDate).toLocaleDateString('en-IN', {
+                day: '2-digit', month: 'long', year: 'numeric'
+            });
+            const items      = batch.items || [];
+            const grandTotal = batch.grandTotal || 0;
+            const grouped    = groupByEntryDate(items);
+
+            let rows = '';
+            let sno  = 1;
+
+            for (const [dateStr, dateItems] of Object.entries(grouped)) {
+                const displayDate = formatDisplayDate(dateStr);
+                const dateTotal   = dateItems.reduce((s, i) => s + (parseFloat(i.total) || 0), 0);
+
+                rows += `<tr class="pdf-date-group"><th colspan="6">📅 ${displayDate}</th></tr>`;
+
+                dateItems.forEach(item => {
+                    rows += `
+                        <tr>
+                            <td>${sno++}</td>
+                            <td>${escapeHtml(item.description || '-')}</td>
+                            <td style="text-align:right">${item.qty || 0}</td>
+                            <td style="text-align:right">₹ ${formatMoney(item.rate || 0)}</td>
+                            <td style="text-align:right">₹ ${formatMoney(item.total || 0)}</td>
+                            <td>${escapeHtml(item.remarks || '-')}</td>
+                        </tr>
+                    `;
+                });
+
+                rows += `
+                    <tr class="pdf-subtotal">
+                        <td colspan="4" style="text-align:right">Date Total</td>
+                        <td style="text-align:right">₹ ${formatMoney(dateTotal)}</td>
+                        <td></td>
+                    </tr>
+                `;
+            }
+
+            return `
+                <div class="pdf-co-header">
+                    <div class="pdf-co-name"><span class="red">RED</span> GOLD</div>
+                    <div class="pdf-co-sub">Brick Factory</div>
+                </div>
+                <div class="pdf-doc-title">Investment Batch Report</div>
+                <div class="pdf-meta-row">
+                    <div><strong>Batch Created: </strong><span>${createdDate}</span></div>
+                    <div><strong>Total Entries: </strong><span>${items.length}</span></div>
+                    <div><strong>Generated On: </strong><span>${new Date().toLocaleDateString('en-IN')}</span></div>
+                </div>
+                <table class="pdf-table">
+                    <thead>
+                        <tr>
+                            <th style="width:36px">S.No</th>
+                            <th>Description</th>
+                            <th style="text-align:right">Qty</th>
+                            <th style="text-align:right">Rate</th>
+                            <th style="text-align:right">Total</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+                <div class="pdf-grand-total">
+                    <span>Grand Total</span>
+                    <span>₹ ${formatMoney(grandTotal)}</span>
+                </div>
+            `;
+        }
+
+        // ── Download PDF ─────────────────────────────────────────────────────────────
+
+        function downloadCurrentPDF() {
+            if (!activeBatch) return;
+            generatePDF(activeBatch);
+        }
+
+        function generatePDF(batch) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const items          = batch.items || [];
+            const grandTotal     = batch.grandTotal || 0;
+            const grouped        = groupByEntryDate(items);
+            const createdDateStr = new Date(batch.createdDate).toLocaleDateString('en-IN');
+
+            // Header triangle
+            doc.setFillColor(123, 45, 38);
+            doc.triangle(70, 0, 210, 0, 210, 77, 'F');
+
+            doc.setFontSize(36);
+            doc.setTextColor(123, 45, 38);
+            doc.setFont(undefined, 'bold');
+            doc.text('RED', 20, 30);
+            doc.setTextColor(0, 0, 0);
+            doc.text('GOLD', 50, 30);
+
+            doc.setFontSize(20);
+            doc.setFont(undefined, 'italic');
+            doc.text('Brick Factory', 20, 42);
+
+            doc.setFontSize(9);
+            doc.setFont(undefined, 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text('ADDRESS :', 20, 55);
+            doc.setFont(undefined, 'normal');
+            doc.text('Red Gold Brick Factory', 20, 61);
+            doc.text('Main Street, Industrial Area', 20, 67);
+            doc.text('City, State - 517001', 20, 72);
+
+            doc.setDrawColor(200, 200, 200);
+            doc.setLineWidth(0.3);
+            doc.line(15, 78, 195, 78);
+
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text('INVESTMENT BATCH REPORT', 105, 88, { align: 'center' });
+
+            // Batch meta
+            let y = 98;
+            doc.setFontSize(9.5);
+            doc.setFont(undefined, 'bold');
+            doc.text('Batch Created :', 20, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(createdDateStr, 58, y);
+            doc.setFont(undefined, 'bold');
+            doc.text('Total Entries :', 110, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(String(items.length), 148, y);
+            y += 10;
+
+            // Table title + header
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'bold');
+            doc.text('INVESTMENT ITEMS', 20, y);
+            y += 6;
+
+            doc.setFillColor(220, 220, 220);
+            doc.rect(15, y, 180, 8, 'FD');
+            doc.setFontSize(8.5);
+            doc.setFont(undefined, 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text('S.NO',        18,  y + 5.5);
+            doc.text('DESCRIPTION', 33,  y + 5.5);
+            doc.text('QTY',         112, y + 5.5, { align: 'center' });
+            doc.text('RATE',        137, y + 5.5, { align: 'center' });
+            doc.text('TOTAL',       162, y + 5.5, { align: 'center' });
+            doc.text('REMARKS',     193, y + 5.5, { align: 'right'  });
+            y += 8;
+
+            const tableTopY = y;
+            let sno = 1;
+
+            for (const [dateStr, dateItems] of Object.entries(grouped)) {
+                if (y > 255) { doc.addPage(); y = 20; }
+
+                // Date group header
+                doc.setFillColor(240, 230, 228);
+                doc.rect(15, y, 180, 7, 'FD');
+                doc.setFontSize(8);
+                doc.setFont(undefined, 'bold');
+                doc.setTextColor(123, 45, 38);
+                doc.text('Date: ' + formatDisplayDate(dateStr), 18, y + 5);
+                doc.setTextColor(0, 0, 0);
+                y += 7;
+
+                let dateTotal = 0;
+
+                dateItems.forEach(item => {
+                    if (y > 262) { doc.addPage(); y = 20; }
+
+                    const descLines = doc.splitTextToSize(item.description || '-', 74);
+                    const rowH      = Math.max(7, descLines.length * 4.5);
+
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(8);
+                    doc.setTextColor(0, 0, 0);
+
+                    doc.text(String(sno++), 18, y + 5);
+                    descLines.forEach((l, li) => doc.text(l, 33, y + 5 + li * 4.5));
+                    doc.text(String(item.qty   || 0), 112, y + 5, { align: 'center' });
+                    doc.text(formatMoney(item.rate  || 0), 137, y + 5, { align: 'center' });
+                    doc.text(formatMoney(item.total || 0), 162, y + 5, { align: 'center' });
+
+                    const remLines = doc.splitTextToSize(item.remarks || '-', 28);
+                    remLines.forEach((l, li) => doc.text(l, 193, y + 5 + li * 4.5, { align: 'right' }));
+
+                    dateTotal += parseFloat(item.total) || 0;
+                    y += rowH + 1;
+                });
+
+                // Date subtotal row
+                if (y > 262) { doc.addPage(); y = 20; }
+                doc.setFillColor(248, 244, 242);
+                doc.rect(15, y, 180, 7, 'FD');
+                doc.setFont(undefined, 'bold');
+                doc.setFontSize(8);
+                doc.text('Date Total:', 118, y + 5, { align: 'right' });
+                doc.text(formatMoney(dateTotal), 162, y + 5, { align: 'center' });
+                y += 9;
+            }
+
+            // Table border
+            doc.setDrawColor(100, 100, 100);
+            doc.setLineWidth(0.3);
+            doc.rect(15, tableTopY - 8, 180, y - (tableTopY - 8));
+
+            // Grand Total
+            y += 8;
+            if (y > 262) { doc.addPage(); y = 20; }
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'bold');
+            doc.text('Grand Total', 130, y);
+            doc.text(':', 166, y);
+            doc.setTextColor(123, 45, 38);
+            doc.text(formatMoney(grandTotal), 192, y, { align: 'right' });
+            doc.setTextColor(0, 0, 0);
+
+            // Footer
+            y += 20;
+            if (y > 270) { doc.addPage(); y = 20; }
+            doc.setFontSize(9);
+            doc.setFont(undefined, 'italic');
+            doc.text('Yours Faithfully,', 192, y, { align: 'right' });
+            doc.setFont(undefined, 'bold');
+            doc.text('RED GOLD Brick Factory', 192, y + 6, { align: 'right' });
+
+            // Page numbers
+            const pages = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pages; i++) {
+                doc.setPage(i);
+                doc.setFontSize(7);
+                doc.setFont(undefined, 'normal');
+                doc.setTextColor(120, 120, 120);
+                doc.text('Generated on ' + new Date().toLocaleDateString('en-IN'), 105, 288, { align: 'center' });
+            }
+
+            doc.save(`RedGold_Batch_${batch.id}.pdf`);
+        }
+
+        // ── Helpers ──────────────────────────────────────────────────────────────────
+
+        function groupByEntryDate(items) {
+            const map = {};
+            items.forEach(item => {
+                const key = item.entryDate || 'Unknown';
+                if (!map[key]) map[key] = [];
+                map[key].push(item);
+            });
+            // sort ascending
+            return Object.keys(map).sort().reduce((acc, k) => { acc[k] = map[k]; return acc; }, {});
+        }
+
+        function formatDisplayDate(dateStr) {
+            if (!dateStr || dateStr === 'Unknown') return 'Unknown Date';
+            const d = new Date(dateStr);
+            return isNaN(d) ? dateStr : d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+
+        function formatMoney(amount) {
+            return parseFloat(amount || 0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function formatMoneyShort(amount) {
+            const n = parseFloat(amount || 0);
+            if (n >= 10000000) return (n / 10000000).toFixed(1) + 'Cr';
+            if (n >= 100000)   return (n / 100000).toFixed(1)   + 'L';
+            if (n >= 1000)     return (n / 1000).toFixed(1)     + 'K';
+            return n.toFixed(0);
+        }
+
+        function escapeHtml(text) {
+            const m = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return String(text).replace(/[&<>"']/g, c => m[c]);
+        }
+
         function showError() {
-            const container = document.getElementById('investmentList');
-            container.innerHTML = `
+            document.getElementById('investmentList').innerHTML = `
                 <div class="empty-state">
-                    <svg class="empty-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="empty-icon" viewBox="0 0 24 24">
                         <path fill="#3E2C23" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                     </svg>
                     <div class="empty-title">Error Loading Data</div>
@@ -752,41 +1112,6 @@
             `;
         }
 
-        // Format money with 2 decimals
-        function formatMoney(amount) {
-            return parseFloat(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-
-        // Format money for short display (K, L, Cr notation)
-        function formatMoneyShort(amount) {
-            const num = parseFloat(amount);
-            if (num >= 10000000) { // 1 Crore
-                return (num / 10000000).toFixed(1) + 'Cr';
-            } else if (num >= 100000) { // 1 Lakh
-                return (num / 100000).toFixed(1) + 'L';
-            } else if (num >= 1000) { // 1 Thousand
-                return (num / 1000).toFixed(1) + 'K';
-            }
-            return num.toFixed(0);
-        }
-
-        // View investment (redirect to investment.html with ID)
-        function viewInvestment(investmentId) {
-            window.location.href = `/create-investment.html?id=${investmentId}`;
-        }
-
-        // Create new investment
-        function createNewInvestment() {
-            // force new record instead of reopening last edited one
-            window.location.href = '/create-investment.html?new=' + Date.now();
-        }
-
-        // Go back to home
-        function goBack() {
-            window.location.href = '/home.html';
-        }
-
-        // Initialize on page load
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
