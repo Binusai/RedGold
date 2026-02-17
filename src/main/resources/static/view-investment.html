@@ -1049,10 +1049,10 @@
             if (y > 262) { doc.addPage(); y = 20; }
             doc.setFontSize(11);
             doc.setFont(undefined, 'bold');
-            doc.text('Grand Total', 130, y);
+            doc.text('Grand Total', 110, y);
             doc.text(':', 166, y);
             doc.setTextColor(123, 45, 38);
-            doc.text(formatMoney(grandTotal), 158, y, { align: 'right' });
+            doc.text(formatMoney(grandTotal), 168, y, { align: 'right' });
             doc.setTextColor(0, 0, 0);
 
             // Footer
