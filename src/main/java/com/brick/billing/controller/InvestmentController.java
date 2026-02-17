@@ -27,24 +27,25 @@ public class InvestmentController {
     // SAVE OR UPDATE
     @PostMapping("/save")
     public Long save(@RequestBody InvestmentRequest req) {
-
-        Investment inv = (req.id() != null)
-                ? repo.findByIdWithItems(req.id()).orElse(new Investment())
-                : new Investment();
-
-        if (inv.getCreatedDate() == null) {
+    
+        Investment inv;
+    
+        if (req.id() != null) {
+            // existing batch
+            inv = repo.findByIdWithItems(req.id()).orElseThrow();
+        } else {
+            // new batch
+            inv = new Investment();
             inv.setCreatedDate(LocalDate.parse(req.createdDate()));
+            inv.setGrandTotal(0.0);
         }
-
-        inv.setRemarks(req.remarks());
-
-        List<InvestmentItem> newItems = new ArrayList<>();
-        double grandTotal = 0;
-
+    
+        double grandTotal = inv.getGrandTotal() == null ? 0 : inv.getGrandTotal();
+    
         for (InvestmentItemDto dto : req.items()) {
-
+    
             if (dto.description() == null || dto.description().isBlank()) continue;
-
+    
             InvestmentItem item = new InvestmentItem();
             item.setInvestment(inv);
             item.setDescription(dto.description());
@@ -54,17 +55,20 @@ public class InvestmentController {
             item.setDiscount(dto.discount());
             item.setTotal(dto.total());
             item.setRemarks(dto.remarks());
-
+    
+            // 🔴 IMPORTANT (store per-row date)
+            item.setEntryDate(LocalDate.parse(dto.entryDate()));
+    
+            inv.getItems().add(item); // append only
             grandTotal += dto.total();
-            newItems.add(item);
         }
-
-        inv.setItems(newItems);
+    
         inv.setGrandTotal(grandTotal);
-
-        repo.saveAndFlush(inv);
+    
+        repo.save(inv);
         return inv.getId();
     }
+
 
     // LIST
     @GetMapping("/all")
