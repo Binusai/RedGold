@@ -24,28 +24,28 @@ public class InvestmentController {
         this.reportRepository = reportRepository;
     }
 
-    // SAVE OR UPDATE
+    // ✅ CREATE NEW BATCH OR APPEND TO EXISTING
     @PostMapping("/save")
     public Long save(@RequestBody InvestmentRequest req) {
-    
+
         Investment inv;
-    
+
         if (req.id() != null) {
-            // existing batch
+            // LOAD existing batch (append mode)
             inv = repo.findByIdWithItems(req.id()).orElseThrow();
         } else {
-            // new batch
+            // CREATE new batch
             inv = new Investment();
             inv.setCreatedDate(LocalDate.parse(req.createdDate()));
             inv.setGrandTotal(0.0);
+            inv.setItems(new ArrayList<>());
         }
-    
-        double grandTotal = inv.getGrandTotal() == null ? 0 : inv.getGrandTotal();
-    
+
+        // Append only new rows
         for (InvestmentItemDto dto : req.items()) {
-    
+
             if (dto.description() == null || dto.description().isBlank()) continue;
-    
+
             InvestmentItem item = new InvestmentItem();
             item.setInvestment(inv);
             item.setDescription(dto.description());
@@ -55,48 +55,53 @@ public class InvestmentController {
             item.setDiscount(dto.discount());
             item.setTotal(dto.total());
             item.setRemarks(dto.remarks());
-    
-            // 🔴 IMPORTANT (store per-row date)
+
+            // 🔴 Per-row entry date (core change)
             item.setEntryDate(LocalDate.parse(dto.entryDate()));
-    
-            inv.getItems().add(item); // append only
-            grandTotal += dto.total();
+
+            inv.getItems().add(item);
         }
-    
+
+        // Recalculate grand total from ALL rows (safe)
+        double grandTotal = inv.getItems()
+                .stream()
+                .mapToDouble(i -> i.getTotal() == null ? 0 : i.getTotal())
+                .sum();
+
         inv.setGrandTotal(grandTotal);
-    
+
         repo.save(inv);
         return inv.getId();
     }
 
-
-    // LIST
+    // ✅ LIST BATCHES
     @GetMapping("/all")
     @Transactional(readOnly = true)
     public List<InvestmentViewDto> list() {
 
         return repo.findAllWithItems().stream().map(i ->
-            new InvestmentViewDto(
-                i.getId(),
-                i.getCreatedDate().toString(),
-                i.getGrandTotal(),
-                i.getRemarks(),
-                i.getItems().stream().map(it ->
-                    new InvestmentItemDto(
-                        it.getDescription(),
-                        it.getPackageSize(),
-                        it.getQty(),
-                        it.getRate(),
-                        it.getDiscount(),
-                        it.getTotal(),
-                        it.getRemarks()
-                    )
-                ).toList()
-            )
+                new InvestmentViewDto(
+                        i.getId(),
+                        i.getCreatedDate().toString(),
+                        i.getGrandTotal(),
+                        i.getRemarks(),
+                        i.getItems().stream().map(it ->
+                                new InvestmentItemDto(
+                                        it.getDescription(),
+                                        it.getPackageSize(),
+                                        it.getQty(),
+                                        it.getRate(),
+                                        it.getDiscount(),
+                                        it.getTotal(),
+                                        it.getRemarks(),
+                                        it.getEntryDate() == null ? null : it.getEntryDate().toString()
+                                )
+                        ).toList()
+                )
         ).toList();
     }
 
-    // LOAD SINGLE
+    // ✅ LOAD SINGLE BATCH
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
     public InvestmentViewDto get(@PathVariable Long id) {
@@ -116,13 +121,14 @@ public class InvestmentController {
                                 it.getRate(),
                                 it.getDiscount(),
                                 it.getTotal(),
-                                it.getRemarks()
+                                it.getRemarks(),
+                                it.getEntryDate() == null ? null : it.getEntryDate().toString()
                         )
                 ).toList()
         );
     }
 
-    // PROFIT SUMMARY
+    // ✅ PROFIT SUMMARY (unchanged)
     @GetMapping("/summary")
     @Transactional(readOnly = true)
     public Map<String, Double> summary() {
