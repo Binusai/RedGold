@@ -938,10 +938,9 @@
 
             doc.setFont(undefined, 'normal');
             doc.setFontSize(10);
-            doc.text('Red Gold Brick Factory', 20, 61);
-            doc.text('Kuppiganipalli village, 197 Ramapuram post', 20, 66);
-            doc.text('Gudipala mandal, Chittoor dist', 20, 71);
-            doc.text('Andhra Pradesh - 517403', 20, 76);
+            doc.text('Kuppiganipalli village, 197 Ramapuram Post', 20, 61);
+            doc.text('Gudipala Mandal, Chittoor dist', 20, 66);
+            doc.text('Andhra Pradesh - 517403', 20, 71);
 
             doc.saveGraphicsState();
             doc.setGState(new doc.GState({ opacity: 0.15 }));
@@ -1034,7 +1033,7 @@
                 doc.rect(15, y, 180, 7, 'FD');
                 doc.setFont(undefined, 'bold');
                 doc.setFontSize(8);
-                doc.text('Total:', 118, y + 5, { align: 'right' });
+                doc.text('Total:', 138, y + 5, { align: 'right' });
                 doc.text(formatMoney(dateTotal), 162, y + 5, { align: 'center' });
                 y += 9;
             }
@@ -1049,7 +1048,7 @@
             if (y > 262) { doc.addPage(); y = 20; }
             doc.setFontSize(11);
             doc.setFont(undefined, 'bold');
-            doc.text('Grand Total', 110, y);
+            doc.text('Grand Total :', 120, y);
             doc.text(':', 166, y);
             doc.setTextColor(123, 45, 38);
             doc.text(formatMoney(grandTotal), 168, y, { align: 'right' });
