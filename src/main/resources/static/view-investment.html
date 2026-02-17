@@ -1054,15 +1054,7 @@
             doc.text(formatMoney(grandTotal), 168, y, { align: 'right' });
             doc.setTextColor(0, 0, 0);
 
-            // Footer
-            y += 20;
-            if (y > 270) { doc.addPage(); y = 20; }
-            doc.setFontSize(9);
-            doc.setFont(undefined, 'italic');
-            doc.text('Yours Faithfully,', 192, y, { align: 'right' });
-            doc.setFont(undefined, 'bold');
-            doc.text('SRI SAI RED BRICK MANUFACTURING CO.', 192, y + 6, { align: 'right' });
-
+            
             // Page numbers
             const pages = doc.internal.getNumberOfPages();
             for (let i = 1; i <= pages; i++) {
