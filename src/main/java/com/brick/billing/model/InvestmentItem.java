@@ -1,6 +1,7 @@
 package com.brick.billing.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "investment_items")
@@ -18,11 +19,12 @@ public class InvestmentItem {
     private Double total;
     private String remarks;
 
+    @Column(name = "entry_date")
+    private LocalDate entryDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "investment_id")
     private Investment investment;
-    @Column(name = "entry_date")
-    private LocalDate entryDate;
 
     // getters & setters
 
@@ -49,12 +51,6 @@ public class InvestmentItem {
     public String getRemarks() { return remarks; }
     public void setRemarks(String remarks) { this.remarks = remarks; }
 
-    public LocalDate getEntryDate() {
-        return entryDate;
-    }
-    
-    public void setEntryDate(LocalDate entryDate) {
-        this.entryDate = entryDate;
-    }
-
+    public LocalDate getEntryDate() { return entryDate; }
+    public void setEntryDate(LocalDate entryDate) { this.entryDate = entryDate; }
 }
