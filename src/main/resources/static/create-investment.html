@@ -137,6 +137,7 @@
             border-radius: 4px;
             font-size: 14px;
             font-family: inherit;
+            text-transform: uppercase;
         }
 
         .investment-table input:focus,
@@ -147,6 +148,11 @@
 
         .investment-table input[type="number"] {
             text-align: right;
+            text-transform: none;
+        }
+
+        .investment-table input[type="date"] {
+            text-transform: none;
         }
 
         .investment-table .sno {
@@ -157,10 +163,6 @@
 
         .investment-table .desc-col {
             min-width: 180px;
-        }
-
-        .investment-table .package-col {
-            min-width: 120px;
         }
 
         .investment-table .qty-col,
@@ -175,7 +177,7 @@
         }
 
         .investment-table .action-col {
-            width: 80px;
+            width: 110px;
             text-align: center;
         }
 
@@ -194,21 +196,20 @@
             background-color: #B71C1C;
         }
 
-        .add-row-btn {
+        .add-row-inline-btn {
             background-color: #2E7D32;
             color: #FFFFFF;
             border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 6px 10px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1;
+            margin-left: 4px;
         }
 
-        .add-row-btn:hover {
+        .add-row-inline-btn:hover {
             background-color: #1B5E20;
         }
 
@@ -390,7 +391,7 @@
                         <tr>
                             <th class="sno">S.No</th>
                             <th class="desc-col">Description</th>
-                            <th class="package-col">Package Size</th>
+
                             <th class="date-col">Entry Date</th>
                             <th class="qty-col">Quantity</th>
                             <th class="rate-col">Rate (₹)</th>
@@ -405,9 +406,6 @@
                     </tbody>
                 </table>
             </div>
-            <button class="add-row-btn" onclick="addInvestmentRow()">
-                <span>+</span> Add Row
-            </button>
         </div>
 
         <!-- Summary Section -->
@@ -504,7 +502,6 @@
         }
 
 
-
         // Add new investment row
         function addInvestmentRow() {
             rowCounter++;
@@ -514,30 +511,30 @@
 
             row.innerHTML = `
                 <td class="sno">${rowCounter}</td>
-                <td><textarea rows="2" class="desc-input" placeholder="Description" oninput="updateRow(${rowCounter})"></textarea></td>
-                <td><input type="text" class="package-input" placeholder="Package size" oninput="updateRow(${rowCounter})"></td>
+                <td><textarea rows="2" class="desc-input" placeholder="Description" oninput="toUpperInput(this); updateRow(${rowCounter})"></textarea></td>
+
                 <td>
                     <input type="date"
                            class="date-input"
                            value="${new Date().toISOString().split('T')[0]}"
                            onchange="updateRow(${rowCounter})">
                 </td>
-                <td><input type="number" class="qty-input" placeholder="0" min="0" value="0" oninput="updateRow(${rowCounter})"></td>
+                <td><input type="number" class="qty-input" placeholder="0" min="0" value="1" oninput="updateRow(${rowCounter})"></td>
                 <td><input type="number" class="rate-input" placeholder="0.00" min="0" step="0.01" value="0" oninput="updateRow(${rowCounter})"></td>
                 <td><input type="number" class="discount-input" placeholder="0.00" min="0" step="0.01" value="0" oninput="updateRow(${rowCounter})"></td>
                 <td><input type="number" class="total-input" placeholder="0.00" readonly></td>
-                <td><input type="text" class="remarks-input" placeholder="Remarks" oninput="updateRow(${rowCounter})"></td>
+                <td><input type="text" class="remarks-input" placeholder="Remarks" oninput="toUpperInput(this); updateRow(${rowCounter})"></td>
                 <td class="action-col">
                     <button class="delete-btn" onclick="deleteRow(${rowCounter})">Delete</button>
+                    <button class="add-row-inline-btn" onclick="addInvestmentRow()" title="Add Row">+</button>
                 </td>
             `;
 
             investmentItems.push({
                 id: rowCounter,
                 description: '',
-                packageSize: '',
                 entryDate: new Date().toISOString().split('T')[0],
-                qty: 0,
+                qty: 1,
                 rate: 0,
                 discount: 0,
                 total: 0,
@@ -556,47 +553,53 @@
 
             row.innerHTML = `
                 <td class="sno">${rowCounter}</td>
-                <td><textarea rows="2" class="desc-input" oninput="updateRow(${rowCounter})">${item.description || ''}</textarea></td>
-                <td><input type="text" class="package-input" value="${item.packageSize || ''}" oninput="updateRow(${rowCounter})"></td>
+                <td><textarea rows="2" class="desc-input" oninput="toUpperInput(this); updateRow(${rowCounter})">${(item.description || '').toUpperCase()}</textarea></td>
+
                 <td>
                     <input type="date"
                            class="date-input"
                            value="${item.entryDate || ''}"
                            onchange="updateRow(${rowCounter})">
                 </td>
-                <td><input type="number" class="qty-input" value="${item.qty || 0}" min="0" oninput="updateRow(${rowCounter})"></td>
+                <td><input type="number" class="qty-input" value="${item.qty || 1}" min="0" oninput="updateRow(${rowCounter})"></td>
                 <td><input type="number" class="rate-input" value="${item.rate || 0}" min="0" step="0.01" oninput="updateRow(${rowCounter})"></td>
                 <td><input type="number" class="discount-input" value="${item.discount || 0}" min="0" step="0.01" oninput="updateRow(${rowCounter})"></td>
                 <td><input type="number" class="total-input" value="${total.toFixed(2)}" readonly></td>
-                <td><input type="text" class="remarks-input" value="${item.remarks || ''}" oninput="updateRow(${rowCounter})"></td>
+                <td><input type="text" class="remarks-input" value="${(item.remarks || '').toUpperCase()}" oninput="toUpperInput(this); updateRow(${rowCounter})"></td>
                 <td class="action-col">
                     <button class="delete-btn" onclick="deleteRow(${rowCounter})">Delete</button>
+                    <button class="add-row-inline-btn" onclick="addInvestmentRow()" title="Add Row">+</button>
                 </td>
             `;
 
             investmentItems.push({
                 id: rowCounter,
-                description: item.description || '',
-                packageSize: item.packageSize || '',
+                description: (item.description || '').toUpperCase(),
                 entryDate: item.entryDate || '',
-                qty: item.qty || 0,
+                qty: item.qty || 1,
                 rate: item.rate || 0,
                 discount: item.discount || 0,
                 total: total,
-                remarks: item.remarks || ''
+                remarks: (item.remarks || '').toUpperCase()
             });
+        }
+
+        // Force uppercase on any input/textarea
+        function toUpperInput(el) {
+            const pos = el.selectionStart;
+            el.value = el.value.toUpperCase();
+            try { el.setSelectionRange(pos, pos); } catch(e) {}
         }
 
         // Update row data
         function updateRow(rowId) {
             const row = document.getElementById(`row-${rowId}`);
-            const description = row.querySelector('.desc-input').value;
-            const packageSize = row.querySelector('.package-input').value;
+            const description = row.querySelector('.desc-input').value.toUpperCase();
             const entryDate = row.querySelector('.date-input').value;
             const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
             const rate = parseFloat(row.querySelector('.rate-input').value) || 0;
             const discount = parseFloat(row.querySelector('.discount-input').value) || 0;
-            const remarks = row.querySelector('.remarks-input').value;
+            const remarks = row.querySelector('.remarks-input').value.toUpperCase();
             const total = (qty * rate) - discount;
 
             // Update total in the row
@@ -608,7 +611,6 @@
                 investmentItems[itemIndex] = {
                     id: rowId,
                     description: description,
-                    packageSize: packageSize,
                     entryDate: entryDate,
                     qty: qty,
                     rate: rate,
@@ -671,15 +673,13 @@
                 remarks: "",
                 items: validItems.map(i => ({
                     description: i.description,
-                    packageSize: i.packageSize,
-                    entryDate: i.entryDate,   // 🔴 REQUIRED
+                    entryDate: i.entryDate,
                     qty: i.qty,
                     rate: i.rate,
                     discount: i.discount,
                     total: i.total,
                     remarks: i.remarks
                 }))
-
             };
         
             try {
@@ -698,9 +698,7 @@
                 window.history.replaceState({}, "", `/create-investment.html?id=${savedId}&mode=add`);
                 mode = "add";
 
-                
                 showSuccess("Saved successfully");
-
         
             } catch (e) {
                 console.error(e);
@@ -762,7 +760,7 @@
                 el.disabled = true;
             });
         
-            document.querySelector('.add-row-btn').style.display = "none";
+            document.querySelectorAll('.add-row-inline-btn').forEach(btn => btn.style.display = "none");
             document.querySelector('.btn-save').style.display = "none";
         }
 
