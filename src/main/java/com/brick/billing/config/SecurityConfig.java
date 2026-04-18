@@ -1,5 +1,5 @@
 package com.brick.billing.config;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +13,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    @Value("${APP_USERNAME}")
+    private String username;
+
+    @Value("${APP_PASSWORD}")
+    private String password;
+    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -45,13 +51,13 @@ public class SecurityConfig {
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder encoder) {
-
+    
         UserDetails user = User.builder()
-                .username("redgold")           // your fixed username
-                .password(encoder.encode("brick@123")) // your password
+                .username(username)
+                .password(encoder.encode(password))
                 .roles("USER")
                 .build();
-
+    
         return new InMemoryUserDetailsManager(user);
     }
 
