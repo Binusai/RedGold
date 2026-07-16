@@ -8,7 +8,8 @@ const ASSETS = [
   "/reports.html",
   "/history.html",
   "/revenue.html",
-  "/logo.png",
+  "/images/logo1.png",
+  "/images/background.png",
   "/manifest.json"
 ];
 
