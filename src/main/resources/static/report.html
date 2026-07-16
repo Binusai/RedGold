@@ -1293,7 +1293,7 @@
                 doc.setFont(undefined, 'bold');
                 doc.text(detail.label, 20, startY + (index * 6));
                 doc.setFont(undefined, 'normal');
-                doc.text(':  ' + detail.value, 58, startY + (index * 6));
+                doc.text(':  ' + detail.value, 45, startY + (index * 6));
             });
 
             // Print right column
@@ -1308,13 +1308,12 @@
 
             // Destination gets printed below, full-width and WRAPPED to the same right edge
             // as the items table (195) so long addresses never run off the page.
-            yPos += 4;
             doc.setFont(undefined, 'bold');
-            doc.text('Destination', 20, yPos);
+            doc.text('ADDRESS', 20, yPos);
             doc.setFont(undefined, 'normal');
             const destinationMaxWidth = contentRight - 58;
             const destinationLines = doc.splitTextToSize(':  ' + (customerLocation || '-'), destinationMaxWidth);
-            doc.text(destinationLines, 58, yPos);
+            doc.text(destinationLines, 45, yPos);
             yPos += Math.max(destinationLines.length * 5, 5);
 
             // === REPORT ITEMS TABLE ===
