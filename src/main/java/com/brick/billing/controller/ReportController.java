@@ -13,7 +13,7 @@ import com.brick.billing.controller.dto.ReportItemDto;
 import com.brick.billing.controller.dto.ReportRequest;
 import com.brick.billing.controller.dto.ReportViewDto;
 import com.brick.billing.model.Booking;
-import com.brick.billing.model.Customer;   // ✅ IMPORTANT (was missing)
+import com.brick.billing.model.Customer;
 import com.brick.billing.model.Report;
 import com.brick.billing.model.ReportItem;
 import com.brick.billing.repository.BookingRepository;
@@ -55,12 +55,13 @@ public class ReportController {
         Report report = reportRepo.findByBookingId(bookingId)
                 .orElseThrow(() -> new RuntimeException("Report not found"));
 
-        // ✅ Explicit type (fix Docker compile issue)
         List<ReportItemDto> items = report.getItems().stream()
                 .map(i -> new ReportItemDto(
                         i.getDescription(),
+                        i.getUom(),
                         i.getRate(),
                         i.getQty(),
+                        i.getDiscount(),
                         i.getTotal()
                 ))
                 .toList();
@@ -76,7 +77,9 @@ public class ReportController {
         );
     }
 
-    // ---------------- DOWNLOAD PDF ----------------
+    // ---------------- DOWNLOAD PDF (legacy / unused by current frontend) ----------------
+    // NOTE: the actual PDF the user downloads is generated client-side via jsPDF in report.html.
+    // This endpoint is kept for backward compatibility but isn't wired to any button right now.
     @GetMapping("/{id}/pdf")
     public ResponseEntity<byte[]> downloadPdf(@PathVariable Long id) throws Exception {
 
@@ -88,11 +91,10 @@ public class ReportController {
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
 
-        document.add(new Paragraph("RED GOLD REPORT"));
+        document.add(new Paragraph("CITIZEN PAPER PRODUCTS"));
         document.add(new Paragraph("Customer: " + report.getBooking().getCustomer().getName()));
         document.add(new Paragraph("Mobile: " + report.getBooking().getCustomer().getMobile()));
-        document.add(new Paragraph("Quantity: " + report.getBooking().getQuantity()));
-        document.add(new Paragraph("Final Total: ₹ " + report.getFinalTotal()));
+        document.add(new Paragraph("Final Total: Rs. " + report.getFinalTotal()));
 
         document.close();
 
@@ -105,10 +107,10 @@ public class ReportController {
     // ---------------- COMMON SAVE METHOD ----------------
     @Transactional
     private Long save(ReportRequest req) {
-    
+
         Booking booking = bookingRepo.findByIdWithCustomer(req.bookingId())
             .orElseThrow(() -> new RuntimeException("Booking not found"));
-    
+
         // ---- update customer ----
         Customer customer = booking.getCustomer();
         customer.setName(req.customerName());
@@ -116,50 +118,70 @@ public class ReportController {
         customer.setEmail(req.email());
         customer.setAddress(req.address());
         customer.setLocation(req.location());
-    
-        // ---- update booking ----
-        booking.setQuantity(req.quantity());
-    
+
+        // ⚠️ booking.setQuantity(...) removed — quantity is fixed at booking creation
+        // and is no longer editable from the Report screen.
+
         // ---- find or create report (WITH items fetched) ----
         Report report = reportRepo.findByBookingIdWithItems(booking.getId()).orElse(null);
-    
+
         if (report == null) {
             report = new Report();
             report.setBooking(booking);
         }
-    
+
         report.setStatus(req.status());
-        report.setNetTotal(req.netTotal());
-        report.setDiscount(req.discount());
-        report.setFinalTotal(req.finalTotal());
         report.setRemarks(req.remarks());
-    
+
         // ---- replace items safely (NO clear(), NO add()) ----
         List<ReportItem> newItems = new ArrayList<>();
-    
+
+        double netTotal = 0.0;      // sum of (rate * qty) across all rows, BEFORE discount
+        double totalDiscount = 0.0; // sum of every row's discount
+
         for (ReportItemDto dto : req.items()) {
-    
+
             if (dto.description() == null || dto.description().isBlank()) continue;
-    
+
+            double rate = dto.rate() == null ? 0.0 : dto.rate();
+            double qty = dto.qty() == null ? 0.0 : dto.qty();
+            double rowDiscount = dto.discount() == null ? 0.0 : dto.discount();
+            double rowGross = rate * qty;
+            double rowTotal = rowGross - rowDiscount;
+
             ReportItem item = new ReportItem();
             item.setReport(report);
             item.setDescription(dto.description());
-            item.setRate(dto.rate());
-            item.setQty(dto.qty());
-            item.setTotal(dto.total());
-    
+            item.setUom(dto.uom() == null ? null : dto.uom().toUpperCase());
+            item.setRate(rate);
+            item.setQty(qty);
+            item.setDiscount(rowDiscount);
+            item.setTotal(rowTotal);
+
             newItems.add(item);
+
+            netTotal += rowGross;
+            totalDiscount += rowDiscount;
         }
-    
+
         report.setItems(newItems);
-    
+
+        // ---- totals are recalculated server-side from the items themselves,
+        // so the numbers saved always match what's actually in each row,
+        // regardless of what the browser sent. ----
+        double finalTotal = netTotal - totalDiscount;
+
+        report.setNetTotal(netTotal);
+        report.setDiscount(totalDiscount);
+        report.setFinalTotal(finalTotal);
+
         // ---- save ----
         reportRepo.saveAndFlush(report);
-    
+
         // ---- workflow ----
         booking.setStatus("COMPLETED".equals(req.status()) ? "COMPLETED" : "DRAFT");
         bookingRepo.saveAndFlush(booking);
-    
+
         return report.getId();
     }
 
