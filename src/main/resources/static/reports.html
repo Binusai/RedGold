@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#7B2D26">
+    <meta name="theme-color" content="#C99700">
     <link rel="icon" href="/logo.png" type="image/png">
-    <title>Reports - RED GOLD</title>
+    <title>Reports - CITIZEN PAPER PRODUCTS</title>
     <style>
         * {
             margin: 0;
@@ -28,7 +28,7 @@
             left: 0;
             right: 0;
             height: 56px;
-            background-color: #7B2D26;
+            background-color: #C99700;
             color: #FFFFFF;
             display: flex;
             align-items: center;
@@ -94,8 +94,8 @@
         }
 
         .tab.active {
-            color: #7B2D26;
-            border-bottom-color: #7B2D26;
+            color: #C99700;
+            border-bottom-color: #C99700;
         }
 
         .tab:hover {
@@ -264,12 +264,12 @@
         }
 
         .btn-create {
-            background-color: #7B2D26;
+            background-color: #C99700;
             color: #FFFFFF;
         }
 
         .btn-create:active {
-            background-color: #632419;
+            background-color: #A67C00;
         }
 
         .btn-edit {
@@ -561,6 +561,11 @@
             `;
         }
 
+        // Get display booking ID (matches report.html's bookingCode fallback logic)
+        function getBookingCode(booking) {
+            return booking.bookingCode || ('BK' + booking.id.toString().padStart(4, '0'));
+        }
+
         // Render booking card
         function renderBookingCard(booking, type) {
             const statusClass = type === 'pending' ? 'status-pending' : type === 'draft' ? 'status-draft' : 'status-completed';
@@ -568,18 +573,13 @@
             
             const customer = booking.customer;
             const bookingDate = new Date(booking.createdAt).toLocaleDateString();
+            const bookingCode = getBookingCode(booking);
 
             return `
                 <div class="booking-card" id="card-${booking.id}">
                     <div class="card-header" onclick="toggleCard(${booking.id}, '${type}')">
                         <div class="card-main-info">
                             <div class="customer-name">${customer.name}</div>
-                            <div class="booking-summary">
-                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
-                                </svg>
-                                ${formatNumber(booking.quantity)} Bricks
-                            </div>
                             <div class="booking-summary">
                                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
@@ -607,16 +607,12 @@
                                 <div class="detail-value">${customer.address}</div>
                             </div>
                             <div class="detail-row">
-                                <div class="detail-label">Quantity</div>
-                                <div class="detail-value">${formatNumber(booking.quantity)} Bricks</div>
-                            </div>
-                            <div class="detail-row">
                                 <div class="detail-label">Destination</div>
                                 <div class="detail-value">${customer.location}</div>
                             </div>
                             <div class="detail-row">
                                 <div class="detail-label">Booking ID</div>
-                                <div class="detail-value">#BK${booking.id.toString().padStart(4, '0')}</div>
+                                <div class="detail-value">${bookingCode}</div>
                             </div>
                             ${renderActionButton(booking.id, type)}
                         </div>
@@ -661,11 +657,6 @@
             details.classList.add('expanded');
             card.classList.add('active');
             currentExpandedCard = bookingId;
-        }
-
-        // Format number with commas
-        function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
         // Navigation functions
