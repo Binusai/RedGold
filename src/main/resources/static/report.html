@@ -506,7 +506,7 @@
                 <div>
                     <div class="detail-item">
                         <div class="detail-label">Name</div>
-                        <input type="text" class="editable-field" id="customerName" value="-">
+                        <input type="text" class="editable-field uppercase-input" id="customerName" value="-">
                     </div>
                     <div class="detail-item">
                         <div class="detail-label">Mobile</div>
@@ -1309,7 +1309,7 @@
             // Destination gets printed below, full-width and WRAPPED to the same right edge
             // as the items table (195) so long addresses never run off the page.
             doc.setFont(undefined, 'bold');
-            doc.text('ADDRESS', 20, yPos);
+            doc.text('Address', 20, yPos);
             doc.setFont(undefined, 'normal');
             const destinationMaxWidth = contentRight - 58;
             const destinationLines = doc.splitTextToSize(':  ' + (customerLocation || '-'), destinationMaxWidth);
