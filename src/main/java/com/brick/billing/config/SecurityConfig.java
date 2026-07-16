@@ -1,64 +1,79 @@
 package com.brick.billing.config;
-import org.springframework.beans.factory.annotation.Value;
+
+import com.brick.billing.model.User;
+import com.brick.billing.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.core.userdetails.User.UserBuilder;
 
 @Configuration
 public class SecurityConfig {
 
-    @Value("${APP_USERNAME}")
-    private String username;
+    @Autowired
+    private UserRepository userRepository;
 
-    @Value("${APP_PASSWORD}")
-    private String password;
-    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                        "/login.html",
+                        "/login",          // Our login page
+                        "/perform_login",  // Login processing
+                        "/register",       // Register endpoint
                         "/logo.png",
                         "/css/**",
                         "/js/**",
+                        "/images/**",
+                        "/static/**",
                         "/api/**",
                         "/splash.html"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(login -> login
-                .loginPage("/login.html")
+                .loginPage("/login")
                 .loginProcessingUrl("/perform_login")
-                .defaultSuccessUrl("/home.html", true)
+                .defaultSuccessUrl("/dashboard", true)
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login.html")
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
             );
 
         return http.build();
     }
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder encoder) {
-    
-        UserDetails user = User.builder()
-                .username(username)
-                .password(encoder.encode(password))
-                .roles("USER")
-                .build();
-    
-        return new InMemoryUserDetailsManager(user);
+    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                // Fetch user from database
+                User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+                
+                // Create UserDetails from our User entity
+                UserBuilder builder = org.springframework.security.core.userdetails.User.builder();
+                builder.username(user.getUsername())
+                       .password(user.getPassword()) // Store encoded password
+                       .roles("USER");
+                
+                return builder.build();
+            }
+        };
     }
 
     @Bean
