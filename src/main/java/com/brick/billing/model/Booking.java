@@ -24,6 +24,11 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // New human-friendly booking code, e.g. CM16072026001
+    // Generated once at creation time (see BookingCodeService) and never changed after.
+    @Column(name = "booking_code", unique = true, updatable = false, length = 20)
+    private String bookingCode;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -43,6 +48,9 @@ public class Booking {
 
     // getters + setters
     public Long getId() { return id; }
+
+    public String getBookingCode() { return bookingCode; }
+    public void setBookingCode(String bookingCode) { this.bookingCode = bookingCode; }
 
     public Customer getCustomer() { return customer; }
     public void setCustomer(Customer customer) { this.customer = customer; }
