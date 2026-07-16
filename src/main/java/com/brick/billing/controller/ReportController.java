@@ -17,6 +17,7 @@ import com.brick.billing.model.Customer;
 import com.brick.billing.model.Report;
 import com.brick.billing.model.ReportItem;
 import com.brick.billing.repository.BookingRepository;
+import com.brick.billing.repository.CustomerRepository;
 import com.brick.billing.repository.ReportRepository;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -29,20 +30,24 @@ public class ReportController {
 
     private final BookingRepository bookingRepo;
     private final ReportRepository reportRepo;
+    private final CustomerRepository customerRepo;
 
-    public ReportController(BookingRepository bookingRepo, ReportRepository reportRepo) {
+    public ReportController(BookingRepository bookingRepo, ReportRepository reportRepo, CustomerRepository customerRepo) {
         this.bookingRepo = bookingRepo;
         this.reportRepo = reportRepo;
+        this.customerRepo = customerRepo;
     }
 
     // ---------------- SAVE DRAFT ----------------
     @PostMapping("/save-draft")
+    @Transactional
     public Long saveDraft(@RequestBody ReportRequest req) {
         return save(req);
     }
 
     // ---------------- FINALIZE REPORT ----------------
     @PostMapping("/finalize")
+    @Transactional
     public Long finalizeReport(@RequestBody ReportRequest req) {
         return save(req);
     }
@@ -78,8 +83,6 @@ public class ReportController {
     }
 
     // ---------------- DOWNLOAD PDF (legacy / unused by current frontend) ----------------
-    // NOTE: the actual PDF the user downloads is generated client-side via jsPDF in report.html.
-    // This endpoint is kept for backward compatibility but isn't wired to any button right now.
     @GetMapping("/{id}/pdf")
     public ResponseEntity<byte[]> downloadPdf(@PathVariable Long id) throws Exception {
 
@@ -105,7 +108,9 @@ public class ReportController {
     }
 
     // ---------------- COMMON SAVE METHOD ----------------
-    @Transactional
+    // NOTE: no @Transactional here on purpose - private/self-invoked methods are not
+    // intercepted by Spring's transaction proxy. The real transaction boundary is on
+    // saveDraft()/finalizeReport() above, which are the actual public entry points.
     private Long save(ReportRequest req) {
 
         Booking booking = bookingRepo.findByIdWithCustomer(req.bookingId())
@@ -119,8 +124,10 @@ public class ReportController {
         customer.setAddress(req.address());
         customer.setLocation(req.location());
 
-        // ⚠️ booking.setQuantity(...) removed — quantity is fixed at booking creation
-        // and is no longer editable from the Report screen.
+        // FIX: explicitly persist the customer changes.
+        // Previously these setters were never actually saved, so address/location edits
+        // were silently discarded at the end of the request.
+        customerRepo.save(customer);
 
         // ---- find or create report (WITH items fetched) ----
         Report report = reportRepo.findByBookingIdWithItems(booking.getId()).orElse(null);
@@ -136,8 +143,8 @@ public class ReportController {
         // ---- replace items safely (NO clear(), NO add()) ----
         List<ReportItem> newItems = new ArrayList<>();
 
-        double netTotal = 0.0;      // sum of (rate * qty) across all rows, BEFORE discount
-        double totalDiscount = 0.0; // sum of every row's discount
+        double netTotal = 0.0;
+        double totalDiscount = 0.0;
 
         for (ReportItemDto dto : req.items()) {
 
@@ -166,9 +173,6 @@ public class ReportController {
 
         report.setItems(newItems);
 
-        // ---- totals are recalculated server-side from the items themselves,
-        // so the numbers saved always match what's actually in each row,
-        // regardless of what the browser sent. ----
         double finalTotal = netTotal - totalDiscount;
 
         report.setNetTotal(netTotal);
