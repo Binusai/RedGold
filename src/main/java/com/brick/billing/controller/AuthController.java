@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,9 @@ public class AuthController {
     
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     @GetMapping("/login")
     public String showLoginPage(Model model) {
@@ -31,11 +35,9 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest, 
                                               HttpSession session) {
         try {
-            // For demo purposes, check if user exists with matching credentials
-            // In production, use proper authentication with password encoding
             User user = userRepository.findByUsername(loginRequest.getUsername()).orElse(null);
             
-            if (user != null && user.getPassword().equals(loginRequest.getPassword())) {
+            if (user != null && passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
                 session.setAttribute("user", user);
                 return ResponseEntity.ok(new AuthResponse(true, "Login successful", "/dashboard"));
             } else {
@@ -72,10 +74,10 @@ public class AuthController {
                 return ResponseEntity.ok(new AuthResponse(false, "Mobile number already registered", null));
             }
             
-            // Create new user
+            // Create new user with encoded password
             User newUser = new User(
                 registerRequest.getUsername(),
-                registerRequest.getPassword(),
+                passwordEncoder.encode(registerRequest.getPassword()), // Encrypt password
                 registerRequest.getMobileNumber()
             );
             
