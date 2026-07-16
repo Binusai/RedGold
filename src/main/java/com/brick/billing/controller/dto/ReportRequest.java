@@ -18,7 +18,9 @@ public record ReportRequest(
         String mobile,
         String email,
         String address,
-        Integer quantity,
         String location
+
+        // ⚠️ quantity removed — booking quantity is fixed at creation time
+        // and is no longer editable from the Report screen.
 
 ) {}
