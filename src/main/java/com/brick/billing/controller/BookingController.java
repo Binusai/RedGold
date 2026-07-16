@@ -9,6 +9,7 @@ import com.brick.billing.model.Booking;
 import com.brick.billing.model.Customer;
 import com.brick.billing.repository.BookingRepository;
 import com.brick.billing.repository.CustomerRepository;
+import com.brick.billing.service.BookingCodeService;
 
 @RestController
 @RequestMapping("/api")
@@ -16,10 +17,12 @@ public class BookingController {
 
     private final CustomerRepository customerRepo;
     private final BookingRepository bookingRepo;
+    private final BookingCodeService bookingCodeService;
 
-    public BookingController(CustomerRepository c, BookingRepository b) {
+    public BookingController(CustomerRepository c, BookingRepository b, BookingCodeService bookingCodeService) {
         this.customerRepo = c;
         this.bookingRepo = b;
+        this.bookingCodeService = bookingCodeService;
     }
 
     @PostMapping("/add-booking")
@@ -39,6 +42,7 @@ public class BookingController {
         booking.setCustomer(c);
         booking.setQuantity(req.quantity());
         booking.setStatus("PENDING");   // important for your workflow
+        booking.setBookingCode(bookingCodeService.generateNextCode());   // ✅ CM16072026001 style code
 
         bookingRepo.save(booking);
 
