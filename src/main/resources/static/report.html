@@ -501,11 +501,11 @@
 
         <!-- Section B: Customer Details -->
         <div class="section" id="customerDetails">
-            <h2 class="section-title">Booking Details</h2>
+            <h2 class="section-title">Billing Details</h2>
             <div class="details-grid">
                 <div>
                     <div class="detail-item">
-                        <div class="detail-label">Customer Name</div>
+                        <div class="detail-label">Name</div>
                         <input type="text" class="editable-field" id="customerName" value="-">
                     </div>
                     <div class="detail-item">
@@ -516,22 +516,18 @@
                         <div class="detail-label">WhatsApp</div>
                         <input type="text" class="editable-field" id="customerWhatsapp" value="-">
                     </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Address</div>
-                        <textarea class="editable-field address-field" id="customerAddress">-</textarea>
-                    </div>
                 </div>
                 <div>
                     <div class="detail-item">
-                        <div class="detail-label">Destination</div>
+                        <div class="detail-label">Address</div>
                         <input type="text" class="editable-field" id="bookingDestination" value="-">
                     </div>
                     <div class="detail-item">
-                        <div class="detail-label">Booking Date</div>
+                        <div class="detail-label">Billing Date</div>
                         <div class="detail-value" id="bookingDate">-</div>
                     </div>
                     <div class="detail-item">
-                        <div class="detail-label">Booking ID</div>
+                        <div class="detail-label">Billing ID</div>
                         <div class="detail-value" id="bookingId">-</div>
                     </div>
                 </div>
@@ -548,7 +544,8 @@
                             <th class="sno">S.No</th>
                             <th class="desc-col">Description</th>
                             <th class="uom-col">UOM</th>
-                            <th class="qty-col">Unit Qty</th>
+                            <th class="qty-col">Qty</th>
+                            <th class="rate-col">Unit Rate (₹)</th>
                             <th class="rate-col">Rate (₹)</th>
                             <th class="discount-col">Discount (₹)</th>
                             <th class="amount-col">Amount (₹)</th>
@@ -834,6 +831,11 @@
                         ${isViewMode ? 'disabled' : ''}>
                 </td>
                 <td>
+                    <input type="number"
+                           class="gross-rate-input"
+                           readonly>
+                </td>
+                <td>
                     <input type="number" class="discount-input-row"
                         placeholder="0.00"
                         min="0"
@@ -889,6 +891,7 @@
                 <td><input type="text" class="uom-input uppercase-input" value="${item.uom || ''}" placeholder="UOM" oninput="updateRow(${rowCounter})" ${isViewMode ? 'disabled' : ''}></td>
                 <td><input type="number" class="qty-input" value="${qty}" placeholder="0" min="0" oninput="updateRow(${rowCounter})" ${isViewMode ? 'disabled' : ''}></td>
                 <td><input type="number" class="rate-input" value="${rate}" placeholder="0.00" min="0" step="0.01" oninput="updateRow(${rowCounter})" ${isViewMode ? 'disabled' : ''}></td>
+                <td><input type="number" class="gross-rate-input" value="${(rate * qty).toFixed(2)}" readonly></td>
                 <td><input type="number" class="discount-input-row" value="${discount}" placeholder="0.00" min="0" step="0.01" oninput="updateRow(${rowCounter})" ${isViewMode ? 'disabled' : ''}></td>
                 <td><input type="number" class="amount-input" value="${total.toFixed(2)}" placeholder="0.00" readonly></td>
                 <td class="action-col" ${isViewMode ? 'style="display:none"' : ''}>
@@ -915,9 +918,13 @@
             const rate = parseFloat(row.querySelector('.rate-input').value) || 0;
             const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
             const rowDiscount = parseFloat(row.querySelector('.discount-input-row').value) || 0;
-            const total = (rate * qty) - rowDiscount;
-
-            // Update amount in the row
+            const grossRate = rate * qty;
+            const total = grossRate - rowDiscount;
+            
+            // Update Rate column
+            row.querySelector('.gross-rate-input').value = grossRate.toFixed(2);
+            
+            // Update Amount column
             row.querySelector('.amount-input').value = total.toFixed(2);
 
             // Update reportItems array
@@ -1250,14 +1257,14 @@
             doc.setFontSize(16);
             doc.setFont('times', 'bold');
             doc.setTextColor(0, 0, 0);
-            doc.text('QUOTATION REPORT', 105, 92, { align: 'center' });
+            doc.text('BILLING REPORT', 105, 92, { align: 'center' });
             doc.setFont('helvetica', 'normal');
 
             let yPos = 102;
 
             doc.setFontSize(11);
             doc.setFont(undefined, 'bold');
-            doc.text('BOOKING DETAILS', 20, yPos);
+            doc.text('BILLING DETAILS', 20, yPos);
 
             yPos += 7;
             doc.setFontSize(9.5);
@@ -1265,13 +1272,13 @@
 
             // Left column details
             const leftDetails = [
-                { label: 'Booking ID', value: bookingCode },
-                { label: 'Customer Name', value: customerName }
+                { label: 'Bill ID', value: bookingCode },
+                { label: 'Name', value: customerName }
             ];
 
             // Right column details
             const rightDetails = [
-                { label: 'Booking Date', value: bookingDate },
+                { label: 'Bill Date', value: bookingDate },
                 { label: 'Phone Number', value: customerMobile }
             ];
 
@@ -1326,10 +1333,11 @@
             doc.setTextColor(0, 0, 0);
             doc.text('S.NO', 20, yPos + 5.5, { align: 'center' });
             doc.text('DESCRIPTION', 27, yPos + 5.5);
-            doc.text('UOM', 85, yPos + 5.5, { align: 'center' });
-            doc.text('UNIT QTY', 105, yPos + 5.5, { align: 'center' });
-            doc.text('RATE', 127, yPos + 5.5, { align: 'center' });
-            doc.text('DISCOUNT', 152, yPos + 5.5, { align: 'center' });
+            doc.text('UOM', 78, yPos + 5.5, { align: 'center' });
+            doc.text('QTY', 96, yPos + 5.5, { align: 'center' });
+            doc.text('UNIT RATE', 116, yPos + 5.5, { align: 'center' });
+            doc.text('RATE', 140, yPos + 5.5, { align: 'center' });
+            doc.text('DISC', 164, yPos + 5.5, { align: 'center' });
             doc.text('AMOUNT', 193, yPos + 5.5, { align: 'right' });
 
             yPos += 8;
@@ -1353,11 +1361,12 @@
                 descLines.forEach((line, lineIndex) => {
                     doc.text(line, 27, yPos - rowHeight + 5 + (lineIndex * 4));
                 });
-
-                doc.text(item.uom || '-', 85, yPos - rowHeight + 5, { align: 'center' });
-                doc.text(String(item.qty), 105, yPos - rowHeight + 5, { align: 'center' });
-                doc.text(item.rate.toFixed(2), 127, yPos - rowHeight + 5, { align: 'center' });
-                doc.text((item.discount || 0).toFixed(2), 152, yPos - rowHeight + 5, { align: 'center' });
+                
+                doc.text(item.uom || '-', 78, yPos - rowHeight + 5, { align: 'center' });
+                doc.text(String(item.qty), 96, yPos - rowHeight + 5, { align: 'center' });
+                doc.text(item.rate.toFixed(2), 116, yPos - rowHeight + 5, { align: 'center' });
+                doc.text((item.rate * item.qty).toFixed(2), 140, yPos - rowHeight + 5, { align: 'center' });
+                doc.text((item.discount || 0).toFixed(2), 164, yPos - rowHeight + 5, { align: 'center' });
                 doc.text(item.total.toFixed(2), 193, yPos - rowHeight + 5, { align: 'right' });
 
                 yPos += 2;
@@ -1388,7 +1397,7 @@
             doc.setFontSize(9.5);
 
             doc.setFont(undefined, 'bold');
-            doc.text('Net Total', labelX, yPos);
+            doc.text('Net Total Amount', labelX, yPos);
             doc.setFont(undefined, 'normal');
             doc.text(':', colonX, yPos);
             doc.text(netTotal.toFixed(2), amountX, yPos, { align: 'right' });
@@ -1396,7 +1405,7 @@
             if (discount > 0) {
                 yPos += 6;
                 doc.setFont(undefined, 'bold');
-                doc.text('Discount', labelX, yPos);
+                doc.text('Discount Amount', labelX, yPos);
                 doc.setFont(undefined, 'normal');
                 doc.text(':', colonX, yPos);
                 doc.text(discount.toFixed(2), amountX, yPos, { align: 'right' });
@@ -1404,7 +1413,7 @@
 
             yPos += 6;
             doc.setFont(undefined, 'bold');
-            doc.text('Final Total', labelX, yPos);
+            doc.text('Final Amount', labelX, yPos);
             doc.setFont(undefined, 'normal');
             doc.text(':', colonX, yPos);
             doc.setTextColor(accent[0], accent[1], accent[2]);
