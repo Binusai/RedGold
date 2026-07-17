@@ -51,8 +51,12 @@ public class Report {
     public void setPaymentDone(Boolean paymentDone) { this.paymentDone = paymentDone; }
 
 
-    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReportItem> items;
+    @OneToMany(
+        mappedBy = "report",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<ReportItem> items = new ArrayList<>();
 
     // getters & setters
     public Long getId() { return id; }
