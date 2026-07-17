@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#7B2D26">
+    <meta name="theme-color" content="#0f1f4d">
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/images/logo1.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
     <title>CM</title>
     <style>
         * {
@@ -43,6 +46,7 @@
 
         .brand-text {
             margin-top: 24px;
+            font-family: 'Cinzel', 'Times New Roman', serif;
             font-size: 32px;
             font-weight: 700;
             letter-spacing: 4px;
@@ -90,12 +94,14 @@
             }
         }
 
-        .text-red {
-            color: #7B2D26;
+        /* CITIZEN — royal blue */
+        .text-royal {
+            color: #0f1f4d;
         }
 
+        /* PAPER PRODUCTS — starts royal blue, eases into a warm metallic gold */
         .text-gold {
-            color: #7B2D26;
+            color: #0f1f4d;
             animation: colorToGold 1s ease-out forwards;
             animation-delay: 1.9s;
         }
@@ -120,10 +126,10 @@
 
         @keyframes colorToGold {
             from {
-                color: #7B2D26;
+                color: #0f1f4d;
             }
             to {
-                color: #ffc82f;
+                color: #D4AF37;
             }
         }
 
@@ -136,7 +142,7 @@
             }
 
             .text-gold {
-                color: #ffc82f;
+                color: #D4AF37;
             }
         }
     </style>
@@ -145,7 +151,7 @@
     <div class="splash-container">
         <img src="/logo.png" alt="Logo" class="logo-image">
         <div class="brand-text">
-            <span class="text-red">CITIZEN</span> <span class="text-gold">PAPER PRODUCTS</span>
+            <span class="text-royal">CITIZEN</span> <span class="text-gold">PAPER PRODUCTS</span>
         </div>
     </div>
 
