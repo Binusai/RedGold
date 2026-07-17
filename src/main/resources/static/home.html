@@ -764,6 +764,7 @@
             <div class="menu-item" data-action="revenue">Revenue Generated</div>
             <!-- <div class="menu-item admin-only" data-action="create-investment">Create Investment</div> -->
             <div class="menu-item admin-only" data-action="view-investment">View Investments</div>
+            <div class="menu-item" data-action="logout" style="border-top: 1px solid #E8E3DC; margin-top: 8px; color: #D32F2F;">Logout</div>
 
         </div>
     </div>
@@ -975,6 +976,10 @@
                     window.location.href = '/view-investment.html';
                     return;
                 }
+                if (action === 'logout') {
+                    window.location.href = '/logout';
+                    return;
+                }
 
 
                 closeMenu();
@@ -1015,6 +1020,10 @@
             
             if (action === 'view-investment') {
                 window.location.href = '/view-investment.html';
+                return;
+            }
+            if (action === 'logout') {
+                window.location.href = '/logout';
                 return;
             }
 
