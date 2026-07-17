@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#7B2D26">
-    <link rel="icon" href="/logo.png" type="image/png">
-    <title>Add Booking - RED GOLD</title>
+    <meta name="theme-color" content="#0f1f4d">
+    <link rel="icon" href="/images/logo1.png" type="image/png">
+    <title>Add Booking - CM</title>
     <style>
         * {
             margin: 0;
@@ -19,34 +19,43 @@
             color: #3E2C23;
             -webkit-tap-highlight-color: transparent;
             padding-bottom: 20px;
+            padding-top: 72px;
         }
 
-        /* Header */
-        .header {
+        /* ===== NAVBAR ===== */
+        .navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 56px;
-            background-color: #7B2D26;
-            color: #FFFFFF;
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            z-index: 100;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: 72px;
+            background: #0f1f4d;
+            z-index: 1000;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.15);
         }
 
+        .navbar-container {
+            max-width: 1400px;
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        /* Back Button */
         .back-button {
             background: none;
             border: none;
             color: #FFFFFF;
             cursor: pointer;
             padding: 8px;
-            margin-right: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .back-icon {
@@ -55,17 +64,53 @@
             fill: #FFFFFF;
         }
 
-        .header-title {
+        /* Brand */
+        .navbar-brand {
+            flex: 1;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .brand-text {
+            color: #FFFFFF;
             font-size: 18px;
             font-weight: 600;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Right side - Username + Logo */
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .navbar-username {
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .navbar-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: #FFFFFF;
+            padding: 4px;
+            flex-shrink: 0;
         }
 
         /* Main Content */
         .main-content {
-            margin-top: 56px;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px 16px;
-            max-width: 100%;
         }
 
         .form-container {
@@ -88,7 +133,7 @@
         }
 
         .required {
-            color: #7B2D26;
+            color: #0f1f4d;
         }
 
         .form-input,
@@ -106,7 +151,7 @@
         .form-input:focus,
         .form-textarea:focus {
             outline: none;
-            border-color: #7B2D26;
+            border-color: #0f1f4d;
         }
 
         .form-textarea {
@@ -126,11 +171,7 @@
             cursor: not-allowed;
         }
 
-        /* WhatsApp Toggle */
-        .whatsapp-group {
-            position: relative;
-        }
-
+        /* Toggle */
         .toggle-container {
             display: flex;
             align-items: center;
@@ -147,10 +188,11 @@
             cursor: pointer;
             transition: background-color 0.3s;
             margin-right: 10px;
+            flex-shrink: 0;
         }
 
         .toggle-switch.active {
-            background-color: #7B2D26;
+            background-color: #0f1f4d;
         }
 
         .toggle-slider {
@@ -194,18 +236,18 @@
         }
 
         .btn-primary {
-            background-color: #7B2D26;
+            background-color: #0f1f4d;
             color: #FFFFFF;
         }
 
         .btn-primary:active {
-            background-color: #632419;
+            background-color: #0a1533;
         }
 
         .btn-secondary {
             background-color: #FFFFFF;
-            color: #7B2D26;
-            border: 2px solid #7B2D26;
+            color: #0f1f4d;
+            border: 2px solid #0f1f4d;
         }
 
         .btn-secondary:active {
@@ -292,12 +334,12 @@
 
         /* Tablet and Desktop */
         @media (min-width: 600px) {
-            .header {
-                height: 64px;
+            .navbar {
+                height: 72px;
             }
 
-            .header-title {
-                font-size: 22px;
+            body {
+                padding-top: 72px;
             }
 
             .back-icon {
@@ -305,12 +347,23 @@
                 height: 28px;
             }
 
+            .brand-text {
+                font-size: 20px;
+            }
+
+            .navbar-username {
+                font-size: 15px;
+                max-width: 200px;
+            }
+
+            .navbar-logo {
+                width: 40px;
+                height: 40px;
+                padding: 4px;
+            }
+
             .main-content {
-                max-width: 800px;
-                margin-left: auto;
-                margin-right: auto;
                 padding: 32px 24px;
-                margin-top: 64px;
             }
 
             .form-container {
@@ -372,18 +425,75 @@
                 min-width: 160px;
             }
         }
+
+        @media (max-width: 480px) {
+            .navbar {
+                height: 60px;
+            }
+
+            body {
+                padding-top: 60px;
+            }
+
+            .navbar-container {
+                padding: 0 12px;
+            }
+
+            .brand-text {
+                font-size: 15px;
+                letter-spacing: 0.3px;
+            }
+
+            .navbar-username {
+                font-size: 12px;
+                max-width: 80px;
+            }
+
+            .navbar-logo {
+                width: 30px;
+                height: 30px;
+                padding: 3px;
+            }
+
+            .back-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            .main-content {
+                padding: 12px 12px;
+            }
+
+            .form-container {
+                padding: 18px 14px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <button class="back-button" onclick="goBack()">
-            <svg class="back-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-            </svg>
-        </button>
-        <div class="header-title">Add Booking</div>
-    </div>
+
+    <!-- ===== NAVBAR ===== -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <!-- Back Button -->
+            <button class="back-button" onclick="goBack()">
+                <svg class="back-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+            </button>
+
+            <!-- App Name -->
+            <div class="navbar-brand">
+                <span class="brand-text">ADD BOOKING</span>
+            </div>
+
+            <!-- Right side: Username + Logo -->
+            <div class="navbar-right">
+                <span class="navbar-username" id="navbarUsername">Guest</span>
+                <img src="/images/logo1.png" alt="Logo" class="navbar-logo">
+            </div>
+        </div>
+    </header>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -424,11 +534,10 @@
                     inputmode="numeric"
                     required
                 >
-
             </div>
 
             <!-- WhatsApp Number -->
-            <div class="form-group whatsapp-group">
+            <div class="form-group">
                 <label for="whatsapp" class="form-label">WhatsApp Number</label>
                 <div class="toggle-container">
                     <div class="toggle-switch" id="whatsappToggle" onclick="toggleWhatsApp()">
@@ -457,7 +566,25 @@
                 ></textarea>
             </div>
 
-            <!-- Quantity -->
+            <!-- Delivery Location with "Same as Address" Toggle -->
+            <div class="form-group">
+                <label for="location" class="form-label">Delivery Location (To Where)</label>
+                <div class="toggle-container">
+                    <div class="toggle-switch" id="locationToggle" onclick="toggleLocation()">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <span class="toggle-label">Same as Address</span>
+                </div>
+                <input 
+                    type="text" 
+                    id="location" 
+                    class="form-input" 
+                    placeholder="Enter delivery location"
+                />
+            </div>
+
+            <!-- Quantity - COMMENTED OUT (removed from UI) -->
+            <!-- 
             <div class="form-group">
                 <label for="quantity" class="form-label">Quantity <span class="required">*</span></label>
                 <input 
@@ -469,17 +596,7 @@
                     required
                 >
             </div>
-
-            <!-- Delivery Location -->
-            <div class="form-group">
-                <label for="location" class="form-label">Delivery Location (To Where)</label>
-                <input 
-                    type="text" 
-                    id="location" 
-                    class="form-input" 
-                    placeholder="Enter delivery location"
-                >
-            </div>
+            -->
 
             <!-- Buttons -->
             <div class="button-group">
@@ -493,8 +610,8 @@
     <div class="success-overlay" id="successOverlay">
         <div class="success-modal">
             <svg class="success-checkmark" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="26" cy="26" r="25" fill="none" stroke="#7B2D26" stroke-width="2"/>
-                <path fill="none" stroke="#7B2D26" stroke-width="3" stroke-linecap="round" d="M14 27l8 8 16-16"/>
+                <circle cx="26" cy="26" r="25" fill="none" stroke="#0f1f4d" stroke-width="2"/>
+                <path fill="none" stroke="#0f1f4d" stroke-width="3" stroke-linecap="round" d="M14 27l8 8 16-16"/>
             </svg>
             <div class="success-title">Booking Added Successfully!</div>
             <div class="success-message" id="successName">Booking for <strong>Customer Name</strong> added successfully</div>
@@ -506,7 +623,17 @@
     </div>
 
     <script>
+        // ===== SET USERNAME =====
+        (function setUsername() {
+            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+            const el = document.getElementById('navbarUsername');
+            if (el) {
+                el.textContent = username || 'Guest';
+            }
+        })();
+
         let isWhatsAppSameAsMobile = false;
+        let isLocationSameAsAddress = false;
         let customerName = '';
 
         // Toggle WhatsApp same as mobile
@@ -528,6 +655,31 @@
             }
         }
 
+        // Toggle Location same as Address
+        function toggleLocation() {
+            const toggle = document.getElementById('locationToggle');
+            const locationInput = document.getElementById('location');
+            const addressInput = document.getElementById('address');
+        
+            isLocationSameAsAddress = !isLocationSameAsAddress;
+        
+            if (isLocationSameAsAddress) {
+                toggle.classList.add('active');
+                locationInput.value = addressInput.value;
+                locationInput.disabled = true;
+            } else {
+                toggle.classList.remove('active');
+                locationInput.disabled = false;
+                locationInput.value = '';
+            }
+        }
+
+        // When address changes, update location if toggle is ON
+        document.getElementById('address').addEventListener('input', function() {
+            if (isLocationSameAsAddress) {
+                document.getElementById('location').value = this.value;
+            }
+        });
 
         function restrictToTenDigits(el) {
             el.value = el.value.replace(/\D/g, '');
@@ -563,8 +715,10 @@
             const mobile = document.getElementById('mobile').value.trim();
             const whatsapp = document.getElementById('whatsapp').value.trim();
             const address = document.getElementById('address').value.trim();
-            const quantity = document.getElementById('quantity').value;
             const location = document.getElementById('location').value.trim();
+
+            // Default quantity to 0 (backend will handle it)
+            const quantity = 0;
 
             customerName = name;
 
@@ -633,6 +787,16 @@
                 `/report.html?mode=create&bookingId=${window.lastCreatedBookingId}`;
         }
 
+        // Also update username when page becomes visible
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+                const el = document.getElementById('navbarUsername');
+                if (el) {
+                    el.textContent = username || 'Guest';
+                }
+            }
+        });
     </script>
 </body>
 </html>
