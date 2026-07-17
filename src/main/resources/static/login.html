@@ -13,141 +13,96 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            height: 100%;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* ----- FULL SCREEN PAGE ----- */
+        .page {
+            position: relative;
             min-height: 100vh;
             min-height: 100dvh;
             display: flex;
             align-items: center;
-            justify-content: center;
-            background: #0b0b1a;
-            padding: 0;
-        }
-
-        /* ----- MAIN WRAPPER (full screen) ----- */
-        .mvj-container {
-            width: 100%;
-            height: 100vh;
-            height: 100dvh;
-            display: flex;
-            flex-direction: row;
-            background: #ffffff;
+            justify-content: space-between;
+            gap: 40px;
             overflow: hidden;
-            position: relative;
+            padding: 40px 6vw;
         }
 
-        /* ----- LEFT PANEL – brand / image ----- */
-        .brand-panel {
-            flex: 1 1 52%;
-            position: relative;
-            background: #0b0b1a;
-            overflow: hidden;
-            min-height: 300px;
-        }
-
-        .brand-panel::before {
+        /* full-bleed blurred background */
+        .page::before {
             content: '';
             position: absolute;
-            inset: 0;
+            inset: -20px;
             background: url('/images/background.png') center/cover no-repeat;
-            filter: blur(5px) brightness(0.65) saturate(1.1);
-            transform: scale(1.02);
-            transition: transform 0.4s ease;
+            filter: blur(6px) brightness(0.85) saturate(1.05);
+            z-index: 0;
         }
 
-        .brand-panel:hover::before {
-            transform: scale(1.06);
-        }
-
-        /* dark overlay */
-        .brand-panel::after {
+        /* soft overlay for contrast */
+        .page::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(145deg, rgba(8, 8, 28, 0.65) 0%, rgba(8, 8, 28, 0.20) 60%, rgba(8, 8, 28, 0.55) 100%);
+            background: linear-gradient(120deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.25) 45%, rgba(255,255,255,0.45) 100%);
             z-index: 1;
         }
 
-        /* ----- LOGO (top-left) ----- */
-        .logo-mvj {
-            position: absolute;
-            top: 36px;
-            left: 36px;
-            z-index: 5;
+        /* ----- BIG CENTERED LOGO (left side) ----- */
+        .logo-side {
+            position: relative;
+            z-index: 2;
+            flex: 1 1 45%;
             display: flex;
             align-items: center;
-            gap: 12px;
-        }
-
-        .logo-mvj img {
-            width: 48px;
-            height: 48px;
-            object-fit: contain;
-            filter: brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
-        }
-
-        .logo-mvj span {
-            color: #fff;
-            font-size: 20px;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
-            background: rgba(0, 0, 0, 0.2);
-            padding: 4px 12px 4px 8px;
-            border-radius: 40px;
-            backdrop-filter: blur(2px);
-        }
-
-        /* ----- brand text (left bottom) ----- */
-        .brand-caption {
-            position: absolute;
-            bottom: 44px;
-            left: 36px;
-            z-index: 5;
-            color: #fff;
-        }
-
-        .brand-caption h2 {
-            font-size: 34px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-            margin-bottom: 2px;
-        }
-
-        .brand-caption p {
-            font-size: 12px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            opacity: 0.7;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-        }
-
-        /* ----- RIGHT PANEL – form ----- */
-        .form-panel {
-            flex: 1 1 48%;
-            padding: 48px 44px;
-            display: flex;
-            flex-direction: column;
             justify-content: center;
-            background: #ffffff;
-            min-width: 300px;
         }
 
-        .form-panel .greeting {
-            margin-bottom: 28px;
+        .logo-side img {
+            width: min(340px, 34vw);
+            max-width: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.25));
         }
 
-        .form-panel .greeting h1 {
-            font-size: 30px;
+        /* ----- GLASS CARD (right side) ----- */
+        .card-side {
+            position: relative;
+            z-index: 2;
+            flex: 0 1 420px;
+            width: 100%;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(22px) saturate(1.4);
+            -webkit-backdrop-filter: blur(22px) saturate(1.4);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 26px;
+            padding: 36px 32px;
+            box-shadow: 0 20px 60px rgba(11, 11, 26, 0.18);
+        }
+
+        .greeting {
+            margin-bottom: 22px;
+            text-align: center;
+        }
+
+        .greeting h1 {
+            font-size: 24px;
             font-weight: 700;
             color: #0b0b1a;
             letter-spacing: -0.3px;
         }
 
-        .form-panel .greeting p {
-            color: #6b6b7e;
-            font-size: 15px;
+        .greeting p {
+            color: #4b4b5e;
+            font-size: 13.5px;
             margin-top: 4px;
         }
 
@@ -155,46 +110,49 @@
         .message-box {
             padding: 12px 16px;
             border-radius: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             font-size: 14px;
             display: none;
             font-weight: 500;
         }
 
         .message-box.error {
-            background: #fef2f2;
+            background: rgba(254, 242, 242, 0.9);
             color: #b91c1c;
             border: 1px solid #fecaca;
             display: block;
         }
 
         .message-box.success {
-            background: #ecfdf5;
+            background: rgba(236, 253, 245, 0.9);
             color: #065f46;
             border: 1px solid #a7f3d0;
             display: block;
         }
 
-        /* tabs */
+        /* tabs — pill segmented control, matches glass aesthetic */
         .tab-bar {
             display: flex;
-            gap: 0;
-            border-bottom: 2px solid #eaeaf0;
-            margin-bottom: 28px;
+            gap: 4px;
+            background: rgba(11, 11, 26, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50px;
+            padding: 4px;
+            margin-bottom: 24px;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 12px 8px 14px;
+            padding: 10px 8px;
             border: none;
             background: transparent;
-            font-size: 16px;
+            border-radius: 50px;
+            font-size: 14px;
             font-weight: 600;
-            color: #7a7a8e;
+            color: #5a5a6e;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.25s;
             text-align: center;
-            position: relative;
         }
 
         .tab-btn:hover {
@@ -202,19 +160,9 @@
         }
 
         .tab-btn.active {
-            color: #0b0b1a;
-        }
-
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 20%;
-            right: 20%;
-            height: 3px;
+            color: #fff;
             background: #0b0b1a;
-            border-radius: 8px 8px 0 0;
-            transition: 0.2s;
+            box-shadow: 0 4px 14px rgba(11, 11, 26, 0.35);
         }
 
         .form-content {
@@ -226,25 +174,30 @@
         }
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 14px;
         }
 
         .form-group label {
             display: block;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 600;
             color: #1e1e2e;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            padding-left: 4px;
+        }
+
+        .input-wrapper {
+            position: relative;
         }
 
         .form-group input {
             width: 100%;
-            height: 50px;
-            padding: 0 16px;
-            border: 2px solid #eaeaf0;
-            border-radius: 12px;
-            font-size: 15px;
-            background: #fafafc;
+            height: 52px;
+            padding: 0 48px 0 20px;
+            border: 1.5px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50px;
+            font-size: 14.5px;
+            background: rgba(255, 255, 255, 0.85);
             transition: 0.2s;
             outline: none;
             color: #0b0b1a;
@@ -253,22 +206,23 @@
         .form-group input:focus {
             border-color: #0b0b1a;
             background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(11, 11, 26, 0.06);
+            box-shadow: 0 0 0 4px rgba(11, 11, 26, 0.08);
         }
 
         .form-group input::placeholder {
-            color: #acacbc;
+            color: #9a9aac;
         }
 
         .form-group input.error {
             border-color: #b91c1c;
-            background: #fef6f6;
+            background: rgba(254, 246, 246, 0.9);
         }
 
         .error-text {
             color: #b91c1c;
-            font-size: 12px;
-            margin-top: 4px;
+            font-size: 11.5px;
+            margin-top: 5px;
+            padding-left: 6px;
             display: none;
         }
 
@@ -276,31 +230,45 @@
             display: block;
         }
 
-        /* password toggle */
-        .password-wrapper {
-            position: relative;
-        }
-
-        .password-wrapper input {
-            padding-right: 48px;
-        }
-
-        .toggle-password {
+        /* icon inside pill input (person / eye) */
+        .field-icon {
             position: absolute;
-            right: 14px;
+            right: 6px;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #0b0b1a;
+            color: #fff;
             border: none;
-            font-size: 20px;
-            color: #7a7a8e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
             cursor: pointer;
-            padding: 4px;
-            transition: 0.2s;
         }
 
-        .toggle-password:hover {
+        .field-icon.static {
+            cursor: default;
+        }
+
+        .terms-note {
+            text-align: center;
+            font-size: 11.5px;
+            color: #6b6b7e;
+            margin-top: 2px;
+            margin-bottom: 18px;
+        }
+
+        .terms-note a {
             color: #0b0b1a;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .terms-note a:hover {
+            text-decoration: underline;
         }
 
         .submit-btn {
@@ -309,19 +277,18 @@
             background: #0b0b1a;
             color: #fff;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 50px;
+            font-size: 15px;
             font-weight: 700;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.6px;
             cursor: pointer;
             transition: 0.25s;
-            margin-top: 8px;
         }
 
         .submit-btn:hover {
             background: #1e1e3a;
             transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(11, 11, 26, 0.25);
+            box-shadow: 0 10px 26px rgba(11, 11, 26, 0.3);
         }
 
         .submit-btn:active {
@@ -335,220 +302,132 @@
             cursor: not-allowed;
         }
 
-        /* ----- RESPONSIVE (mobile & tablet) ----- */
-        @media (max-width: 820px) {
-            .mvj-container {
+        /* ----- RESPONSIVE ----- */
+        @media (max-width: 900px) {
+            .page {
                 flex-direction: column;
-                height: auto;
-                min-height: 100vh;
-                min-height: 100dvh;
+                justify-content: center;
+                padding: 32px 20px;
+                gap: 28px;
             }
 
-            .brand-panel {
-                flex: 0 0 240px;
-                min-height: 200px;
-                width: 100%;
+            .logo-side {
+                flex: 0 0 auto;
             }
 
-            .brand-panel::before {
-                filter: blur(3px) brightness(0.6);
+            .logo-side img {
+                width: min(200px, 45vw);
             }
 
-            .logo-mvj {
-                top: 20px;
-                left: 22px;
-            }
-
-            .logo-mvj img {
-                width: 38px;
-                height: 38px;
-            }
-
-            .logo-mvj span {
-                font-size: 16px;
-                padding: 2px 10px 2px 8px;
-            }
-
-            .brand-caption {
-                bottom: 24px;
-                left: 22px;
-            }
-
-            .brand-caption h2 {
-                font-size: 24px;
-            }
-
-            .brand-caption p {
-                font-size: 10px;
-                letter-spacing: 3px;
-            }
-
-            .form-panel {
-                padding: 32px 24px;
-                flex: 1 1 auto;
-                min-width: unset;
-            }
-
-            .form-panel .greeting h1 {
-                font-size: 26px;
+            .card-side {
+                flex: 0 1 auto;
+                max-width: 420px;
             }
         }
 
-        @media (max-width: 480px) {
-            .brand-panel {
-                flex: 0 0 180px;
-                min-height: 160px;
+        @media (max-width: 420px) {
+            .glass-card {
+                padding: 26px 20px;
+                border-radius: 22px;
             }
 
-            .logo-mvj {
-                top: 14px;
-                left: 16px;
-                gap: 8px;
+            .logo-side img {
+                width: 150px;
             }
 
-            .logo-mvj img {
-                width: 30px;
-                height: 30px;
-            }
-
-            .logo-mvj span {
-                font-size: 13px;
-                padding: 0 8px 0 6px;
-            }
-
-            .brand-caption {
-                bottom: 16px;
-                left: 16px;
-            }
-
-            .brand-caption h2 {
-                font-size: 20px;
-            }
-
-            .brand-caption p {
-                font-size: 9px;
-                letter-spacing: 2px;
-            }
-
-            .form-panel {
-                padding: 24px 16px;
-            }
-
-            .form-panel .greeting h1 {
-                font-size: 22px;
-            }
-
-            .form-panel .greeting p {
-                font-size: 13px;
-            }
-
-            .tab-btn {
-                font-size: 14px;
-                padding: 10px 4px 12px;
-            }
-
-            .form-group input {
-                height: 44px;
-                font-size: 14px;
-            }
-
+            .form-group input,
             .submit-btn {
                 height: 48px;
-                font-size: 15px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .brand-panel {
-                flex: 0 0 150px;
-                min-height: 130px;
-            }
-
-            .form-panel {
-                padding: 18px 12px;
             }
         }
     </style>
 </head>
 <body>
 
-<div class="mvj-container">
+<div class="page">
 
-    <!-- LEFT: brand panel -->
-    <div class="brand-panel">
-        <div class="logo-mvj">
-            <img src="/images/logo1.png" alt="MVJ" />
-            <span>CITIZEN</span>
-        </div>
-        <div class="brand-caption">
-            <h2>PAPER PRODUCTS</h2>
-        </div>
+    <!-- LEFT: big centered logo, no text -->
+    <div class="logo-side">
+        <img src="/images/logo1.png" alt="Citizen Paper Products" />
     </div>
 
-    <!-- RIGHT: form panel -->
-    <div class="form-panel">
-        <div class="greeting">
-            <h1 id="formTitle">Welcome Back</h1>
-            <p id="formSub">Sign in to your account to continue</p>
-        </div>
+    <!-- RIGHT: glass card -->
+    <div class="card-side">
+        <div class="glass-card">
+            <div class="greeting">
+                <h1 id="formTitle">Welcome Back</h1>
+                <p id="formSub">Sign in to your account to continue</p>
+            </div>
 
-        <div class="message-box" id="messageBox"></div>
+            <div class="message-box" id="messageBox"></div>
 
-        <!-- tabs -->
-        <div class="tab-bar">
-            <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">Login</button>
-            <button class="tab-btn" id="registerTab" onclick="switchTab('register')">Register</button>
-        </div>
+            <!-- tabs -->
+            <div class="tab-bar">
+                <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">Login</button>
+                <button class="tab-btn" id="registerTab" onclick="switchTab('register')">Register</button>
+            </div>
 
-        <!-- LOGIN FORM -->
-        <div class="form-content" id="loginForm">
-            <form id="loginFormElement" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label for="loginUsername">Username</label>
-                    <input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="username" />
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password" />
-                        <button type="button" class="toggle-password" onclick="togglePassword('loginPassword', this)">👁</button>
+            <!-- LOGIN FORM -->
+            <div class="form-content" id="loginForm">
+                <form id="loginFormElement" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginUsername">Username</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="username" />
+                            <span class="field-icon static">👤</span>
+                        </div>
                     </div>
-                </div>
-                <button type="submit" class="submit-btn">LOGIN</button>
-            </form>
-        </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password" />
+                            <button type="button" class="field-icon" onclick="togglePassword('loginPassword', this)">👁</button>
+                        </div>
+                    </div>
+                    <p class="terms-note">By signing in you accept our <a href="#">Terms and Conditions</a></p>
+                    <button type="submit" class="submit-btn">LOGIN</button>
+                </form>
+            </div>
 
-        <!-- REGISTER FORM -->
-        <div class="form-content hidden" id="registerForm">
-            <form id="registerFormElement" onsubmit="handleRegister(event)">
-                <div class="form-group">
-                    <label for="registerMobile">Mobile Number</label>
-                    <input type="tel" id="registerMobile" placeholder="Enter 10-digit mobile" required pattern="[0-9]{10}" maxlength="10" />
-                    <div class="error-text" id="mobileError">Enter a valid 10-digit number</div>
-                </div>
-                <div class="form-group">
-                    <label for="registerUsername">Username</label>
-                    <input type="text" id="registerUsername" placeholder="Choose a username" required minlength="3" autocomplete="username" />
-                    <div class="error-text" id="usernameError">Minimum 3 characters</div>
-                </div>
-                <div class="form-group">
-                    <label for="registerPassword">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="registerPassword" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password" />
-                        <button type="button" class="toggle-password" onclick="togglePassword('registerPassword', this)">👁</button>
+            <!-- REGISTER FORM -->
+            <div class="form-content hidden" id="registerForm">
+                <form id="registerFormElement" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="registerMobile">Mobile Number</label>
+                        <div class="input-wrapper">
+                            <input type="tel" id="registerMobile" placeholder="Enter 10-digit mobile" required pattern="[0-9]{10}" maxlength="10" />
+                            <span class="field-icon static">📱</span>
+                        </div>
+                        <div class="error-text" id="mobileError">Enter a valid 10-digit number</div>
                     </div>
-                    <div class="error-text" id="passwordError">Password must be at least 6 characters</div>
-                </div>
-                <div class="form-group">
-                    <label for="registerConfirmPassword">Confirm Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="registerConfirmPassword" placeholder="Confirm your password" required autocomplete="new-password" />
-                        <button type="button" class="toggle-password" onclick="togglePassword('registerConfirmPassword', this)">👁</button>
+                    <div class="form-group">
+                        <label for="registerUsername">Username</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="registerUsername" placeholder="Choose a username" required minlength="3" autocomplete="username" />
+                            <span class="field-icon static">👤</span>
+                        </div>
+                        <div class="error-text" id="usernameError">Minimum 3 characters</div>
                     </div>
-                    <div class="error-text" id="confirmError">Passwords do not match</div>
-                </div>
-                <button type="submit" class="submit-btn">REGISTER</button>
-            </form>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="registerPassword" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password" />
+                            <button type="button" class="field-icon" onclick="togglePassword('registerPassword', this)">👁</button>
+                        </div>
+                        <div class="error-text" id="passwordError">Password must be at least 6 characters</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Confirm Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="registerConfirmPassword" placeholder="Confirm your password" required autocomplete="new-password" />
+                            <button type="button" class="field-icon" onclick="togglePassword('registerConfirmPassword', this)">👁</button>
+                        </div>
+                        <div class="error-text" id="confirmError">Passwords do not match</div>
+                    </div>
+                    <p class="terms-note">By registering you accept our <a href="#">Terms and Conditions</a></p>
+                    <button type="submit" class="submit-btn">REGISTER</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
