@@ -895,7 +895,9 @@
         // Load existing report (for edit/view mode)
         async function loadExistingReport() {
             try {
-                const response = await fetch(`/api/report/by-booking/${bookingId}`);
+                const response = await fetch(`/api/report/by-booking/${bookingId}`, {
+                    credentials: 'include'  // 👈 ADD THIS
+                });
                 existingReport = await response.json();
 
                 if (!existingReport) {
@@ -1242,6 +1244,7 @@
                 const response = await fetch('/api/report/save-draft', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify(reportData)
                 });
 
@@ -1274,6 +1277,7 @@
                 const response = await fetch('/api/report/finalize', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify(reportData)
                 });
 
