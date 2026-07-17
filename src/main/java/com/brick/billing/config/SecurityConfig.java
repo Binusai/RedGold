@@ -27,23 +27,36 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                        "/login",          // Our login page
-                        "/perform_login",  // Login processing
-                        "/register",       // Register endpoint
+                        "/login",
+                        "/perform_login",
+                        "/register",
+                        "/images/**",
                         "/logo.png",
+                        "/logo1.png",
                         "/css/**",
                         "/js/**",
-                        "/images/**",
                         "/static/**",
                         "/api/**",
-                        "/splash.html"
+                        "/splash.html",
+                        "/index.html",
+                        "/home.html",
+                        "/add-booking.html",
+                        "/history.html",
+                        "/reports.html",
+                        "/report.html",
+                        "/revenue.html",
+                        "/bookings.html",
+                        "/create-investment.html",
+                        "/view-investment.html",
+                        "/manifest.json",
+                        "/service-worker.js"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(login -> login
                 .loginPage("/login")
                 .loginProcessingUrl("/perform_login")
-                .defaultSuccessUrl("/dashboard", true)
+                .defaultSuccessUrl("/home.html", true)
                 .permitAll()
             )
             .logout(logout -> logout
@@ -61,14 +74,12 @@ public class SecurityConfig {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                // Fetch user from database
                 User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
                 
-                // Create UserDetails from our User entity
                 UserBuilder builder = org.springframework.security.core.userdetails.User.builder();
                 builder.username(user.getUsername())
-                       .password(user.getPassword()) // Store encoded password
+                       .password(user.getPassword())
                        .roles("USER");
                 
                 return builder.build();
