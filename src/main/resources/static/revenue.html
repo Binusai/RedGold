@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#7B2D26">
-    <link rel="icon" href="/logo.png" type="image/png">
+    <meta name="theme-color" content="#0f1f4d">
+    <link rel="icon" href="/images/logo1.png" type="image/png">
     <title>Revenue - CM</title>
     <style>
         * {
@@ -14,39 +14,48 @@
         }
 
         body {
-            font-family: "Times New Roman", Times, serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #F4EFEA;
             color: #3E2C23;
             -webkit-tap-highlight-color: transparent;
             padding-bottom: 20px;
+            padding-top: 72px;
         }
 
-        /* Header */
-        .header {
+        /* ===== NAVBAR ===== */
+        .navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 56px;
-            background-color: #7B2D26;
-            color: #FFFFFF;
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            z-index: 100;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: 72px;
+            background: #0f1f4d;
+            z-index: 1000;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.15);
         }
 
+        .navbar-container {
+            max-width: 1400px;
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        /* Back Button */
         .back-button {
             background: none;
             border: none;
             color: #FFFFFF;
             cursor: pointer;
             padding: 8px;
-            margin-right: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .back-icon {
@@ -55,23 +64,58 @@
             fill: #FFFFFF;
         }
 
-        .header-title {
+        /* Brand */
+        .navbar-brand {
+            flex: 1;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .brand-text {
+            color: #FFFFFF;
             font-size: 18px;
             font-weight: 600;
-            letter-spacing: 0.3px;
-            font-family: "Times New Roman", Times, serif;
+            letter-spacing: 0.5px;
+        }
+
+        /* Right side - Username + Logo */
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .navbar-username {
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .navbar-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: #FFFFFF;
+            padding: 4px;
+            flex-shrink: 0;
         }
 
         /* Summary Section */
         .summary-section {
-            margin-top: 56px;
+            margin-top: 0;
             background-color: #FFFFFF;
             border-bottom: 2px solid #D4C4B8;
             padding: 24px 16px;
         }
 
         .summary-container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
@@ -92,15 +136,13 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
-            font-family: "Times New Roman", Times, serif;
         }
 
         .summary-number {
             font-size: 38px;
             font-weight: 700;
-            color: #7B2D26;
+            color: #0f1f4d;
             line-height: 1;
-            font-family: "Times New Roman", Times, serif;
         }
 
         .filter-wrapper {
@@ -114,7 +156,6 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 6px;
-            font-family: "Times New Roman", Times, serif;
         }
 
         .filter-select {
@@ -128,13 +169,13 @@
             cursor: pointer;
             appearance: none;
             min-width: 160px;
-            font-family: "Times New Roman", Times, serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             transition: border-color 0.2s;
         }
 
         .filter-select:focus {
             outline: none;
-            border-color: #7B2D26;
+            border-color: #0f1f4d;
         }
 
         .filter-wrapper::after {
@@ -179,7 +220,7 @@
         }
 
         .progress-ring.amount-ring {
-            background: conic-gradient(#7B2D26 0% var(--percent), #D4C4B8 var(--percent) 100%);
+            background: conic-gradient(#0f1f4d 0% var(--percent), #D4C4B8 var(--percent) 100%);
         }
 
         .progress-ring::before {
@@ -199,13 +240,11 @@
             color: #2E7D32;
             text-align: center;
             line-height: 1.2;
-            font-family: "Times New Roman", Times, serif;
         }
 
         .progress-ring.amount-ring .ring-text {
-            color: #7B2D26;
+            color: #0f1f4d;
             font-size: 9px;
-            font-family: "Times New Roman", Times, serif;
         }
 
         .ring-label {
@@ -216,12 +255,11 @@
             letter-spacing: 0.5px;
             text-align: center;
             max-width: 90px;
-            font-family: "Times New Roman", Times, serif;
         }
 
         /* Main Content */
         .main-content {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 24px 16px;
         }
@@ -244,13 +282,11 @@
             font-weight: 600;
             color: #3E2C23;
             margin-bottom: 8px;
-            font-family: "Times New Roman", Times, serif;
         }
 
         .empty-text {
             font-size: 14px;
             color: #6B5D4F;
-            font-family: "Times New Roman", Times, serif;
         }
 
         /* Revenue Cards */
@@ -280,7 +316,6 @@
             font-weight: 700;
             color: #3E2C23;
             margin-bottom: 8px;
-            font-family: "Times New Roman", Times, serif;
         }
 
         .revenue-detail {
@@ -290,7 +325,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-family: "Times New Roman", Times, serif;
         }
 
         .revenue-detail svg {
@@ -317,9 +351,8 @@
         .final-total {
             font-size: 18px;
             font-weight: 700;
-            color: #7B2D26;
+            color: #0f1f4d;
             margin-top: 6px;
-            font-family: "Times New Roman", Times, serif;
         }
 
         .card-action {
@@ -333,17 +366,16 @@
             font-weight: 700;
             border: none;
             border-radius: 8px;
-            background-color: #7B2D26;
+            background-color: #0f1f4d;
             color: #FFFFFF;
             cursor: pointer;
             transition: all 0.2s;
             white-space: nowrap;
-            font-family: "Times New Roman", Times, serif;
             letter-spacing: 0.5px;
         }
 
         .pay-button:active {
-            background-color: #632419;
+            background-color: #0a1533;
         }
 
         .pay-button:disabled {
@@ -362,7 +394,6 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            font-family: "Times New Roman", Times, serif;
         }
 
         /* Loading State */
@@ -371,7 +402,6 @@
             padding: 60px 20px;
             color: #6B5D4F;
             font-size: 15px;
-            font-family: "Times New Roman", Times, serif;
         }
 
         .loading-spinner {
@@ -379,7 +409,7 @@
             height: 40px;
             margin: 0 auto 16px;
             border: 4px solid #D4C4B8;
-            border-top-color: #7B2D26;
+            border-top-color: #0f1f4d;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -390,12 +420,12 @@
 
         /* Tablet and Desktop */
         @media (min-width: 600px) {
-            .header {
-                height: 64px;
+            .navbar {
+                height: 72px;
             }
 
-            .header-title {
-                font-size: 22px;
+            body {
+                padding-top: 72px;
             }
 
             .back-icon {
@@ -403,8 +433,22 @@
                 height: 28px;
             }
 
+            .brand-text {
+                font-size: 20px;
+            }
+
+            .navbar-username {
+                font-size: 15px;
+                max-width: 200px;
+            }
+
+            .navbar-logo {
+                width: 40px;
+                height: 40px;
+                padding: 4px;
+            }
+
             .summary-section {
-                margin-top: 64px;
                 padding: 32px 24px;
             }
 
@@ -497,6 +541,75 @@
             }
         }
 
+        @media (max-width: 480px) {
+            .navbar {
+                height: 60px;
+            }
+
+            body {
+                padding-top: 60px;
+            }
+
+            .navbar-container {
+                padding: 0 12px;
+            }
+
+            .brand-text {
+                font-size: 15px;
+                letter-spacing: 0.3px;
+            }
+
+            .navbar-username {
+                font-size: 12px;
+                max-width: 80px;
+            }
+
+            .navbar-logo {
+                width: 30px;
+                height: 30px;
+                padding: 3px;
+            }
+
+            .back-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            .summary-section {
+                padding: 16px 12px;
+            }
+
+            .summary-number {
+                font-size: 28px;
+            }
+
+            .main-content {
+                padding: 12px 12px;
+            }
+
+            .revenue-rings {
+                gap: 12px;
+            }
+
+            .ring-container {
+                width: 60px;
+                height: 60px;
+            }
+
+            .progress-ring::before {
+                width: 44px;
+                height: 44px;
+            }
+
+            .ring-text {
+                font-size: 11px;
+            }
+
+            .progress-ring.amount-ring .ring-text {
+                font-size: 7px;
+            }
+        }
+
         @media (min-width: 900px) {
             .main-content {
                 max-width: 1000px;
@@ -509,15 +622,28 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <button class="back-button" onclick="goBack()">
-            <svg class="back-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-            </svg>
-        </button>
-        <div class="header-title">Revenue</div>
-    </div>
+    <!-- ===== NAVBAR ===== -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <!-- Back Button -->
+            <button class="back-button" onclick="goBack()">
+                <svg class="back-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+            </button>
+
+            <!-- App Name -->
+            <div class="navbar-brand">
+                <span class="brand-text">REVENUE</span>
+            </div>
+
+            <!-- Right side: Username + Logo -->
+            <div class="navbar-right">
+                <span class="navbar-username" id="navbarUsername">Guest</span>
+                <img src="/images/logo1.png" alt="Logo" class="navbar-logo">
+            </div>
+        </div>
+    </header>
 
     <!-- Summary Section -->
     <div class="summary-section">
@@ -568,6 +694,15 @@
     </div>
 
     <script>
+        // ===== SET USERNAME =====
+        (function setUsername() {
+            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+            const el = document.getElementById('navbarUsername');
+            if (el) {
+                el.textContent = username || 'Guest';
+            }
+        })();
+
         let allReports = [];
         let currentFilter = 'lifetime';
         let currentSummary = null;
