@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 
@@ -27,7 +26,9 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
+                        "/",
                         "/login",
+                        "/login.html",
                         "/perform_login",
                         "/register",
                         "/images/**",
@@ -37,8 +38,6 @@ public class SecurityConfig {
                         "/js/**",
                         "/static/**",
                         "/api/**",
-                        "/splash.html",
-                        "/index.html",
                         "/home.html",
                         "/add-booking.html",
                         "/history.html",
@@ -53,12 +52,8 @@ public class SecurityConfig {
                 ).permitAll()
                 .anyRequest().authenticated()
             )
-            .formLogin(login -> login
-                .loginPage("/login")
-                .loginProcessingUrl("/perform_login")
-                .defaultSuccessUrl("/home.html", true)
-                .permitAll()
-            )
+            // ⚠️ DISABLE default form login since we're using custom JSON login
+            .formLogin(login -> login.disable())
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
