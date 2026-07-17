@@ -13,9 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.core.userdetails.User.UserBuilder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @Configuration
 public class SecurityConfig {
@@ -26,53 +23,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // Disable CSRF
+            // Disable CSRF completely
             .csrf(csrf -> csrf.disable())
-            // Allow all static resources and API endpoints
+            // Allow ALL requests - no authentication needed for anything
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                        "/",
-                        "/index.html",
-                        "/login",
-                        "/login.html",
-                        "/perform_login",
-                        "/register",
-                        "/images/**",
-                        "/logo.png",
-                        "/logo1.png",
-                        "/css/**",
-                        "/js/**",
-                        "/static/**",
-                        "/api/**",  // Allow ALL API endpoints
-                        "/home.html",
-                        "/add-booking.html",
-                        "/history.html",
-                        "/reports.html",
-                        "/report.html",
-                        "/revenue.html",
-                        "/bookings.html",
-                        "/create-investment.html",
-                        "/view-investment.html",
-                        "/manifest.json",
-                        "/service-worker.js"
-                ).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()  // 👈 THIS ALLOWS EVERYTHING
             )
-            // Disable default form login
+            // Disable form login
             .formLogin(login -> login.disable())
-            // Logout configuration
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-            )
-            // Session management
-            .sessionManagement(session -> session
-                .sessionFixation().migrateSession()
-                .maximumSessions(1)
-                .expiredUrl("/login")
-            );
+            // Disable logout (we'll handle it manually)
+            .logout(logout -> logout.disable());
 
         return http.build();
     }
