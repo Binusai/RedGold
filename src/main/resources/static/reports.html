@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#C99700">
+    <meta name="theme-color" content="#7B2D26">
     <link rel="icon" href="/logo.png" type="image/png">
-    <title>Reports - CITIZEN PAPER PRODUCTS</title>
+    <title>Reports - CM</title>
     <style>
         * {
             margin: 0;
@@ -14,7 +14,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: "Times New Roman", Times, serif;
             background-color: #F4EFEA;
             color: #3E2C23;
             -webkit-tap-highlight-color: transparent;
@@ -28,7 +28,7 @@
             left: 0;
             right: 0;
             height: 56px;
-            background-color: #C99700;
+            background-color: #7B2D26;
             color: #FFFFFF;
             display: flex;
             align-items: center;
@@ -59,6 +59,7 @@
             font-size: 18px;
             font-weight: 600;
             letter-spacing: 0.3px;
+            font-family: "Times New Roman", Times, serif;
         }
 
         /* Tabs */
@@ -68,7 +69,7 @@
             left: 0;
             right: 0;
             background-color: #FFFFFF;
-            border-bottom: 2px solid #E0E0E0;
+            border-bottom: 2px solid #D4C4B8;
             z-index: 90;
         }
 
@@ -91,11 +92,13 @@
             cursor: pointer;
             transition: all 0.2s;
             white-space: nowrap;
+            font-family: "Times New Roman", Times, serif;
+            letter-spacing: 0.5px;
         }
 
         .tab.active {
-            color: #C99700;
-            border-bottom-color: #C99700;
+            color: #7B2D26;
+            border-bottom-color: #7B2D26;
         }
 
         .tab:hover {
@@ -127,25 +130,28 @@
             font-weight: 600;
             color: #3E2C23;
             margin-bottom: 8px;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .empty-text {
             font-size: 14px;
             color: #6B5D4F;
+            font-family: "Times New Roman", Times, serif;
         }
 
         /* Booking Cards */
         .booking-card {
             background-color: #FFFFFF;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 12px;
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: 1px solid #D4C4B8;
             transition: box-shadow 0.2s;
         }
 
         .booking-card.active {
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            border-color: #7B2D26;
         }
 
         .card-header {
@@ -165,6 +171,7 @@
             font-weight: 700;
             color: #3E2C23;
             margin-bottom: 6px;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .booking-summary {
@@ -173,6 +180,7 @@
             margin-bottom: 4px;
             display: flex;
             align-items: center;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .booking-summary svg {
@@ -186,6 +194,7 @@
             font-size: 12px;
             color: #9B8B7E;
             margin-top: 6px;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .status-badge {
@@ -195,16 +204,17 @@
             font-weight: 700;
             letter-spacing: 0.3px;
             white-space: nowrap;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .status-pending {
-            background-color: #FFF3E0;
-            color: #E65100;
+            background-color: #F4EFEA;
+            color: #6B5D4F;
         }
 
         .status-draft {
-            background-color: #E3F2FD;
-            color: #1565C0;
+            background-color: #FFF3E0;
+            color: #E65100;
         }
 
         .status-completed {
@@ -225,7 +235,7 @@
 
         .details-content {
             padding: 0 16px 16px 16px;
-            border-top: 1px solid #E8E3DC;
+            border-top: 1px solid #D4C4B8;
         }
 
         .detail-row {
@@ -242,11 +252,13 @@
             color: #6B5D4F;
             margin-bottom: 4px;
             font-weight: 600;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .detail-value {
             font-size: 14px;
             color: #3E2C23;
+            font-family: "Times New Roman", Times, serif;
         }
 
         /* Action Button */
@@ -261,24 +273,25 @@
             letter-spacing: 0.5px;
             margin-top: 16px;
             transition: all 0.2s;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .btn-create {
-            background-color: #C99700;
+            background-color: #7B2D26;
             color: #FFFFFF;
         }
 
         .btn-create:active {
-            background-color: #A67C00;
+            background-color: #632419;
         }
 
         .btn-edit {
-            background-color: #1565C0;
+            background-color: #E65100;
             color: #FFFFFF;
         }
 
         .btn-edit:active {
-            background-color: #0D47A1;
+            background-color: #BF360C;
         }
 
         .btn-view {
@@ -295,6 +308,21 @@
             text-align: center;
             padding: 40px 20px;
             color: #6B5D4F;
+            font-family: "Times New Roman", Times, serif;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 16px;
+            border: 4px solid #D4C4B8;
+            border-top-color: #7B2D26;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Tab Content Sections */
@@ -433,9 +461,9 @@
     <!-- Tabs -->
     <div class="tabs-container">
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('pending')">Pending</button>
-            <button class="tab" onclick="switchTab('drafted')">Drafted</button>
-            <button class="tab" onclick="switchTab('completed')">Completed</button>
+            <button class="tab active" onclick="switchTab('pending', event)">Pending</button>
+            <button class="tab" onclick="switchTab('drafted', event)">Drafted</button>
+            <button class="tab" onclick="switchTab('completed', event)">Completed</button>
         </div>
     </div>
 
@@ -443,17 +471,26 @@
     <div class="main-content">
         <!-- Pending Tab Content -->
         <div id="pendingContent" class="tab-content active">
-            <div class="loading">Loading pending bookings...</div>
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                Loading pending bookings...
+            </div>
         </div>
 
         <!-- Drafted Tab Content -->
         <div id="draftedContent" class="tab-content">
-            <div class="loading">Loading drafted reports...</div>
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                Loading drafted reports...
+            </div>
         </div>
 
         <!-- Completed Tab Content -->
         <div id="completedContent" class="tab-content">
-            <div class="loading">Loading completed reports...</div>
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                Loading completed reports...
+            </div>
         </div>
     </div>
 
@@ -480,13 +517,22 @@
         }
 
         // Switch tabs
-        function switchTab(tabName) {
+        function switchTab(tabName, event) {
             currentTab = tabName;
             
             // Update tab buttons
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            } else {
+                // Fallback: find the tab by text content
+                tabs.forEach(tab => {
+                    if (tab.textContent.toLowerCase() === tabName) {
+                        tab.classList.add('active');
+                    }
+                });
+            }
 
             // Update tab content
             const contents = document.querySelectorAll('.tab-content');
@@ -552,8 +598,8 @@
             return `
                 <div class="empty-state">
                     <svg class="empty-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="#3E2C23" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
-                        <path fill="#3E2C23" d="M7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/>
+                        <path fill="#9B8B7E" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                        <path fill="#9B8B7E" d="M7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/>
                     </svg>
                     <div class="empty-title">${title}</div>
                     <div class="empty-text">${text}</div>
@@ -566,25 +612,56 @@
             return booking.bookingCode || ('BK' + booking.id.toString().padStart(4, '0'));
         }
 
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            if (!text) return '-';
+            
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            
+            return text.toString().replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Format phone number with country code
+        function formatPhoneNumber(phone) {
+            if (!phone) return '-';
+            if (phone.startsWith('91') && phone.length === 12) {
+                return '+91 ' + phone.slice(2);
+            }
+            return phone;
+        }
+
         // Render booking card
         function renderBookingCard(booking, type) {
             const statusClass = type === 'pending' ? 'status-pending' : type === 'draft' ? 'status-draft' : 'status-completed';
             const statusText = type === 'pending' ? 'PENDING' : type === 'draft' ? 'DRAFT' : 'COMPLETED';
             
             const customer = booking.customer;
-            const bookingDate = new Date(booking.createdAt).toLocaleDateString();
+            const bookingDate = new Date(booking.createdAt).toLocaleDateString('en-IN');
             const bookingCode = getBookingCode(booking);
+
+            // Safely handle customer data
+            const customerName = customer?.name || 'Unknown Customer';
+            const customerLocation = customer?.location || '-';
+            const customerMobile = customer?.mobile ? formatPhoneNumber(customer.mobile) : '-';
+            const customerWhatsapp = customer?.whatsapp ? formatPhoneNumber(customer.whatsapp) : '-';
+            const customerAddress = customer?.address || '-';
 
             return `
                 <div class="booking-card" id="card-${booking.id}">
                     <div class="card-header" onclick="toggleCard(${booking.id}, '${type}')">
                         <div class="card-main-info">
-                            <div class="customer-name">${customer.name}</div>
+                            <div class="customer-name">${escapeHtml(customerName)}</div>
                             <div class="booking-summary">
                                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                                 </svg>
-                                ${customer.location}
+                                ${escapeHtml(customerLocation)}
                             </div>
                             <div class="booking-date">${bookingDate}</div>
                         </div>
@@ -596,19 +673,19 @@
                         <div class="details-content">
                             <div class="detail-row">
                                 <div class="detail-label">Mobile Number</div>
-                                <div class="detail-value">${customer.mobile}</div>
+                                <div class="detail-value">${customerMobile}</div>
                             </div>
                             <div class="detail-row">
                                 <div class="detail-label">WhatsApp Number</div>
-                                <div class="detail-value">${customer.whatsapp}</div>
+                                <div class="detail-value">${customerWhatsapp}</div>
                             </div>
                             <div class="detail-row">
                                 <div class="detail-label">Address</div>
-                                <div class="detail-value">${customer.address}</div>
+                                <div class="detail-value">${escapeHtml(customerAddress)}</div>
                             </div>
                             <div class="detail-row">
                                 <div class="detail-label">Destination</div>
-                                <div class="detail-value">${customer.location}</div>
+                                <div class="detail-value">${escapeHtml(customerLocation)}</div>
                             </div>
                             <div class="detail-row">
                                 <div class="detail-label">Booking ID</div>
