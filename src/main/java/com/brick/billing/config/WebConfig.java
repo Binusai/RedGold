@@ -11,8 +11,8 @@ public class WebConfig implements WebMvcConfigurer {
     
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        // Root URL should go to login page
-        registry.addViewController("/").setViewName("forward:/login");
+        // Root URL should go to splash screen (index.html)
+        registry.addViewController("/").setViewName("forward:/index.html");
     }
     
     @Bean
