@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#7B2D26">
     <link rel="icon" href="/logo.png" type="image/png">
-    <title>All Bookings - RED GOLD</title>
+    <title>All Bookings - CM</title>
     <style>
         * {
             margin: 0;
@@ -14,8 +14,8 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #FAFAFA;
+            font-family: "Times New Roman", Times, serif;
+            background-color: #F4EFEA;
             color: #3E2C23;
             -webkit-tap-highlight-color: transparent;
             padding-bottom: 20px;
@@ -59,13 +59,14 @@
             font-size: 18px;
             font-weight: 600;
             letter-spacing: 0.3px;
+            font-family: "Times New Roman", Times, serif;
         }
 
         /* Summary Section */
         .summary-section {
             margin-top: 56px;
             background-color: #FFFFFF;
-            border-bottom: 2px solid #E0E0E0;
+            border-bottom: 2px solid #D4C4B8;
             padding: 24px 16px;
         }
 
@@ -91,6 +92,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .summary-number {
@@ -98,6 +100,7 @@
             font-weight: 700;
             color: #7B2D26;
             line-height: 1;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .filter-wrapper {
@@ -111,19 +114,22 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 6px;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .filter-select {
             padding: 10px 36px 10px 14px;
             font-size: 14px;
             font-weight: 600;
-            border: 2px solid #D0D0D0;
+            border: 2px solid #D4C4B8;
             border-radius: 8px;
             background-color: #FFFFFF;
             color: #3E2C23;
             cursor: pointer;
             appearance: none;
             min-width: 160px;
+            font-family: "Times New Roman", Times, serif;
+            transition: border-color 0.2s;
         }
 
         .filter-select:focus {
@@ -137,7 +143,7 @@
             right: 12px;
             bottom: 12px;
             pointer-events: none;
-            color: #666;
+            color: #9B8B7E;
             font-size: 10px;
         }
 
@@ -159,13 +165,12 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: conic-gradient(#7B2D26 0% var(--percent), #E0E0E0 var(--percent) 100%);
+            background: conic-gradient(#7B2D26 0% var(--percent), #D4C4B8 var(--percent) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
         }
-        
 
         .storage-ring::before {
             content: '';
@@ -182,6 +187,7 @@
             font-size: 16px;
             font-weight: 700;
             color: #7B2D26;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .storage-label {
@@ -191,18 +197,20 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             text-align: center;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .storage-button {
             padding: 8px 16px;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 700;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
             white-space: nowrap;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .btn-export {
@@ -210,7 +218,7 @@
             color: #FFFFFF;
         }
 
-        .btn-export:hover {
+        .btn-export:active {
             background-color: #632419;
         }
 
@@ -219,7 +227,7 @@
             color: #FFFFFF;
         }
 
-        .btn-truncate:hover {
+        .btn-truncate:active {
             background-color: #B71C1C;
         }
 
@@ -248,18 +256,20 @@
             font-weight: 600;
             color: #3E2C23;
             margin-bottom: 8px;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .empty-text {
             font-size: 14px;
             color: #6B5D4F;
+            font-family: "Times New Roman", Times, serif;
         }
 
         /* Booking Cards */
         .booking-card {
             background-color: #FFFFFF;
-            border: 1px solid #E0E0E0;
-            border-radius: 10px;
+            border: 1px solid #D4C4B8;
+            border-radius: 12px;
             padding: 18px;
             margin-bottom: 12px;
             display: flex;
@@ -282,6 +292,7 @@
             font-weight: 700;
             color: #3E2C23;
             margin-bottom: 8px;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .booking-detail {
@@ -291,6 +302,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .booking-detail svg {
@@ -323,11 +335,12 @@
             white-space: nowrap;
             margin-left: 12px;
             flex-shrink: 0;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .status-pending {
-            background-color: #F5F5F5;
-            color: #666;
+            background-color: #F4EFEA;
+            color: #6B5D4F;
         }
 
         .status-draft {
@@ -346,13 +359,14 @@
             padding: 60px 20px;
             color: #6B5D4F;
             font-size: 15px;
+            font-family: "Times New Roman", Times, serif;
         }
 
         .loading-spinner {
             width: 40px;
             height: 40px;
             margin: 0 auto 16px;
-            border: 4px solid #E0E0E0;
+            border: 4px solid #D4C4B8;
             border-top-color: #7B2D26;
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -558,7 +572,6 @@
             }
         }
 
-
         // Handle storage action (Export or Truncate)
         function handleStorageAction() {
             const button = document.getElementById('storageButton');
@@ -605,7 +618,6 @@
                 }
             }
         }
-
 
         // Load all bookings from API
         async function loadAllBookings() {
@@ -691,8 +703,8 @@
             return `
                 <div class="empty-state">
                     <svg class="empty-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="#3E2C23" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
-                        <path fill="#3E2C23" d="M7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/>
+                        <path fill="#9B8B7E" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                        <path fill="#9B8B7E" d="M7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/>
                     </svg>
                     <div class="empty-title">No Bookings Found</div>
                     <div class="empty-text">No bookings match the selected filter</div>
@@ -750,7 +762,7 @@
             container.innerHTML = `
                 <div class="empty-state">
                     <svg class="empty-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="#3E2C23" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        <path fill="#9B8B7E" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                     </svg>
                     <div class="empty-title">Error Loading Data</div>
                     <div class="empty-text">Please refresh the page to try again</div>
@@ -765,7 +777,7 @@
 
         // Escape HTML to prevent XSS
         function escapeHtml(text) {
-            if (!text) return '-';   // prevents null/undefined crash
+            if (!text) return '-';
         
             const map = {
                 '&': '&amp;',
@@ -777,7 +789,6 @@
         
             return text.toString().replace(/[&<>"']/g, m => map[m]);
         }
-
 
         // Go back to home
         function goBack() {
