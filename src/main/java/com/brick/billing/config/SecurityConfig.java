@@ -13,6 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.core.userdetails.User.UserBuilder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Configuration
 public class SecurityConfig {
@@ -23,7 +26,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            // Disable CSRF
             .csrf(csrf -> csrf.disable())
+            // Allow all static resources and API endpoints
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/",
@@ -38,10 +43,7 @@ public class SecurityConfig {
                         "/css/**",
                         "/js/**",
                         "/static/**",
-                        "/api/**",
-                        "/api/report/save-draft",  
-                        "/api/report/finalize",     
-                        "/api/report/by-booking/**", 
+                        "/api/**",  // Allow ALL API endpoints
                         "/home.html",
                         "/add-booking.html",
                         "/history.html",
@@ -56,12 +58,20 @@ public class SecurityConfig {
                 ).permitAll()
                 .anyRequest().authenticated()
             )
+            // Disable default form login
             .formLogin(login -> login.disable())
+            // Logout configuration
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
+            )
+            // Session management
+            .sessionManagement(session -> session
+                .sessionFixation().migrateSession()
+                .maximumSessions(1)
+                .expiredUrl("/login")
             );
 
         return http.build();
