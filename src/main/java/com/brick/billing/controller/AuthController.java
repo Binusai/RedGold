@@ -26,7 +26,7 @@ public class AuthController {
     
     @GetMapping("/login")
     public String showLoginPage(Model model) {
-        // Forward to the static HTML file
+        // Serve the static HTML file directly
         return "forward:/login.html";
     }
     
