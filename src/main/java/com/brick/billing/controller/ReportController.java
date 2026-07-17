@@ -128,34 +128,35 @@ public class ReportController {
         // Previously these setters were never actually saved, so address/location edits
         // were silently discarded at the end of the request.
         customerRepo.save(customer);
-
         // ---- find or create report (WITH items fetched) ----
         Report report = reportRepo.findByBookingIdWithItems(booking.getId()).orElse(null);
-
+        
         if (report == null) {
             report = new Report();
             report.setBooking(booking);
         }
-
         report.setStatus(req.status());
         report.setRemarks(req.remarks());
-
-        // ---- replace items safely (NO clear(), NO add()) ----
-        List<ReportItem> newItems = new ArrayList<>();
-
+        // ---- replace items ----
+        if (report.getItems() == null) {
+            report.setItems(new ArrayList<>());
+        } else {
+            report.getItems().clear();
+        }
+        
         double netTotal = 0.0;
         double totalDiscount = 0.0;
-
+        
         for (ReportItemDto dto : req.items()) {
-
+        
             if (dto.description() == null || dto.description().isBlank()) continue;
-
+        
             double rate = dto.rate() == null ? 0.0 : dto.rate();
             double qty = dto.qty() == null ? 0.0 : dto.qty();
             double rowDiscount = dto.discount() == null ? 0.0 : dto.discount();
             double rowGross = rate * qty;
             double rowTotal = rowGross - rowDiscount;
-
+        
             ReportItem item = new ReportItem();
             item.setReport(report);
             item.setDescription(dto.description());
@@ -164,14 +165,12 @@ public class ReportController {
             item.setQty(qty);
             item.setDiscount(rowDiscount);
             item.setTotal(rowTotal);
-
-            newItems.add(item);
-
+        
+            report.getItems().add(item);
+        
             netTotal += rowGross;
             totalDiscount += rowDiscount;
         }
-
-        report.setItems(newItems);
 
         double finalTotal = netTotal - totalDiscount;
 
