@@ -698,9 +698,9 @@
 
                 if (data.success) {
                     showMessage(data.message, 'success');
-                    setTimeout(() => {
-                        window.location.href = data.redirectUrl;
-                    }, 1000);
+                        setTimeout(() => {
+                            window.location.href = '/home.html';
+                        }, 1000);
                 } else {
                     showMessage(data.message, 'error');
                     submitBtn.disabled = false;
@@ -783,9 +783,9 @@
 
                 if (data.success) {
                     showMessage(data.message, 'success');
-                    setTimeout(() => {
-                        window.location.href = data.redirectUrl;
-                    }, 1000);
+                        setTimeout(() => {
+                            window.location.href = '/home.html';
+                        }, 1000);
                 } else {
                     showMessage(data.message, 'error');
                     submitBtn.disabled = false;
