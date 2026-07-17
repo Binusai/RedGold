@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#7B2D26">
-    <link rel="icon" href="/logo.png" type="image/png">
-    <title>Investment - YSG Bricks</title>
+    <meta name="theme-color" content="#0f1f4d">
+    <link rel="icon" href="/images/logo1.png" type="image/png">
+    <title>Investment - CM</title>
     <style>
         * {
             margin: 0;
@@ -14,33 +14,39 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #FFFFFF;
-            color: #2C2416;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #F4EFEA;
+            color: #3E2C23;
             line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+            padding-top: 72px;
         }
 
-        .container {
-            max-width: 1200px;
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: #0f1f4d;
+            z-index: 1000;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .navbar-container {
+            max-width: 1400px;
+            height: 100%;
             margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header */
-        .page-header {
-            background-color: #7B2D26;
-            color: #FFFFFF;
-            padding: 24px 0;
-            margin: -20px -20px 30px -20px;
-        }
-
-        .page-header .container {
+            padding: 0 20px;
             display: flex;
             align-items: center;
-            gap: 16px;
+            justify-content: space-between;
+            position: relative;
         }
 
-        .back-btn {
+        /* Back Button */
+        .back-button {
             background: none;
             border: none;
             color: #FFFFFF;
@@ -49,6 +55,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .back-icon {
@@ -57,17 +64,59 @@
             fill: #FFFFFF;
         }
 
-        .page-title {
-            font-size: 24px;
-            font-weight: 700;
+        /* Brand */
+        .navbar-brand {
+            flex: 1;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .brand-text {
+            color: #FFFFFF;
+            font-size: 18px;
+            font-weight: 600;
             letter-spacing: 0.5px;
+        }
+
+        /* Right side - Username + Logo */
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .navbar-username {
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .navbar-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: #FFFFFF;
+            padding: 4px;
+            flex-shrink: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         /* Section Styles */
         .section {
-            background: #FAFAFA;
-            border: 1px solid #E0E0E0;
-            border-radius: 8px;
+            background: #FFFFFF;
+            border: 1px solid #D4C4B8;
+            border-radius: 12px;
             padding: 24px;
             margin-bottom: 24px;
         }
@@ -75,7 +124,7 @@
         .section-title {
             font-size: 16px;
             font-weight: 700;
-            color: #7B2D26;
+            color: #0f1f4d;
             margin-bottom: 16px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -92,13 +141,13 @@
         .info-label {
             font-size: 14px;
             font-weight: 600;
-            color: #666;
+            color: #6B5D4F;
             text-transform: uppercase;
         }
 
         .info-value {
             font-size: 16px;
-            color: #7B2D26;
+            color: #0f1f4d;
             font-weight: 700;
         }
 
@@ -115,35 +164,36 @@
         }
 
         .investment-table th {
-            background-color: #7B2D26;
+            background-color: #0f1f4d;
             color: #FFFFFF;
             padding: 12px 8px;
             text-align: left;
             font-size: 13px;
             font-weight: 600;
-            border: 1px solid #6A251F;
+            border: 1px solid #0a1533;
         }
 
         .investment-table td {
             padding: 10px 8px;
-            border: 1px solid #E0E0E0;
+            border: 1px solid #D4C4B8;
         }
 
         .investment-table input,
         .investment-table textarea {
             width: 100%;
             padding: 8px;
-            border: 1px solid #D0D0D0;
+            border: 1px solid #D4C4B8;
             border-radius: 4px;
             font-size: 14px;
-            font-family: inherit;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             text-transform: uppercase;
+            transition: border-color 0.2s;
         }
 
         .investment-table input:focus,
         .investment-table textarea:focus {
             outline: none;
-            border-color: #7B2D26;
+            border-color: #0f1f4d;
         }
 
         .investment-table input[type="number"] {
@@ -190,14 +240,15 @@
             cursor: pointer;
             font-size: 12px;
             font-weight: 600;
+            transition: background-color 0.2s;
         }
 
-        .delete-btn:hover {
+        .delete-btn:active {
             background-color: #B71C1C;
         }
 
         .add-row-inline-btn {
-            background-color: #2E7D32;
+            background-color: #0f1f4d;
             color: #FFFFFF;
             border: none;
             padding: 6px 10px;
@@ -207,10 +258,11 @@
             font-weight: 700;
             line-height: 1;
             margin-left: 4px;
+            transition: background-color 0.2s;
         }
 
-        .add-row-inline-btn:hover {
-            background-color: #1B5E20;
+        .add-row-inline-btn:active {
+            background-color: #0a1533;
         }
 
         /* Summary */
@@ -218,7 +270,7 @@
             max-width: 400px;
             margin-left: auto;
             background: #FFFFFF;
-            border: 2px solid #7B2D26;
+            border: 2px solid #0f1f4d;
             border-radius: 8px;
             padding: 20px;
         }
@@ -228,14 +280,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px 0;
-            border-bottom: 1px solid #E0E0E0;
+            border-bottom: 1px solid #D4C4B8;
         }
 
         .summary-row:last-child {
             border-bottom: none;
             padding-top: 16px;
             margin-top: 8px;
-            border-top: 2px solid #7B2D26;
+            border-top: 2px solid #0f1f4d;
         }
 
         .summary-label {
@@ -246,7 +298,7 @@
         .summary-value {
             font-size: 16px;
             font-weight: 700;
-            color: #7B2D26;
+            color: #0f1f4d;
         }
 
         .summary-row:last-child .summary-label,
@@ -262,36 +314,41 @@
             justify-content: flex-end;
             margin-top: 32px;
             padding-top: 24px;
-            border-top: 2px solid #E0E0E0;
+            border-top: 2px solid #D4C4B8;
         }
 
         .btn {
             padding: 14px 28px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
             letter-spacing: 0.3px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
         }
 
         .btn-back {
-            background-color: #E0E0E0;
-            color: #2C2416;
+            background-color: #D4C4B8;
+            color: #3E2C23;
         }
 
-        .btn-back:hover {
-            background-color: #BDBDBD;
+        .btn-back:active {
+            background-color: #C4B4A8;
         }
 
         .btn-save {
-            background-color: #7B2D26;
+            background-color: #0f1f4d;
             color: #FFFFFF;
         }
 
-        .btn-save:hover {
-            background-color: #5A2118;
+        .btn-save:active {
+            background-color: #0a1533;
         }
 
         .btn:disabled {
@@ -303,15 +360,6 @@
         @media (max-width: 768px) {
             .container {
                 padding: 12px;
-            }
-
-            .page-header {
-                margin: -12px -12px 20px -12px;
-                padding: 16px 0;
-            }
-
-            .page-title {
-                font-size: 20px;
             }
 
             .section {
@@ -340,12 +388,77 @@
             }
         }
 
+        @media (min-width: 600px) {
+            .navbar {
+                height: 72px;
+            }
+
+            body {
+                padding-top: 72px;
+            }
+
+            .back-icon {
+                width: 28px;
+                height: 28px;
+            }
+
+            .brand-text {
+                font-size: 20px;
+            }
+
+            .navbar-username {
+                font-size: 15px;
+                max-width: 200px;
+            }
+
+            .navbar-logo {
+                width: 40px;
+                height: 40px;
+                padding: 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                height: 60px;
+            }
+
+            body {
+                padding-top: 60px;
+            }
+
+            .navbar-container {
+                padding: 0 12px;
+            }
+
+            .brand-text {
+                font-size: 15px;
+                letter-spacing: 0.3px;
+            }
+
+            .navbar-username {
+                font-size: 12px;
+                max-width: 80px;
+            }
+
+            .navbar-logo {
+                width: 30px;
+                height: 30px;
+                padding: 3px;
+            }
+
+            .back-icon {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
         /* Success Message */
         .success-message {
             background-color: #E8F5E9;
             color: #2E7D32;
             padding: 16px;
-            border-radius: 6px;
+            border-radius: 8px;
             margin-bottom: 20px;
             border-left: 4px solid #2E7D32;
             display: none;
@@ -357,17 +470,28 @@
     </style>
 </head>
 <body>
-    <!-- Page Header -->
-    <div class="page-header">
-        <div class="container">
-            <button class="back-btn" onclick="goBack()">
+    <!-- ===== NAVBAR ===== -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <!-- Back Button -->
+            <button class="back-button" onclick="goBack()">
                 <svg class="back-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
                 </svg>
             </button>
-            <h1 class="page-title">Business Investment</h1>
+
+            <!-- App Name -->
+            <div class="navbar-brand">
+                <span class="brand-text">BUSINESS INVESTMENT</span>
+            </div>
+
+            <!-- Right side: Username + Logo -->
+            <div class="navbar-right">
+                <span class="navbar-username" id="navbarUsername">Guest</span>
+                <img src="/images/logo1.png" alt="Logo" class="navbar-logo">
+            </div>
         </div>
-    </div>
+    </header>
 
     <!-- Main Container -->
     <div class="container">
@@ -427,6 +551,15 @@
     </div>
 
     <script>
+        // ===== SET USERNAME =====
+        (function setUsername() {
+            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+            const el = document.getElementById('navbarUsername');
+            if (el) {
+                el.textContent = username || 'Guest';
+            }
+        })();
+
         let investmentItems = [];
         let rowCounter = 0;
         let investmentId = null;
@@ -763,7 +896,6 @@
             document.querySelectorAll('.add-row-inline-btn').forEach(btn => btn.style.display = "none");
             document.querySelector('.btn-save').style.display = "none";
         }
-
     </script>
 </body>
 </html>
