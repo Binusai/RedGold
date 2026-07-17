@@ -20,7 +20,9 @@
             color: #3E2C23;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
-            padding-bottom: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Header */
@@ -186,592 +188,115 @@
             background-color: #F4EFEA;
         }
 
-        /* Main Content */
-        .main-content {
-            margin-top: 80px;
-            padding: 16px;
-            max-width: 100%;
-        }
-
-        .greeting-section {
-            margin-bottom: 16px;
-        }
-
-        .greeting {
-            font-size: 16px;
-            color: #D4AF37;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .user-name {
-            font-size: 22px;
-            color: #3E2C23;
-            font-weight: 700;
-        }
-
-        /* Animation Card */
-        .animation-card {
-            background: linear-gradient(135deg, #0f1f4d 0%, #1a2e6e 100%);
-            border-radius: 20px;
-            padding: 30px 20px;
-            margin-bottom: 24px;
-            position: relative;
-            overflow: hidden;
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .brick-wall {
-            position: relative;
-            width: 180px;
-            height: 120px;
-            margin-bottom: 16px;
-        }
-
-        .brick {
-            position: absolute;
-            background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
-            border: 1.5px solid #9C7A1F;
-            border-radius: 2px;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-
-        /* Row 1 - Bottom */
-        .brick-1-1 {
-            width: 58px;
-            height: 22px;
-            bottom: 0;
-            left: 0;
-            animation: brickWave 3s ease-in-out infinite;
-        }
-
-        .brick-1-2 {
-            width: 58px;
-            height: 22px;
-            bottom: 0;
-            left: 61px;
-            animation: brickWave 3s ease-in-out infinite 0.1s;
-        }
-
-        .brick-1-3 {
-            width: 58px;
-            height: 22px;
-            bottom: 0;
-            right: 0;
-            animation: brickWave 3s ease-in-out infinite 0.2s;
-        }
-
-        /* Row 2 */
-        .brick-2-1 {
-            width: 58px;
-            height: 22px;
-            bottom: 24px;
-            left: 30px;
-            animation: brickWave 3s ease-in-out infinite 0.15s;
-        }
-
-        .brick-2-2 {
-            width: 58px;
-            height: 22px;
-            bottom: 24px;
-            left: 91px;
-            animation: brickWave 3s ease-in-out infinite 0.25s;
-        }
-
-        /* Row 3 */
-        .brick-3-1 {
-            width: 58px;
-            height: 22px;
-            bottom: 48px;
-            left: 0;
-            animation: brickWave 3s ease-in-out infinite 0.3s;
-        }
-
-        .brick-3-2 {
-            width: 58px;
-            height: 22px;
-            bottom: 48px;
-            left: 61px;
-            animation: brickWave 3s ease-in-out infinite 0.4s;
-        }
-
-        .brick-3-3 {
-            width: 58px;
-            height: 22px;
-            bottom: 48px;
-            right: 0;
-            animation: brickWave 3s ease-in-out infinite 0.5s;
-        }
-
-        /* Row 4 */
-        .brick-4-1 {
-            width: 58px;
-            height: 22px;
-            bottom: 72px;
-            left: 30px;
-            animation: brickWave 3s ease-in-out infinite 0.45s;
-        }
-
-        .brick-4-2 {
-            width: 58px;
-            height: 22px;
-            bottom: 72px;
-            left: 91px;
-            animation: brickWave 3s ease-in-out infinite 0.55s;
-        }
-
-        /* Row 5 - Top */
-        .brick-5-1 {
-            width: 58px;
-            height: 22px;
-            bottom: 96px;
-            left: 0;
-            animation: brickWave 3s ease-in-out infinite 0.6s;
-        }
-
-        .brick-5-2 {
-            width: 58px;
-            height: 22px;
-            bottom: 96px;
-            left: 61px;
-            animation: brickWave 3s ease-in-out infinite 0.7s;
-        }
-
-        .brick-5-3 {
-            width: 58px;
-            height: 22px;
-            bottom: 96px;
-            right: 0;
-            animation: brickWave 3s ease-in-out infinite 0.8s;
-        }
-
-        @keyframes brickWave {
-            0%, 100% {
-                transform: translateY(0) scale(1);
-            }
-            50% {
-                transform: translateY(-3px) scale(1.02);
-            }
-        }
-
-        .animation-text {
-            color: #FFFFFF;
-            font-size: 15px;
-            font-weight: 600;
-            text-align: center;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Action Grid */
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #3E2C23;
-            margin-bottom: 16px;
-        }
-
-        .action-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-bottom: 20px;
-            justify-content: space-between;
-        }
-
-        .grid-item {
-            flex: 1 1 calc(50% - 8px);
-            min-width: calc(50% - 8px);
-            max-width: calc(50% - 8px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .icon-circle {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background-color: #FFFFFF;
-            border: 3px solid #0f1f4d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            transition: all 0.2s;
-        }
-
-        .grid-item:active .icon-circle {
-            background-color: #F9F5F0;
-            transform: scale(0.95);
-        }
-
-        .icon-svg {
-            width: 45px;
-            height: 45px;
-        }
-
-        .icon-label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #3E2C23;
-            text-align: center;
-            line-height: 1.3;
-        }
-
-        /* Primary Action Button */
-        .add-booking-btn {
-            width: 100%;
-            background-color: #0f1f4d;
-            border: none;
-            border-radius: 12px;
-            padding: 18px;
-            font-size: 16px;
-            font-weight: 700;
-            color: #FFFFFF;
-            text-align: center;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            margin-top: 8px;
-            transition: background-color 0.2s;
-        }
-
-        .add-booking-btn:active {
-            background-color: #0a1533;
-        }
-
-        /* Floating Action Button */
-        .fab {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 56px;
-            height: 56px;
-            background-color: #0f1f4d;
-            border: none;
-            border-radius: 50%;
-            color: #FFFFFF;
-            font-size: 28px;
-            font-weight: 300;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 50;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            transition: all 0.2s;
-        }
-
-        .fab:active {
-            background-color: #0a1533;
-            transform: scale(0.9);
-        }
-
-        /* Tablet and Desktop Styles */
-        @media (min-width: 600px) {
-            .header {
-                height: 96px;
-            }
-
-            .app-name {
-                font-size: 24px;
-            }
-
-            .header-username {
-                font-size: 18px;
-                max-width: 220px;
-            }
-
-            .header-logo {
-                width: 48px;
-                height: 48px;
-            }
-
-            .main-content {
-                max-width: 1200px;
-                margin-left: auto;
-                margin-right: auto;
-                margin-top: 96px;
-                padding: 32px;
-            }
-
-            .greeting {
-                font-size: 20px;
-            }
-
-            .user-name {
-                font-size: 32px;
-            }
-
-            .animation-card {
-                padding: 60px 40px;
-                min-height: 320px;
-            }
-
-            .brick-wall {
-                width: 450px;
-                height: 200px;
-                margin-bottom: 24px;
-            }
-
-            .brick {
-                border: 2px solid #9C7A1F;
-            }
-
-            /* Row 1 - Bottom */
-            .brick-1-1 {
-                width: 88px;
-                height: 35px;
-                bottom: 0;
-                left: 0;
-            }
-
-            .brick-1-2 {
-                width: 88px;
-                height: 35px;
-                bottom: 0;
-                left: 92px;
-            }
-
-            .brick-1-3 {
-                width: 88px;
-                height: 35px;
-                bottom: 0;
-                left: 184px;
-            }
-
-            .brick-1-4 {
-                width: 88px;
-                height: 35px;
-                bottom: 0;
-                left: 276px;
-            }
-
-            .brick-1-5 {
-                width: 88px;
-                height: 35px;
-                bottom: 0;
-                right: 0;
-            }
-
-            /* Row 2 */
-            .brick-2-1 {
-                width: 88px;
-                height: 35px;
-                bottom: 39px;
-                left: 45px;
-            }
-
-            .brick-2-2 {
-                width: 88px;
-                height: 35px;
-                bottom: 39px;
-                left: 137px;
-            }
-
-            .brick-2-3 {
-                width: 88px;
-                height: 35px;
-                bottom: 39px;
-                left: 229px;
-            }
-
-            .brick-2-4 {
-                width: 88px;
-                height: 35px;
-                bottom: 39px;
-                left: 321px;
-            }
-
-            /* Row 3 */
-            .brick-3-1 {
-                width: 88px;
-                height: 35px;
-                bottom: 78px;
-                left: 0;
-            }
-
-            .brick-3-2 {
-                width: 88px;
-                height: 35px;
-                bottom: 78px;
-                left: 92px;
-            }
-
-            .brick-3-3 {
-                width: 88px;
-                height: 35px;
-                bottom: 78px;
-                left: 184px;
-            }
-
-            .brick-3-4 {
-                width: 88px;
-                height: 35px;
-                bottom: 78px;
-                left: 276px;
-            }
-
-            .brick-3-5 {
-                width: 88px;
-                height: 35px;
-                bottom: 78px;
-                right: 0;
-            }
-
-            /* Row 4 */
-            .brick-4-1 {
-                width: 88px;
-                height: 35px;
-                bottom: 117px;
-                left: 45px;
-            }
-
-            .brick-4-2 {
-                width: 88px;
-                height: 35px;
-                bottom: 117px;
-                left: 137px;
-            }
-
-            .brick-4-3 {
-                width: 88px;
-                height: 35px;
-                bottom: 117px;
-                left: 229px;
-            }
-
-            .brick-4-4 {
-                width: 88px;
-                height: 35px;
-                bottom: 117px;
-                left: 321px;
-            }
-
-            /* Row 5 - Top */
-            .brick-5-1 {
-                width: 88px;
-                height: 35px;
-                bottom: 156px;
-                left: 0;
-            }
-
-            .brick-5-2 {
-                width: 88px;
-                height: 35px;
-                bottom: 156px;
-                left: 92px;
-            }
-
-            .brick-5-3 {
-                width: 88px;
-                height: 35px;
-                bottom: 156px;
-                left: 184px;
-            }
-
-            .brick-5-4 {
-                width: 88px;
-                height: 35px;
-                bottom: 156px;
-                left: 276px;
-            }
-
-            .brick-5-5 {
-                width: 88px;
-                height: 35px;
-                bottom: 156px;
-                right: 0;
-            }
-
-            .animation-text {
-                font-size: 22px;
-            }
-
-            .section-title {
-                font-size: 22px;
-                margin-bottom: 24px;
-            }
-
-            .action-grid {
-                gap: 32px;
-            }
-
-            .grid-item {
-                flex: 1 1 calc(25% - 24px);
-                min-width: calc(25% - 24px);
-                max-width: calc(25% - 24px);
-            }
-
-            .icon-circle {
-                width: 140px;
-                height: 140px;
-                border: 4px solid #0f1f4d;
-                margin-bottom: 16px;
-            }
-
-            .icon-svg {
-                width: 70px;
-                height: 70px;
-            }
-
-            .icon-label {
-                font-size: 17px;
-                font-weight: 600;
-            }
-
-            .add-booking-btn {
-                padding: 24px;
-                font-size: 20px;
-                border-radius: 16px;
-                max-width: 600px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .fab {
-                width: 64px;
-                height: 64px;
-                font-size: 32px;
-                bottom: 32px;
-                right: 32px;
-            }
-        }
-
         .admin-only {
             display: none;
         }
 
-        /* Extra bricks for desktop - hidden on mobile */
-        .brick-1-4, .brick-1-5,
-        .brick-2-3, .brick-2-4,
-        .brick-3-4, .brick-3-5,
-        .brick-4-3, .brick-4-4,
-        .brick-5-4, .brick-5-5 {
+        .register-only {
             display: none;
         }
 
-        @media (min-width: 600px) {
-            .brick-1-4, .brick-1-5,
-            .brick-2-3, .brick-2-4,
-            .brick-3-4, .brick-3-5,
-            .brick-4-3, .brick-4-4,
-            .brick-5-4, .brick-5-5 {
-                display: block;
+        /* Main Content - Logo Center */
+        .main-content {
+            margin-top: 80px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* ----- LOGO ANIMATION (from login page) ----- */
+        .logo-wrap {
+            position: relative;
+            display: inline-block;
+            animation: logoFloat 7s ease-in-out infinite;
+            opacity: 0.15;
+        }
+
+        /* soft dark spotlight behind the logo */
+        .logo-wrap::before {
+            content: '';
+            position: absolute;
+            top: -35%;
+            left: -35%;
+            right: -35%;
+            bottom: -35%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(11, 11, 26, 0.42) 0%, rgba(11, 11, 26, 0.18) 45%, rgba(11, 11, 26, 0) 72%);
+            filter: blur(26px);
+            z-index: -1;
+            animation: glowPulse 6s ease-in-out infinite;
+        }
+
+        .logo-wrap img {
+            display: block;
+            width: min(340px, 50vw);
+            max-width: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 24px rgba(214, 178, 110, 0.4));
+            animation: logoGleam 6s ease-in-out infinite;
+        }
+
+        /* metallic shimmer, masked to the exact shape of the logo */
+        .logo-shimmer {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            -webkit-mask-image: url('/images/logo1.png');
+            mask-image: url('/images/logo1.png');
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.95) 48%, rgba(255, 221, 150, 0.95) 52%, transparent 70%);
+            background-size: 260% 260%;
+            background-position: -160% -160%;
+            mix-blend-mode: overlay;
+            animation: shimmerSweep 5s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(0.6deg); }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.65; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.07); }
+        }
+
+        @keyframes logoGleam {
+            0%, 100% { 
+                filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.45)) 
+                        drop-shadow(0 0 24px rgba(214, 178, 110, 0.4)) 
+                        brightness(1) saturate(1); 
+            }
+            50% { 
+                filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.45)) 
+                        drop-shadow(0 0 32px rgba(255, 210, 130, 0.65)) 
+                        brightness(1.08) saturate(1.15); 
             }
         }
-        @media (min-width: 600px) {
-            .add-booking-btn {
-                padding: 24px;
-                font-size: 20px;
-                border-radius: 16px;
-                max-width: 100%;
-                margin-left: auto;
-                margin-right: auto;
+
+        @keyframes shimmerSweep {
+            0% { background-position: -160% -160%; opacity: 0; }
+            12% { opacity: 1; }
+            45% { background-position: 160% 160%; opacity: 1; }
+            58% { opacity: 0; }
+            100% { background-position: 160% 160%; opacity: 0; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .logo-wrap,
+            .logo-wrap img,
+            .logo-shimmer,
+            .logo-wrap::before {
+                animation: none !important;
             }
         }
 
@@ -927,6 +452,43 @@
             border: 1px solid #d4efe3;
             display: block;
         }
+
+        /* Tablet and Desktop */
+        @media (min-width: 600px) {
+            .header {
+                height: 96px;
+            }
+
+            .app-name {
+                font-size: 24px;
+            }
+
+            .header-username {
+                font-size: 18px;
+                max-width: 220px;
+            }
+
+            .header-logo {
+                width: 48px;
+                height: 48px;
+            }
+
+            .main-content {
+                margin-top: 96px;
+                min-height: calc(100vh - 96px);
+                padding: 60px 40px;
+            }
+
+            .logo-wrap img {
+                width: min(450px, 40vw);
+            }
+        }
+
+        @media (max-width: 420px) {
+            .logo-wrap img {
+                width: min(200px, 60vw);
+            }
+        }
     </style>
 </head>
 <body>
@@ -961,9 +523,8 @@
             <div class="menu-item" data-action="history">History</div>
             <div class="menu-item" data-action="reports">Reports</div>
             <div class="menu-item" data-action="revenue">Revenue Generated</div>
-            <!-- <div class="menu-item admin-only" data-action="create-investment">Create Investment</div> -->
             <div class="menu-item admin-only" data-action="view-investment">View Investments</div>
-            <!-- 👇 REGISTER MENU ITEM - Only visible to admins -->
+            <!-- Register Menu Item - Only visible to admins -->
             <div class="menu-item register-only" data-action="register" style="border-top: 1px solid #E8E3DC; margin-top: 8px; color: #0f1f4d; font-weight: 600;">
                 ➕ Register New User
             </div>
@@ -971,114 +532,15 @@
         </div>
     </div>
 
-    <!-- Main Content — intentionally blank, sections below are commented out -->
+    <!-- Main Content - Only Logo -->
     <div class="main-content">
-
-        <!--
-        <div class="greeting-section">
-            <div class="greeting">Hello there !!</div>
+        <div class="logo-wrap">
+            <img src="/images/logo1.png" alt="Citizen Paper Products" />
+            <div class="logo-shimmer"></div>
         </div>
-
-        <div class="animation-card">
-            <div class="brick-wall">
-                <div class="brick brick-1-1"></div>
-                <div class="brick brick-1-2"></div>
-                <div class="brick brick-1-3"></div>
-                <div class="brick brick-1-4"></div>
-                <div class="brick brick-1-5"></div>
-
-                <div class="brick brick-2-1"></div>
-                <div class="brick brick-2-2"></div>
-                <div class="brick brick-2-3"></div>
-                <div class="brick brick-2-4"></div>
-
-                <div class="brick brick-3-1"></div>
-                <div class="brick brick-3-2"></div>
-                <div class="brick brick-3-3"></div>
-                <div class="brick brick-3-4"></div>
-                <div class="brick brick-3-5"></div>
-
-                <div class="brick brick-4-1"></div>
-                <div class="brick brick-4-2"></div>
-                <div class="brick brick-4-3"></div>
-                <div class="brick brick-4-4"></div>
-
-                <div class="brick brick-5-1"></div>
-                <div class="brick brick-5-2"></div>
-                <div class="brick brick-5-3"></div>
-                <div class="brick brick-5-4"></div>
-                <div class="brick brick-5-5"></div>
-            </div>
-            <div class="animation-text">Production & Delivery System</div>
-        </div>
-
-        <div class="section-title">Quick Actions</div>
-
-        <div class="action-grid">
-            <div class="grid-item" onclick="handleAction('history')">
-                <div class="icon-circle">
-                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="9" stroke="#0f1f4d" stroke-width="2"/>
-                        <path d="M12 7V12L15 15" stroke="#0f1f4d" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="icon-label">History</div>
-            </div>
-
-            <div class="grid-item" onclick="handleAction('reports')">
-                <div class="icon-circle">
-                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 7H21M3 12H21M3 17H21" stroke="#0f1f4d" stroke-width="2" stroke-linecap="round"/>
-                        <circle cx="7" cy="7" r="1.5" fill="#0f1f4d"/>
-                        <circle cx="7" cy="12" r="1.5" fill="#0f1f4d"/>
-                        <circle cx="7" cy="17" r="1.5" fill="#0f1f4d"/>
-                    </svg>
-                </div>
-                <div class="icon-label">View Reports</div>
-            </div>
-
-            <div class="grid-item" onclick="handleAction('revenue')">
-                <div class="icon-circle">
-                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#0f1f4d" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M2 17L12 22L22 17" stroke="#0f1f4d" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M2 12L12 17L22 12" stroke="#0f1f4d" stroke-width="2" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="icon-label">Revenue Generated</div>
-            </div>
-
-            <div class="grid-item admin-only" onclick="handleAction('view-investment')">
-                <div class="icon-circle">
-                    <svg class="icon-svg" viewBox="0 0 24 24">
-                        <rect x="3" y="4" width="18" height="16" stroke="#0f1f4d" stroke-width="2"/>
-                    </svg>
-                </div>
-                <div class="icon-label">View Investments</div>
-            </div>
-
-            <div class="grid-item admin-only" id="bookingsQuickAction" onclick="handleAction('bookings')">
-                <div class="icon-circle">
-                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="#0f1f4d" stroke-width="2"/>
-                        <path d="M3 8H21M8 3V8M16 3V8" stroke="#0f1f4d" stroke-width="2" stroke-linecap="round"/>
-                        <circle cx="8" cy="13" r="1" fill="#0f1f4d"/>
-                        <circle cx="12" cy="13" r="1" fill="#0f1f4d"/>
-                        <circle cx="16" cy="13" r="1" fill="#0f1f4d"/>
-                        <circle cx="8" cy="17" r="1" fill="#0f1f4d"/>
-                        <circle cx="12" cy="17" r="1" fill="#0f1f4d"/>
-                    </svg>
-                </div>
-                <div class="icon-label">List of Bookings</div>
-            </div>
-        </div>
-
-        <button class="add-booking-btn" onclick="handleAction('add-booking')">ADD BOOKING</button>
-        -->
-
     </div>
 
-    <!-- ===== REGISTER MODAL ===== -->
+    <!-- Register Modal -->
     <div class="modal-overlay" id="registerModal">
         <div class="modal-box">
             <button class="modal-close-btn" onclick="closeRegisterModal()">×</button>
@@ -1176,7 +638,6 @@
             document.getElementById('registerModal').classList.add('active');
             document.getElementById('registerModalMessage').style.display = 'none';
             document.getElementById('registerModalForm').reset();
-            // Clear any errors
             document.querySelectorAll('#registerModalForm .modal-error-text').forEach(el => el.classList.remove('visible'));
             document.querySelectorAll('#registerModalForm input').forEach(el => el.classList.remove('error'));
         }
@@ -1185,14 +646,12 @@
             document.getElementById('registerModal').classList.remove('active');
         }
 
-        // Close modal on overlay click
         document.getElementById('registerModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeRegisterModal();
             }
         });
 
-        // ===== SHOW MODAL MESSAGE =====
         function showModalMessage(message, type) {
             const box = document.getElementById('registerModalMessage');
             box.textContent = message;
@@ -1213,34 +672,29 @@
             const password = document.getElementById('modalRegisterPassword').value;
             const confirmPassword = document.getElementById('modalRegisterConfirmPassword').value;
 
-            // Clear previous errors
             document.querySelectorAll('#registerModalForm .modal-error-text').forEach(el => el.classList.remove('visible'));
             document.querySelectorAll('#registerModalForm input').forEach(el => el.classList.remove('error'));
 
             let isValid = true;
 
-            // Validate mobile
             if (!/^[0-9]{10}$/.test(mobile)) {
                 document.getElementById('modalMobileError').classList.add('visible');
                 document.getElementById('modalRegisterMobile').classList.add('error');
                 isValid = false;
             }
 
-            // Validate username
             if (username.length < 3) {
                 document.getElementById('modalUsernameError').classList.add('visible');
                 document.getElementById('modalRegisterUsername').classList.add('error');
                 isValid = false;
             }
 
-            // Validate password
             if (password.length < 6) {
                 document.getElementById('modalPasswordError').classList.add('visible');
                 document.getElementById('modalRegisterPassword').classList.add('error');
                 isValid = false;
             }
 
-            // Validate confirm password
             if (password !== confirmPassword) {
                 document.getElementById('modalConfirmError').classList.add('visible');
                 document.getElementById('modalRegisterConfirmPassword').classList.add('error');
@@ -1276,7 +730,6 @@
                     showModalMessage('✅ ' + data.message, 'success');
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'REGISTER USER';
-                    // Close modal after 2 seconds
                     setTimeout(() => {
                         closeRegisterModal();
                     }, 2000);
@@ -1292,7 +745,7 @@
             }
         }
 
-        // ===== REAL-TIME VALIDATION FOR MODAL =====
+        // ===== REAL-TIME VALIDATION =====
         document.getElementById('modalRegisterMobile').addEventListener('input', function() {
             this.value = this.value.replace(/\D/g, '').slice(0, 10);
             if (this.value.length === 10) {
@@ -1378,12 +831,10 @@
                     window.location.href = '/add-booking.html';
                     return;
                 }
-
                 if (action === 'history') {
                     window.location.href = '/history.html';
                     return;
                 }
-
                 if (action === 'reports') {
                     window.location.href = '/reports.html';
                     return;
@@ -1396,15 +847,10 @@
                     window.location.href = '/revenue.html';
                     return;
                 }
-                if (action === 'create-investment') {
-                    window.location.href = '/create-investment.html';
-                    return;
-                }
                 if (action === 'view-investment') {
                     window.location.href = '/view-investment.html';
                     return;
                 }
-                // 👇 REGISTER ACTION
                 if (action === 'register') {
                     closeMenu();
                     openRegisterModal();
@@ -1420,52 +866,7 @@
             });
         });
 
-        // ===== HANDLE ACTION BUTTONS =====
-        function handleAction(action) {
-            if (action === 'add-booking') {
-                window.location.href = '/add-booking.html';
-                return;
-            }
-
-            if (action === 'history') {
-                window.location.href = '/history.html';
-                return;
-            }
-
-            if (action === 'reports') {
-                window.location.href = '/reports.html';
-                return;
-            }
-            if (action === 'bookings') {
-                window.location.href = '/bookings.html';
-                return;
-            }
-            if (action === 'revenue') {
-                window.location.href = '/revenue.html';
-                return;
-            }
-            if (action === 'create-investment') {
-                window.location.href = '/create-investment.html';
-                return;
-            }
-            if (action === 'view-investment') {
-                window.location.href = '/view-investment.html';
-                return;
-            }
-            if (action === 'register') {
-                openRegisterModal();
-                return;
-            }
-            if (action === 'logout') {
-                localStorage.removeItem('username');
-                window.location.href = '/logout';
-                return;
-            }
-
-            console.log('Action triggered:', action);
-        }
-
-        // ===== ADMIN MENU TOGGLE (existing) =====
+        // ===== ADMIN MENU TOGGLE =====
         const menuTrigger = document.getElementById("menuTrigger");
         let adminMenuUnlocked = false;
         
@@ -1476,11 +877,8 @@
             document.querySelectorAll('.admin-only').forEach(el => {
                 el.style.display = adminMenuUnlocked ? 'flex' : 'none';
             });
-
-            const bookingsQuick = document.getElementById('bookingsQuickAction');
-            if (bookingsQuick) {
-                bookingsQuick.style.display = adminMenuUnlocked ? 'flex' : 'none';
-            }
+            
+            setTimeout(toggleRegisterMenu, 100);
         });
 
         // ===== USERNAME FROM LOGIN =====
@@ -1494,13 +892,6 @@
 
         // ===== TOGGLE REGISTER MENU ON PAGE LOAD =====
         toggleRegisterMenu();
-
-        // Also check when admin menu is toggled
-        const originalToggle = menuTrigger.click;
-        menuTrigger.addEventListener('click', function(e) {
-            // Re-check register visibility after admin toggle
-            setTimeout(toggleRegisterMenu, 100);
-        });
     </script>
 </body>
 </html>
