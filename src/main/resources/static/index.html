@@ -33,7 +33,7 @@
             text-align: center;
         }
 
-.logo-image {
+        .logo-image {
             width: 130px;
             max-width: 140px;
             height: auto;
@@ -150,15 +150,18 @@
     </div>
 
     <script>
+        // Check if user prefers reduced motion
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
+
         if (prefersReducedMotion) {
+            // Redirect immediately if reduced motion is preferred
             setTimeout(function() {
-                window.location.href = '/login';  // ← Changed from /login.html
+                window.location.href = '/login';
             }, 1000);
         } else {
+            // Normal animation timing: 1.2s logo + 0.4s text + 0.6s color + 1s pause = 3.2s
             setTimeout(function() {
-                window.location.href = '/login';  // ← Changed from /login.html
+                window.location.href = '/login';
             }, 4600);
         }
     </script>
@@ -171,7 +174,5 @@
       });
     }
     </script>
-    
-
 </body>
 </html>
