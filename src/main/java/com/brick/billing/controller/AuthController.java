@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +28,6 @@ public class AuthController {
     
     @GetMapping("/login")
     public String showLoginPage(Model model) {
-        // Serve the static HTML file directly
         return "forward:/login.html";
     }
     
@@ -38,6 +39,15 @@ public class AuthController {
             
             if (user != null && passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
                 session.setAttribute("user", user);
+                
+                // 👇 ADD THIS: Set Spring Security context
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                    user.getUsername(), 
+                    null, 
+                    java.util.Collections.emptyList()
+                );
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                
                 return ResponseEntity.ok(new AuthResponse(true, "Login successful", "/home.html"));
             } else {
                 return ResponseEntity.ok(new AuthResponse(false, "Invalid username or password", null));
@@ -79,6 +89,14 @@ public class AuthController {
             
             session.setAttribute("user", newUser);
             
+            // 👇 ADD THIS: Set Spring Security context
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                newUser.getUsername(), 
+                null, 
+                java.util.Collections.emptyList()
+            );
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            
             return ResponseEntity.ok(new AuthResponse(true, "Registration successful", "/home.html"));
         } catch (Exception e) {
             return ResponseEntity.ok(new AuthResponse(false, "Registration failed: " + e.getMessage(), null));
@@ -96,6 +114,7 @@ public class AuthController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
+        SecurityContextHolder.clearContext();  // 👈 Clear security context
         return "redirect:/login";
     }
 }
