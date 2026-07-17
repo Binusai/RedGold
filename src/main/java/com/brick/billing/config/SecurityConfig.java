@@ -27,7 +27,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/",
-                        "/index.html",        // ← ADD THIS
+                        "/index.html",
                         "/login",
                         "/login.html",
                         "/perform_login",
@@ -53,7 +53,6 @@ public class SecurityConfig {
                 ).permitAll()
                 .anyRequest().authenticated()
             )
-            // Disable default form login
             .formLogin(login -> login.disable())
             .logout(logout -> logout
                 .logoutUrl("/logout")
