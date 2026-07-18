@@ -138,11 +138,7 @@ public class ReportController {
         report.setStatus(req.status());
         report.setRemarks(req.remarks());
         // ---- replace items ----
-        if (report.getItems() == null) {
-            report.setItems(new ArrayList<>());
-        } else {
-            report.getItems().clear();
-        }
+        report.getItems().clear();
         
         double netTotal = 0.0;
         double totalDiscount = 0.0;
